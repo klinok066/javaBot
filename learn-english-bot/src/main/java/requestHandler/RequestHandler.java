@@ -19,22 +19,24 @@ public class RequestHandler {
         return toHelp();
     }
 
-    public void useCommand(String command, String stringAnswer) {
+    public void useCommand(String command, StringBuilder stringAnswer) {
         switch (command) {
             case "help": {
-                stringAnswer = toHelp();
+                stringAnswer.append(toHelp());
                 break;
             }
             case "start": {
-                stringAnswer = "Hello, I'm bot, which help you to learn new english words!\n" +
-                               "List of commands which you can use:\n" +
-                               toStart();
+                stringAnswer.append("Hello, I'm bot, which help you to learn new english words!\n" + "List of commands which you can use:\n").append(toStart());
                 break;
             }
             default: {
-                stringAnswer = "Sorry, I'm don't understand you...";
+                stringAnswer.append("Sorry, I'm don't understand you...");
                 break;
             }
         }
+    }
+
+    public String formatCommandFromTelegram(String command) {
+        return command.substring(1, command.length());
     }
 }
