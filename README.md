@@ -74,6 +74,16 @@ Once a day, a notification should have been made in the bot, which sounds like t
 
 `/word_to <word> <group>` - redefining the group of an existing word
 
+`/test_all <mode>` - start testing for all words from the database
+
+`/test <number of words> <mode>` - start testing on some part of the words from the entire database
+
+`/test_in_group_all <group> <mode>` - start testing for all words from the group
+
+`/test_in_group <group> <amount> <mode>` - start testing on a certain number of words from the group
+
+`/stop_test` - end to testing (for `/test_all` and for `test_in_group_all`)
+
 ## Architecture:
 
     -----------------------  --------------------------
