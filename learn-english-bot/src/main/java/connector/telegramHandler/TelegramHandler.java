@@ -19,6 +19,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         SendMessage message = new SendMessage();
+        message.setChatId(update.getMessage().getChatId());
         message.setText("Привет, Мир!");
 
         {

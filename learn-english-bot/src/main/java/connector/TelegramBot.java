@@ -8,7 +8,7 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class TelegramBot implements Connector {
     public void start() {
         TelegramHandler bot = new TelegramHandler();
-        
+
         {
             try {
                 TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
