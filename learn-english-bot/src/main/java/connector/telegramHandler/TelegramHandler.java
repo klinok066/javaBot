@@ -5,6 +5,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import requestHandler.RequestHandler;
+
 public class TelegramHandler extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
@@ -18,9 +20,17 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        RequestHandler requestHandler = new RequestHandler();
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
-        message.setText("Привет, Мир!");
+        message.setText("Hello!");
+
+        if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().charAt(0) == '/') {
+            StringBuilder answer = new StringBuilder("");
+            String userTextMessage = requestHandler.formatCommandFromTelegram(update.getMessage().getText());
+            requestHandler.useCommand(userTextMessage, answer);
+            message.setText(answer.toString());
+        }
 
         {
             try {
