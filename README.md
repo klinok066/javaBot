@@ -82,7 +82,7 @@ Once a day, a notification should have been made in the bot, which sounds like t
 
 `/test_in_group <group> <amount> <mode>` - start testing on a certain number of words from the group
 
-`/stop_test` - end to testing (for `/test_all` and for `test_in_group_all`)
+`/stop_test` - end testing (for `/test_all` and for `test_in_group_all`)
 
 ## Architecture:
 
