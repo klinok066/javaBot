@@ -97,7 +97,7 @@ Once a day, a notification should have been made in the bot, which sounds like t
 
 ### Tasks:
 1. Write a server, connect to the telegram API
-2. To the message: *Hi, bot!* Reply: *Hi, <name in the telegram>!*
+2. To the message: *Hi, bot!* Reply: *Hi, "name in the telegram"!*
 3. Put the bot on heroku
 
 Ilya's responsibilities: Write a server and an interface that connects to the telegram API and provides the appropriate methods, cover with tests
