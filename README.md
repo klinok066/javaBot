@@ -1,87 +1,87 @@
-# Бот для изучения английских слов (флеш-карточки с английскими словами)
+# Bot for learning English words (flash cards with English words)
 
-**Задача:** создать Restful API  для бота и навыка Алисы по изучению английского
+**Task:** создать Restful API  для бота и навыка Алисы по изучению английского
 
-**Функционал API:**
+**API functionality:**
 
-1. Добавлять новые слова в базу данных (только английские)
-2. Возможность тренировки выученных слов (как по всем, так и по группам)
-3. Напоминание про повторение слов
+1. Add new words to the database (English only)
+2. Ability to practice learned words (all at once or in groups)
+3. Word repetition reminder
 
-## Добавление новых слов
+## Adding new words
 
-При добавлении слова у нас должна быть возможность:
+To add a word:
 
-1. Добавить его в определенную группу (обязательный параметр)
-2. Задать перевод слова (обязательный параметр): перевод слова можно указать самостоятельно или воспользоваться автоматическим переводом
-3. Само слово, которое хотим добавить
+1. Specify a specific group to which it will be added (required parameter)
+2. Set word translation (required parameter): you can specify the translation of the word yourself or use automatic translation
+3. Word to be added
 
-## Тренировка выученных слов
+## Practicing learned words
 
-Тренировка должна быть: по всем выученным, по некоторой части, по всей группе слов или по части выученных слов
+Training should be: for all learned, for some part, for the entire group of words or for part of the learned words
 
-### По всем выученным словам
+### For all learned words
 
-`/test_all <режим>` - начать тестирование по всем словам из базы данных
+`/test_all <mode>` - start testing for all words from the database
 
-Тут есть **сложный режим** и **легкий**
+There is a **hard** and **easy** mode
 
-**Сложный режим** - это надо написать боту самому перевод слова
+**Hard mode** - you need to write the bot itself the translation of the word
 
-**Легкий режим** - это надо выбрать 1 из 4 переводов
+**Easy mode** - you need to choose 1 of 4 translations
 
-**По умолчанию стоит легкий режим**, т. е. если не указать какой режим, то автоматически сервер выберет легкий
+**The default is light mode**, i.e. if you do not specify which mode, the server will automatically select light
 
-Идет проверка выученных слов до тех пор, пока пользователь не напишет `/stop_test`. 
+The learned words are checked until the user writes `/stop_test`.
 
-### По некоторой части слов
+### For some part of the words
 
-`/test <количество слов> <режим>` - начать тестирование по некоторой части слов из всей базы данных
+`/test <number of words> <mode>` - start testing on some part of the words from the entire database
 
-Пользователь в этом режиме пишет количество слов для проверки, стандартно установленно значение 10
+The user in this mode writes the number of words to check, the default value is 10
 
-Выбор режима также, как и в прошлом разделе
+Mode selection is the same as in the previous section
 
-### По всем словам из группы
+### For all words from the group
 
-`/test_in_group_all <группа> <режим>` - начать тестирование по всем словам из группы
+`/test_in_group_all <group> <mode>` - start testing for all words from the group
 
-Тут такой же выбор режима, как и в первом разделе
+Here is the same mode selection as in the first section.
 
-Чтобы остановить тестирование, надо написать команду `/stop_test`
+To stop testing, you need to write the command `/stop_test`
 
-### По некоторым словам из группы
+### According to some words from the group
 
-`/test_in_group <группа> <количество> <режим>` - начать тестирование по некоторому количеству слов из группы
+`/test_in_group <group> <amount> <mode>` - start testing on a certain number of words from the group
 
-Выбор режима такой же, как и первом разделе
+The mode selection is the same as the first section
 
-## Напоминание о повторении слов
+## Word repetition reminder
 
-Раз в день должно было сделанно уведомление в боте, которое звучит так: *О, а какое щас время? Правильно, время учить английский!*
+Once a day, a notification should have been made in the bot, which sounds like this: *Oh, what time is it right now? That's right, it's time to learn English!*
 
-## Список команд:
+## List of commands:
 
-`/start` - запустить бота
+`/start` - start the bot
 
-`/group_list` - список всех групп
+`/group_list` - list of all groups
 
-`/group_create <название>` - создать группу
+`/group_create <name>` - create a group
 
-`/word_list` - список всех слов с паггинацией
+`/word_list` - list of all paginated words
 
-`/word_add <слово> <перевод> <группа>` - добавление слова. Перевод можно самим указать, но если написать `_translate`, то перевод будет автоматический через Yandex API, параметр группа не обязателен, все остальные обязательны
+`/word_add <word> <translation> <group>` - adding a word. You can specify the translation yourself, but if you write `_translate`, then the translation will be automatic through the Yandex API, the group parameter is optional, all the rest are required
 
-`/word_to <слово> <группа>` - переопределение группы у существующего слова
+`/word_to <word> <group>` - redefining the group of an existing word
 
-## Архитектура:
+## Architecture:
 
     -----------------------  --------------------------
-    | Алиса command block |  | Telegram command block |
+    | Alice command block |  | Telegram command block |
     -----------------------  --------------------------
                      ↑↓          ↑↓
         -------------------------------------------
-        |          Обработчик запросов            |
+        |            Request handler              |
         -------------------------------------------
                             ↑↓
                     -------------------
@@ -89,17 +89,17 @@
                     -------------------
                             ↑↓   
                     -------------------
-                    |   База данных   |
+                    |     Database    |
                     -------------------
-                    
-## Этап 1
+
+## Stage 1
 
 
-### Задачи:
-1. Написать сервер, подключиться к API телеграмма
-2. На сообщение: *Привет, бот!* Ответить: *Привет, <имя в телеграме>!*
-3. Поставить бота на heroku
+### Tasks:
+1. Write a server, connect to the telegram API
+2. To the message: *Hi, bot!* Reply: *Hi, <name in the telegram>!*
+3. Put the bot on heroku
 
-Обязанности Ильи: Написать сервер и интерфейс, который подключается к API телеграмма и предоставляет соответствующие методы, покрыть тестами
+Ilya's responsibilities: Write a server and an interface that connects to the telegram API and provides the appropriate methods, cover with tests
 
-Обязанности Артема: Релизовать ответы на сообщения и задеплоить его на heroku, покрыть тестами
+Artem's responsibilities: Implement responses to messages and deploy it on heroku, cover it with tests, write this README.md in English :)
