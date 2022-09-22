@@ -30,6 +30,10 @@ public class RequestHandler {
                 toHelp();
     }
 
+    private String toHello() {
+        return "Hello, friend!";
+    }
+
     public void useCommand(String command, StringBuilder stringAnswer) {
         switch (command) {
             case "help": {
@@ -38,6 +42,10 @@ public class RequestHandler {
             }
             case "start": {
                 stringAnswer.append(toStart());
+                break;
+            }
+            case "hello": {
+                stringAnswer.append(toHello());
                 break;
             }
             default: {
