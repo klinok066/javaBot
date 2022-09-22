@@ -6,9 +6,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class TelegramBot implements Connector {
-    public void start() {
-        TelegramHandler bot = new TelegramHandler();
+    private TelegramHandler bot = null;
 
+    public TelegramBot(String botUsername, String botToken) {
+        bot = new TelegramHandler(botUsername, botToken);
+    }
+
+    public void start() {
         {
             try {
                 TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);

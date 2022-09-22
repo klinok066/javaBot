@@ -1,5 +1,6 @@
 package connector.telegramHandler;
 
+import connector.TelegramBot;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -8,14 +9,22 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import requestHandler.RequestHandler;
 
 public class TelegramHandler extends TelegramLongPollingBot {
+    private final String botUsername;
+    private final String botToken;
+
+    public TelegramHandler(String botUsername, String botToken) {
+        this.botUsername = botUsername;
+        this.botToken = botToken;
+    }
+
     @Override
     public String getBotUsername() {
-        return "matmech_learn_english_bot";
+        return botUsername;
     }
 
     @Override
     public String getBotToken() {
-        return "5657871435:AAFzHduN1o9i3LxzNEfeXqAAdf-GSu50N2c";
+        return botToken;
     }
 
     @Override
