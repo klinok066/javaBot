@@ -1,5 +1,9 @@
 package requestHandler;
 
+import org.json.JSONObject;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
 public class RequestHandler {
     private String toHelp() {
         return  "Start bot:\n" +
@@ -34,25 +38,21 @@ public class RequestHandler {
         return "Hello, friend!";
     }
 
-    public void useCommand(String command, StringBuilder stringAnswer) {
-        switch (command) {
-            case "help": {
-                stringAnswer.append(toHelp());
-                break;
-            }
-            case "start": {
-                stringAnswer.append(toStart());
-                break;
-            }
-            case "hello": {
-                stringAnswer.append(toHello());
-                break;
-            }
-            default: {
-                stringAnswer.append(toDefaultAnswer());
-                break;
-            }
-        }
+    public String useCommand(String command) {
+        return switch (command) {
+            case "help" -> toHelp();
+            case "start" -> toStart();
+            case "hello" -> toHello();
+            default -> toDefaultAnswer();
+        };
+    }
+
+    public String toAnswer(String messageString, JSONObject info) {
+        return switch (messageString.toLowerCase()) {
+            case "hello, bot" -> "Hello, " + info.get("firstName");
+            default -> "Sorry, I'm don't understand you...\n" +
+                       "You can write /help for get all commands which you can use!";
+        };
     }
 
     public String formatCommandFromTelegram(String command) {
