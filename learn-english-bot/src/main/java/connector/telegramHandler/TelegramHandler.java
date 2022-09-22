@@ -23,7 +23,6 @@ public class TelegramHandler extends TelegramLongPollingBot {
         RequestHandler requestHandler = new RequestHandler();
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
-        message.setText("Hello!");
 
         if (update.hasMessage() && update.getMessage().hasText() && update.getMessage().getText().charAt(0) == '/') {
             StringBuilder answer = new StringBuilder("");
