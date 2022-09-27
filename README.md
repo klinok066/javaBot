@@ -101,3 +101,7 @@ Once a day, a notification should have been made in the bot, which sounds like t
                     -------------------
                     |     Database    |
                     -------------------
+                    
+## Steps:
+
+### Step 1
