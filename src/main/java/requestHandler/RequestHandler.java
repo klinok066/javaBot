@@ -38,7 +38,7 @@ public class RequestHandler {
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    public String useCommand(String command) {
+    public String useCommand(String command) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart();
@@ -48,7 +48,7 @@ public class RequestHandler {
         };
     }
 
-    public String toAnswer(String messageString, JSONObject info) {
+    public String toAnswer(String messageString, JSONObject info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.get("firstName");
             default -> "Sorry, I'm don't understand you...\n" +
