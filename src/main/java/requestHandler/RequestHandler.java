@@ -34,11 +34,6 @@ public class RequestHandler {
                 toHelp();
     }
 
-    private String toHello() {
-        return "Hello, friend!";
-    }
-    //есть ли смысл от этой функции? Если я добавил ответ на простое hello, врядли кто-то будет писать именно /hello
-
     private String functionInProgress(){
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
@@ -47,7 +42,6 @@ public class RequestHandler {
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart();
-            case "hello" -> toHello();
             case "group_list", "word_add", "group_create", "word_list", "word_to", "testing_all", "test", "test_in_group_all", "test_in_group", "stop_test" -> functionInProgress();
 
             default -> toDefaultAnswer();
@@ -57,7 +51,6 @@ public class RequestHandler {
     public String toAnswer(String messageString, JSONObject info) {
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.get("firstName");
-//            case "" -> "Hello, " + info.get("firstName");
             default -> "Sorry, I'm don't understand you...\n" +
                        "You can write /help for get all commands which you can use!";
         };
