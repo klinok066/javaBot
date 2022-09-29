@@ -3,6 +3,7 @@ package org.matmech;
 import connector.Connector;
 import connector.TelegramBot;
 
+
 public class Main {
     public static void main(String[] args) {
         // environment variables
@@ -14,5 +15,9 @@ public class Main {
 
         Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN);
         bot.start();
+
+        System.out.println("Hello, i'm bot");
+        cmdLogic cmd = new cmdLogic();
+        cmd.responceForCDM();
     }
 }
