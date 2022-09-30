@@ -1,5 +1,6 @@
 package org.matmech;
 
+import connector.CmdLogic;
 import connector.Connector;
 import connector.TelegramBot;
 
@@ -17,7 +18,7 @@ public class Main {
         bot.start();
 
         System.out.println("Hello, i'm bot");
-        cmdLogic cmd = new cmdLogic();
-        cmd.responceForCDM();
+        CmdLogic cmd = new CmdLogic("User", "Unknown", "unknown", "false", "-1");
+        cmd.responseForCDM();
     }
 }

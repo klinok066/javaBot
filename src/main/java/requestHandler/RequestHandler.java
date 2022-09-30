@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class RequestHandler {
     private String toHelp() {
-        return  "Start bot:\n" +
+        return  "Bot\'s commands:\n" +
                 "/start - start the bot\n\n" +
                 "Groups:\n" +
                 "/group_list - list of all groups\n" +
@@ -30,8 +30,7 @@ public class RequestHandler {
 
     private String toStart() {
         return  "Hello, I'm bot, which help you to learn new english words!\n" +
-                "List of commands which you can use:\n" +
-                toHelp();
+                "List of commands which you can use just write: /help";
     }
 
     private String functionInProgress(){
@@ -42,7 +41,16 @@ public class RequestHandler {
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart();
-            case "group_list", "word_add", "group_create", "word_list", "word_to", "testing_all", "test", "test_in_group_all", "test_in_group", "stop_test" -> functionInProgress();
+            case    "group_list",
+                    "word_add",
+                    "group_create",
+                    "word_list",
+                    "word_to",
+                    "testing_all",
+                    "test",
+                    "test_in_group_all",
+                    "test_in_group",
+                    "stop_test" -> functionInProgress();
 
             default -> toDefaultAnswer();
         };
@@ -51,12 +59,21 @@ public class RequestHandler {
     public String toAnswer(String messageString, JSONObject info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.get("firstName");
-            default -> "Sorry, I'm don't understand you...\n" +
-                       "You can write /help for get all commands which you can use!";
+            default -> toDefaultAnswer();
         };
     }
 
     public String formatCommandFromTelegram(String command) {
         return command.substring(1, command.length());
+    }
+
+    public JSONObject getInfo(String firstName, String lastName, String username, String isBot, String id) {
+        JSONObject info = new JSONObject();
+        info.put("firstName", firstName);
+        info.put("lastName", lastName);
+        info.put("username", username);
+        info.put("isBot", isBot);
+        info.put("id", id);
+        return info;
     }
 }
