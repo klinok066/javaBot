@@ -18,7 +18,7 @@ public class Main {
         bot.start();
 
         System.out.println("Hello, i'm bot");
-        CmdLogic cmd = new CmdLogic("User", "Unknown", "unknown", "false", "-1");
+        CmdLogic cmd = new CmdLogic("User", "Unknown");
         cmd.responseForCDM();
     }
 }

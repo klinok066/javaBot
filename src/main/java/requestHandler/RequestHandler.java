@@ -76,4 +76,11 @@ public class RequestHandler {
         info.put("id", id);
         return info;
     }
+
+    public JSONObject getInfo(String firstName, String lastName) {
+        JSONObject info = new JSONObject();
+        info.put("firstName", firstName);
+        info.put("lastName", lastName);
+        return info;
+    }
 }

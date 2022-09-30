@@ -10,16 +10,10 @@ public class CmdLogic {
     private RequestHandler requestHandler;
     private String firstName;
     private String lastName;
-    private String username;
-    private String isBot;
-    private String id;
 
-    public CmdLogic(String firstName, String lastName, String username, String isBot, String id) {
+    public CmdLogic(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
-        this.isBot = isBot;
-        this.id = id;
         requestHandler = new RequestHandler();
         input = new Scanner(System.in);
     }
@@ -29,12 +23,17 @@ public class CmdLogic {
             String messageFromCMD = input.nextLine();
             JSONObject info;
             StringBuilder answer = new StringBuilder("");
-
-            if (messageFromCMD.charAt(0) == '/') {
-                String userTextMessage = requestHandler.formatCommandFromTelegram(messageFromCMD);
+            String[] messageWords = messageFromCMD.split(" ");
+            if (messageWords[0].charAt(0) == '/') {
+                if(messageWords.length == 1){
+                String userTextMessage = requestHandler.formatCommandFromTelegram(messageWords[0]);
                 answer.append(requestHandler.useCommand(userTextMessage));
-            } else {
-                info = requestHandler.getInfo(firstName, lastName, username, isBot, id);
+                } else{
+                    // реализовать передачу остальных слов из запроса в метод useCommand
+                    continue;
+                }
+            }else {
+                info = requestHandler.getInfo(firstName, lastName);
                 answer.append(requestHandler.toAnswer(messageFromCMD, info));
             }
 
