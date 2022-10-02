@@ -39,6 +39,12 @@ public class TelegramHandler extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             StringBuilder answer = new StringBuilder("");
             String userTextMessage;
+            // creating JSON object with all information about user which send message
+            info = requestHandler.getInfo(update.getMessage().getFrom().getFirstName(),
+                    update.getMessage().getFrom().getLastName(),
+                    update.getMessage().getFrom().getUserName(),
+                    update.getMessage().getFrom().getIsBot().toString(),
+                    update.getMessage().getFrom().getId().toString());
 
             if (update.getMessage().getText().charAt(0) == '/') {
                 // forming answer for message
@@ -46,13 +52,6 @@ public class TelegramHandler extends TelegramLongPollingBot {
                 userTextMessage = requestHandler.formatCommandFromTelegram(update.getMessage().getText());
                 answer.append(requestHandler.useCommand(userTextMessage));
             } else {
-                // creating JSON object with all information about user which send message
-                info = requestHandler.getInfo(update.getMessage().getFrom().getFirstName(),
-                                              update.getMessage().getFrom().getLastName(),
-                                              update.getMessage().getFrom().getUserName(),
-                                              update.getMessage().getFrom().getIsBot().toString(),
-                                              update.getMessage().getFrom().getId().toString());
-
                 // forming answer for message
 
                 userTextMessage = update.getMessage().getText();
