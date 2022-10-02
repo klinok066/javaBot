@@ -46,15 +46,18 @@ public class TelegramHandler extends TelegramLongPollingBot {
                     update.getMessage().getFrom().getIsBot().toString(),
                     update.getMessage().getFrom().getId().toString());
 
-            if (update.getMessage().getText().charAt(0) == '/') {
+            String messageString = update.getMessage().getText();
+            String[] messageWords = messageString.split(" ");
+
+            if (messageWords[0].charAt(0) == '/') {
                 // forming answer for message
 
-                userTextMessage = requestHandler.formatCommandFromTelegram(update.getMessage().getText());
+                userTextMessage = requestHandler.formatCommandFromTelegram(messageWords[0]);
                 answer.append(requestHandler.useCommand(userTextMessage));
             } else {
                 // forming answer for message
 
-                userTextMessage = update.getMessage().getText();
+                userTextMessage = messageString;
                 answer.append(requestHandler.toAnswer(userTextMessage, info));
             }
 
