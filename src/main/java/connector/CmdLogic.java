@@ -21,21 +21,10 @@ public class CmdLogic {
     public void responseForCDM() {
         while(true) {
             String messageFromCMD = input.nextLine();
-            JSONObject info;
             StringBuilder answer = new StringBuilder("");
-            String[] messageWords = messageFromCMD.split(" ");
-            if (messageWords[0].charAt(0) == '/') {
-                if(messageWords.length == 1){
-                String userTextMessage = requestHandler.formatCommandFromTelegram(messageWords[0]);
-                answer.append(requestHandler.useCommand(userTextMessage));
-                } else{
-                    // реализовать передачу остальных слов из запроса в метод useCommand
-                    continue;
-                }
-            }else {
-                info = requestHandler.getInfo(firstName, lastName);
-                answer.append(requestHandler.toAnswer(messageFromCMD, info));
-            }
+            JSONObject info = requestHandler.getInfo(firstName, lastName);
+
+            answer.append(requestHandler.onUse(messageFromCMD, info));
 
             System.out.println(answer);
         }

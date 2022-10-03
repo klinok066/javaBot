@@ -24,9 +24,14 @@ public class RequestHandler {
                 "/stop_test - end testing (for /test_all and for /test_in_group_all)";
     }
 
+    private boolean isCmd(String command) {
+        return command.charAt(0) == '/';
+    }
+
     private String toDefaultAnswer() {
         return "Sorry, I'm don't understand you...";
     }
+
 
     private String toStart() {
         return  "Hello, I'm bot, which help you to learn new english words!\n" +
@@ -37,7 +42,7 @@ public class RequestHandler {
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    public String useCommand(String command) { // ответ на команды
+    private String useCommand(String command) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart();
@@ -56,11 +61,21 @@ public class RequestHandler {
         };
     }
 
-    public String toAnswer(String messageString, JSONObject info) { // просто ответ на обычные сообщения
+    private String toAnswer(String messageString, JSONObject info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.get("firstName");
             default -> toDefaultAnswer();
         };
+    }
+
+
+    public String onUse(String messageString, JSONObject info) {
+        if (isCmd(messageString)) {
+            String[] messageStringWords = messageString.split(" ");
+            return useCommand(formatCommandFromTelegram(messageStringWords[0]));
+        }
+        else
+            return toAnswer(messageString, info);
     }
 
     public String formatCommandFromTelegram(String command) {
