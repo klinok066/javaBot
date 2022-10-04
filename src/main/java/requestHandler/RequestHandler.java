@@ -79,6 +79,9 @@ public class RequestHandler {
     }
 
     public String formatCommandFromTelegram(String command) {
+        if (!isCmd(command))
+            return command;
+
         return command.substring(1, command.length());
     }
 
