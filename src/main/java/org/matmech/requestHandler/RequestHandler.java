@@ -1,10 +1,13 @@
-package requestHandler;
+package org.matmech.requestHandler;
 
 import org.json.JSONObject;
+import org.matmech.dbHandler.DBHandler;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class RequestHandler {
+    private DBHandler db;
+
     private String toHelp() {
         return  "Bot\'s commands:\n" +
                 "/start - start the bot\n\n" +
@@ -68,6 +71,9 @@ public class RequestHandler {
         };
     }
 
+    public RequestHandler(DBHandler db) {
+        this.db = db;
+    }
 
     public String onUse(String messageString, JSONObject info) {
         if (isCmd(messageString)) {

@@ -1,23 +1,22 @@
-package connector.telegramHandler;
+package org.matmech.connector.telegramHandler;
 
-import connector.TelegramBot;
 import org.json.JSONObject;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import requestHandler.RequestHandler;
+import org.matmech.requestHandler.RequestHandler;
 
 public class TelegramHandler extends TelegramLongPollingBot {
     private final String botUsername;
     private final String botToken;
     private final RequestHandler requestHandler;
 
-    public TelegramHandler(String botUsername, String botToken) {
+    public TelegramHandler(String botUsername, String botToken, RequestHandler requestHandler) {
         this.botUsername = botUsername;
         this.botToken = botToken;
-        requestHandler = new RequestHandler();
+        this.requestHandler = requestHandler;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package connector;
+package org.matmech.connector;
 
 public interface Connector {
     void start();

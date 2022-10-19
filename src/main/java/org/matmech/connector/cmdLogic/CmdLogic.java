@@ -1,7 +1,7 @@
-package connector;
+package org.matmech.connector.cmdLogic;
 
 import org.json.JSONObject;
-import requestHandler.RequestHandler;
+import org.matmech.requestHandler.RequestHandler;
 import java.util.Scanner;
 
 
@@ -11,11 +11,13 @@ public class CmdLogic {
     private String firstName;
     private String lastName;
 
-    public CmdLogic(String firstName, String lastName) {
+    public CmdLogic(String firstName, String lastName, RequestHandler requestHandler) {
         this.firstName = firstName;
         this.lastName = lastName;
-        requestHandler = new RequestHandler();
-        input = new Scanner(System.in);
+        this.requestHandler = requestHandler;
+        this.input = new Scanner(System.in);
+
+        System.out.println("Hello, i'm bot");
     }
 
     public void responseForCDM() {

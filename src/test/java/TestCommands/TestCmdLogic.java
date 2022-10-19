@@ -2,12 +2,11 @@ package TestCommands;
 
 import junit.framework.TestCase;
 import org.json.JSONObject;
-import connector.CmdLogic;
+import org.matmech.connector.cmdLogic.CmdLogic;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class TestCmdLogic extends TestCase {

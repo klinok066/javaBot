@@ -2,10 +2,10 @@ package TestCommands;
 
 import junit.framework.TestCase;
 import org.json.JSONObject;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import requestHandler.RequestHandler;
+import org.matmech.dbHandler.DBHandler;
+import org.matmech.requestHandler.RequestHandler;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -15,7 +15,11 @@ public class TestRequestHandler extends TestCase {
     private final Map messages = new HashMap();
 
     private JSONObject info = new JSONObject();
-    private RequestHandler handler = new RequestHandler();
+    private String DB_URL = System.getenv("DB_URL");
+    private String DB_USERNAME = System.getenv("DB_USERNAME");
+    private String DB_PASSWORD = System.getenv("DB_PASSWORD");
+    private DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
+    private RequestHandler handler = new RequestHandler(db);
 
     @Before
     public void setUpCommandsArray() { // исправить тесты

@@ -1,6 +1,9 @@
-package connector;
+package org.matmech.connector.telegramBot;
 
-import connector.telegramHandler.TelegramHandler;
+import org.matmech.connector.Connector;
+import org.matmech.connector.telegramHandler.TelegramHandler;
+import org.matmech.dbHandler.DBHandler;
+import org.matmech.requestHandler.RequestHandler;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -8,8 +11,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class TelegramBot implements Connector {
     private final TelegramHandler bot;
 
-    public TelegramBot(String botUsername, String botToken) {
-        bot = new TelegramHandler(botUsername, botToken);
+    public TelegramBot(String botUsername, String botToken, RequestHandler requestHandler) {
+        bot = new TelegramHandler(botUsername, botToken, requestHandler);
     }
 
     public void start() {
