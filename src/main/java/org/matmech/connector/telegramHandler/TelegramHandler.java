@@ -1,6 +1,7 @@
 package org.matmech.connector.telegramHandler;
 
 import org.json.JSONObject;
+import org.matmech.dataSaver.DataSaver;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -33,21 +34,21 @@ public class TelegramHandler extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
-        JSONObject info;
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             StringBuilder answer = new StringBuilder();
 
-            // creating JSON object with all information about user which send message
-            info = requestHandler.getInfo(update.getMessage().getFrom().getFirstName(),
-                    update.getMessage().getFrom().getLastName(),
-                    update.getMessage().getFrom().getUserName(),
-                    update.getMessage().getFrom().getIsBot().toString(),
-                    update.getMessage().getFrom().getId().toString());
+            // creating Data Saver object which save information about user
+
+            DataSaver data = new DataSaver(update.getMessage().getFrom().getFirstName(),
+                                           update.getMessage().getFrom().getLastName(),
+                                           update.getMessage().getFrom().getUserName(),
+                                           update.getMessage().getFrom().getId()
+                                          );
 
             String messageString = update.getMessage().getText();
 
-            answer.append(requestHandler.onUse(messageString, info));
+            answer.append(requestHandler.onUse(messageString, data));
 
             message.setText(answer.toString());
         }

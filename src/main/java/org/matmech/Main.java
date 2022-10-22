@@ -3,7 +3,7 @@ package org.matmech;
 import org.matmech.connector.cmdLogic.CmdLogic;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegramBot.TelegramBot;
-import org.matmech.dbHandler.DBHandler;
+import org.matmech.db.DBHandler;
 import org.matmech.requestHandler.RequestHandler;
 
 public class Main {
@@ -19,7 +19,7 @@ public class Main {
         // database
 
         DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
-        db.init();
+        db.connect();
 
         // request handler
 
@@ -30,7 +30,9 @@ public class Main {
         Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN, requestHandler);
         bot.start();
 
-        CmdLogic cmd = new CmdLogic("User", "Unknown", requestHandler);
+        CmdLogic cmd = new CmdLogic("User", "Unknown", "Unknown", -1, requestHandler);
         cmd.responseForCDM();
+
+        db.close(); // close database
     }
 }
