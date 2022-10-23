@@ -53,12 +53,17 @@ public class RequestHandler {
         return db.translateWord(params[0]);
     }
 
+    private String deleteWord(String[] params) {
+        return db.deleteWord(params[0]);
+    }
+
     private String useCommand(String command, DataSaver info, String[] params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart(info);
             case "word_add" -> wordAdd(params, info);
             case "translate" -> translateWord(params);
+            case "delete_word" -> deleteWord(params);
             case    "group_list",
                     "group_create",
                     "word_list",

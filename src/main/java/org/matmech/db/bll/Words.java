@@ -83,6 +83,10 @@ public class Words extends BaseModelExtend {
         return "Слово было успешно добавлено!";
     }
 
+    /**
+     * <p>Достает слово из базы данных</p>
+     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     */
     public String translate() {
         try {
             if (isExist()) {
@@ -95,6 +99,25 @@ public class Words extends BaseModelExtend {
             }
 
             return "Ошибка! В словаре нет этого слова!\n Полный список команд можете посмотреть с помощью /help";
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * <p>Удаляет словои из базы данных</p>
+     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     */
+    public String deleteWord() {
+        try {
+            if (isExist()) {
+                String deleteWordSQL = "delete from words where word_value='" + wordValue + "';";
+                statement.executeUpdate(deleteWordSQL);
+
+                return "Слово было удалено из базы данных!";
+            }
+
+            return "Слова нет в базе данных!";
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

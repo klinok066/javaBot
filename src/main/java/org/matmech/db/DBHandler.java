@@ -43,9 +43,9 @@ public class DBHandler {
     /**
      * <p>Добавляет нового пользователя в базу данных</p>
      *
-     * @param firstname
-     * @param surname
-     * @param tag
+     * @param firstname - имя человека
+     * @param surname - фамилия человека
+     * @param tag - username человека
      */
     public String usersInsert(String firstname, String surname, String tag) {
         users.setFirstname(firstname);
@@ -65,10 +65,10 @@ public class DBHandler {
     /**
      * <p>Добавляет слово в базу данных</p>
      *
-     * @param wordValue
-     * @param wordTranslate
-     * @param group
-     * @param tag
+     * @param wordValue - слово, переданное в параметрах
+     * @param wordTranslate - перевод этого слова
+     * @param group - параметр, который означает
+     * @param tag - username человека
      */
     public String wordAdd(String wordValue, String wordTranslate, String group, String tag) {
         words.setWordTranslate(wordTranslate);
@@ -87,13 +87,28 @@ public class DBHandler {
         return words.wordAdd();
     }
 
+    /**
+     * <p>Показать перевод слова</p>
+     *
+     * @param wordValue - слово, переданное в параметрах
+     */
     public String translateWord(String wordValue) {
         words.setWordValue(wordValue);
         return words.translate();
     }
 
     /**
-     * Закрывает соединение с базой данных
+     * <p>Удаляет слово</p>
+     *
+     * @param wordValue - слово, переданное в параметрах
+     */
+    public String deleteWord(String wordValue) {
+        words.setWordValue(wordValue);
+        return words.deleteWord();
+    }
+
+    /**
+     * <p>Закрывает соединение с базой данных</p>
      */
     public void close() {
         try {
