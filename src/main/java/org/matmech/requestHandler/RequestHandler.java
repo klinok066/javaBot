@@ -1,10 +1,14 @@
-package requestHandler;
+package org.matmech.requestHandler;
 
-import org.json.JSONObject;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.matmech.dataSaver.DataSaver;
+import org.matmech.db.DBHandler;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class RequestHandler {
+    private DBHandler db;
+
     private String toHelp() {
         return  "Bot\'s commands:\n" +
                 "/start - start the bot\n\n" +
@@ -24,25 +28,43 @@ public class RequestHandler {
                 "/stop_test - end testing (for /test_all and for /test_in_group_all)";
     }
 
+    private boolean isCmd(String command) {
+        return command.charAt(0) == '/';
+    }
+
     private String toDefaultAnswer() {
         return "Sorry, I'm don't understand you...";
     }
 
-    private String toStart() {
-        return  "Hello, I'm bot, which help you to learn new english words!\n" +
-                "List of commands which you can use just write: /help";
+
+    private String toStart(DataSaver data) {
+        return db.usersInsert(data.getFirstname(), data.getSurname(), data.getTag());
     }
 
     private String functionInProgress(){
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    public String useCommand(String command) { // ответ на команды
+    private String wordAdd(String[] params, DataSaver data) {
+        return db.wordAdd(params[0], params[1], params[2], data.getTag());
+    }
+
+    private String translateWord(String[] params) {
+        return db.translateWord(params[0]);
+    }
+
+    private String deleteWord(String[] params) {
+        return db.deleteWord(params[0]);
+    }
+
+    private String useCommand(String command, DataSaver info, String[] params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
-            case "start" -> toStart();
+            case "start" -> toStart(info);
+            case "word_add" -> wordAdd(params, info);
+            case "translate" -> translateWord(params);
+            case "delete_word" -> deleteWord(params);
             case    "group_list",
-                    "word_add",
                     "group_create",
                     "word_list",
                     "word_to",
@@ -56,31 +78,36 @@ public class RequestHandler {
         };
     }
 
-    public String toAnswer(String messageString, JSONObject info) { // просто ответ на обычные сообщения
+    private String toAnswer(String messageString, DataSaver info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
-            case "hello" -> "Hello, " + info.get("firstName");
+            case "hello" -> "Hello, " + info.getFirstname();
             default -> toDefaultAnswer();
         };
     }
 
+    public RequestHandler(DBHandler db) {
+        this.db = db;
+    }
+
+    public String onUse(String messageString, DataSaver info) {
+        if (isCmd(messageString)) {
+            String[] messageStringWords = messageString.split(" ");
+            String[] params = new String[messageStringWords.length - 1];
+
+            for (int i = 1; i < messageStringWords.length; i++) {
+                params[i - 1] = messageStringWords[i];
+            }
+
+            return useCommand(formatCommandFromTelegram(messageStringWords[0]), info, params);
+        }
+        else
+            return toAnswer(messageString, info);
+    }
+
     public String formatCommandFromTelegram(String command) {
+        if (!isCmd(command))
+            return command;
+
         return command.substring(1, command.length());
-    }
-
-    public JSONObject getInfo(String firstName, String lastName, String username, String isBot, String id) {
-        JSONObject info = new JSONObject();
-        info.put("firstName", firstName);
-        info.put("lastName", lastName);
-        info.put("username", username);
-        info.put("isBot", isBot);
-        info.put("id", id);
-        return info;
-    }
-
-    public JSONObject getInfo(String firstName, String lastName) {
-        JSONObject info = new JSONObject();
-        info.put("firstName", firstName);
-        info.put("lastName", lastName);
-        return info;
     }
 }
