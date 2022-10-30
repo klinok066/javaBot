@@ -19,7 +19,6 @@ public class Main {
         // database
 
         DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
-        db.connect();
 
         // request handler
 
@@ -32,7 +31,5 @@ public class Main {
 
         CmdLogic cmd = new CmdLogic("User", "Unknown", "Unknown", -1, requestHandler);
         cmd.responseForCDM();
-
-        db.close(); // close database
     }
 }

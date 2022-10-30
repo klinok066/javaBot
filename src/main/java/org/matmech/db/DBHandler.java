@@ -1,43 +1,33 @@
 package org.matmech.db;
 
-import org.matmech.db.bll.Dictonary;
-import org.matmech.db.bll.Groups;
-import org.matmech.db.bll.Users;
-import org.matmech.db.bll.Words;
-
 import java.sql.*;
+import org.matmech.db.bll.GroupsDBSource;
+import org.matmech.db.bll.UsersDBSource;
+import org.matmech.db.bll.DictonaryDBSource;
+import org.matmech.db.bll.WordsDBSource;
+import org.matmech.db.models.Users;
+import org.matmech.db.models.Groups;
+import org.matmech.db.models.Dictonary;
+import org.matmech.db.models.Words;
+import org.matmech.db.repository.DBConnection;
 
 public class DBHandler {
-    private final String DB_URL;
-    private final String DB_USERNAME;
-    private final String DB_PASSWORD;
-    private Connection connection = null;
-    private Users users;
-    private Groups groups;
-    private Dictonary dictonary;
-    private Words words;
+    private DBConnection dbConnection = null;
+    private UsersDBSource usersDBSource;
+    private GroupsDBSource groupsDBSource;
+    private DictonaryDBSource dictonaryDBSource;
+    private WordsDBSource wordsDBSource;
 
     public DBHandler(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
-        this.DB_URL = DB_URL;
-        this.DB_USERNAME = DB_USERNAME;
-        this.DB_PASSWORD = DB_PASSWORD;
+        dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+        usersDBSource = new UsersDBSource();
+        groupsDBSource = new GroupsDBSource();
+        dictonaryDBSource = new DictonaryDBSource();
+        wordsDBSource = new WordsDBSource();
     }
 
-    /**
-     * <p>Соединяемся с базой данных и настраеваем этот DBHandler</p>
-     */
-    public void connect() {
-        try {
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-
-            dictonary = new Dictonary(connection);
-            users = new Users(connection, dictonary);
-            groups = new Groups(connection);
-            words = new Words(connection);
-        } catch (SQLException e) {
-            System.out.println("Can't connect to database");
-            throw new RuntimeException(e);
-        }
+    public void setDbConnection(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
+        dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
     }
 
     /**
@@ -48,18 +38,25 @@ public class DBHandler {
      * @param tag - username человека
      */
     public String usersInsert(String firstname, String surname, String tag) {
-        users.setFirstname(firstname);
-        users.setSurname(surname);
-        users.setTag(tag);
+        Users user = new Users();
+        Dictonary dictonary = new Dictonary();
 
-        return users.regUser();
+        user.setFirstname(firstname);
+        user.setSurname(surname);
+        user.setTag(tag);
+
+        return usersDBSource.regUser(user, dictonary, dictonaryDBSource, dbConnection);
     }
 
     /**
      * <p>Выводите всех пользователей из базы данных</p>
      */
     public void getAllUsers() {
-        users.getAllUsers();
+        try {
+            usersDBSource.getAllUsers(dbConnection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -71,20 +68,30 @@ public class DBHandler {
      * @param tag - username человека
      */
     public String wordAdd(String wordValue, String wordTranslate, String group, String tag) {
-        words.setWordTranslate(wordTranslate);
-        words.setWordValue(wordValue);
+        try {
+            Words words = new Words();
+            Users users = new Users();
+            Dictonary dictonary = new Dictonary();
+            Groups groups = new Groups();
 
-        users.setTag(tag);
-        dictonary.setUserId(users.getUserIdByTag());
-        words.setDictonaryId(dictonary.getDictonaryId());
+            words.setWordTranslate(wordTranslate);
+            words.setWordValue(wordValue);
 
-        groups.setTitle(group);
-        groups.setDictonaryId(dictonary.getDictonaryId());
+            users.setTag(tag);
 
-        groups.createGroup();
+            dictonary.setUserId(usersDBSource.getUserIdByTag(users, dbConnection));
+            words.setDictonaryId(dictonaryDBSource.getDictonaryId(dictonary, dbConnection));
 
-        words.setGroupId(groups.getGroupId());
-        return words.wordAdd();
+            groups.setTitle(group);
+            groups.setDictonaryId(dictonaryDBSource.getDictonaryId(dictonary, dbConnection));
+
+            groupsDBSource.createGroup(groups, dbConnection);
+
+            words.setGroupId(groupsDBSource.getGroupId(groups, dbConnection));
+            return wordsDBSource.wordAdd(words, dbConnection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -93,8 +100,11 @@ public class DBHandler {
      * @param wordValue - слово, переданное в параметрах
      */
     public String translateWord(String wordValue) {
+        Words words = new Words();
+
         words.setWordValue(wordValue);
-        return words.translate();
+
+        return wordsDBSource.translate(words, dbConnection);
     }
 
     /**
@@ -103,19 +113,10 @@ public class DBHandler {
      * @param wordValue - слово, переданное в параметрах
      */
     public String deleteWord(String wordValue) {
-        words.setWordValue(wordValue);
-        return words.deleteWord();
-    }
+        Words words = new Words();
 
-    /**
-     * <p>Закрывает соединение с базой данных</p>
-     */
-    public void close() {
-        try {
-            System.out.println("Connection closed");
-            connection.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        words.setWordValue(wordValue);
+
+        return wordsDBSource.deleteWord(words, dbConnection);
     }
 }
