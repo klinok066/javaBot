@@ -63,7 +63,7 @@ public class RequestHandler {
             case "start" -> toStart(info);
             case "word_add" -> wordAdd(params, info);
             case "translate" -> translateWord(params);
-            case "delete_word" -> deleteWord(params);
+            case "remove" -> deleteWord(params);
             case    "group_list",
                     "group_create",
                     "word_list",
