@@ -73,4 +73,22 @@ public class GroupsDBSource {
 
         return groupId;
     }
+
+    public String getGroupTitle(int DictonaryId, DBConnection dbConnection) throws SQLException {
+        String groupTitle = "";
+
+        try {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("int", Integer.toString(DictonaryId)));
+
+            String getGroupTitleSQL = "select title from groups where dictonary_id=?";
+            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
+
+            for (HashMap<String, String> item : response)
+                groupTitle = item.get("title");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return groupTitle;
+    }
 }

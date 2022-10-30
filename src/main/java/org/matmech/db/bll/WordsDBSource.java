@@ -86,6 +86,26 @@ public class WordsDBSource {
     }
 
     /**
+     * <p>Меняет параметр word_translate</p>
+     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     */
+    public String editTranslation(Words words, DBConnection dbConnection) {
+        if (isExist(words, dbConnection)) {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", words.getWordValue()));
+
+            String translateValueSQL = "UPDATE words SET word_translate = '" + words.getWordTranslate() + "' WHERE word_value = ?";
+
+
+            dbConnection.executeUpdateWithParams(translateValueSQL, params);
+            return "вы успешно изменили translation";
+        }
+
+        return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
+
+    }
+
+    /**
      * <p>Удаляет слово из базы данных</p>
      * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
      */

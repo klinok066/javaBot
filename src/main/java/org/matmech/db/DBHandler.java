@@ -108,6 +108,44 @@ public class DBHandler {
     }
 
     /**
+     * <p>Изменить параметр слова</p>
+     *
+     * @param wordValue - слово, переданное в параметрах
+     * @param wordParam - параметр для изменения, переданное в параметрах
+     * @param paramValue - значение изменяемого параметра, переданное в параметрах
+     */
+    public String edit(String wordValue, String wordParam, String paramValue){
+        Words words = new Words();
+        words.setWordValue(wordValue);
+        switch (wordParam){
+//            case("group"):
+//                words.setGroupId();
+//                break;
+            case("translation"):
+                words.setWordTranslate(paramValue);
+                return wordsDBSource.editTranslation(words,dbConnection);
+        }
+        return "Этот параметр не подлежит изменению.\n Полный список команд можете посмотреть с помощью /help";
+    }
+
+    /**
+     * <p>Узнать группу слова</p>
+     *
+     * @param wordValue - слово, переданное в параметрах
+     */
+    public String getGroup(String wordValue) throws SQLException {
+        Words words = new Words();
+
+        words.setWordValue(wordValue);
+
+        int groupID = words.getDictonaryId();
+
+        return groupsDBSource.getGroupTitle(groupID, dbConnection);
+
+
+    }
+
+    /**
      * <p>Удаляет слово</p>
      *
      * @param wordValue - слово, переданное в параметрах

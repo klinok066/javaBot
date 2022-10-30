@@ -53,6 +53,11 @@ public class RequestHandler {
         return db.translateWord(params[0]);
     }
 
+    private String edit(String[] params) {
+        return db.edit(params[0], params[1], params[2]);
+    }
+
+
     private String deleteWord(String[] params) {
         return db.deleteWord(params[0]);
     }
