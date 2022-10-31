@@ -114,13 +114,26 @@ public class DBHandler {
      * @param wordParam - параметр для изменения, переданное в параметрах
      * @param paramValue - значение изменяемого параметра, переданное в параметрах
      */
+    //если ломается обернуть в isExist()
     public String edit(String wordValue, String wordParam, String paramValue){
         Words words = new Words();
         words.setWordValue(wordValue);
         switch (wordParam){
-//            case("group"):
-//                words.setGroupId();
-//                break;
+            case("group"):
+                try {
+                    Groups groups = new Groups();
+                    groups.setTitle(paramValue);
+                    // вытягиваю dictionary_id из слова
+                    int dictionaryID = Integer.parseInt(wordsDBSource.getDictonaryId(words, dbConnection));
+                    groups.setDictonaryId(dictionaryID);
+                    // поиск по d_id group_id с title из paramValue
+                    int groupID = groupsDBSource.getGroupId(groups, dbConnection);
+
+                    words.setGroupId(groupID);
+                    return wordsDBSource.editGroupId(words, dbConnection);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             case("translation"):
                 words.setWordTranslate(paramValue);
                 return wordsDBSource.editTranslation(words,dbConnection);

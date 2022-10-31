@@ -93,18 +93,37 @@ public class WordsDBSource {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
 
-            String geDictonaryIdSQL = "select * from words where word_value=?";
+            String getDictionaryIdSQL = "select * from words where word_value=?";
 
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(geDictonaryIdSQL, params);
+            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
 
             for (HashMap<String, String> item : response)
-                return item.get("dictonary_id");
+                return item.get("dictionary_id");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         return "Не удалось получить группу";
     }
+
+    public String getGroupId(Words words, DBConnection dbConnection) {
+        try {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", words.getWordValue()));
+
+            String getGroupIdSQL = "select * from words where word_value=?";
+
+            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
+
+            for (HashMap<String, String> item : response)
+                return item.get("group_id");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "Не удалось получить группу";
+    }
+
 
     /**
      * <p>Меняет параметр word_translate</p>
@@ -115,11 +134,32 @@ public class WordsDBSource {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
 
-            String translateValueSQL = "UPDATE words SET word_translate = '" + words.getWordTranslate() + "' WHERE word_value = ?";
+            String translateValueSQL = "UPDATE words SET word_translate = " + words.getWordTranslate() + " WHERE word_value = ?";
 
 
             dbConnection.executeUpdateWithParams(translateValueSQL, params);
             return "вы успешно изменили translation";
+        }
+
+        return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
+
+    }
+
+
+    /**
+     * <p>Меняет параметр group_id</p>
+     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     */
+    public String editGroupId(Words words, DBConnection dbConnection){
+        if (isExist(words, dbConnection)){
+            ArrayList<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
+            params.add(createParams("string", words.getWordValue()));
+
+            String groupIdValueSQL = "UPDATE words SET group_id = " + words.getGroupId() + " WHERE word_value = ?";
+
+
+            dbConnection.executeUpdateWithParams(groupIdValueSQL, params);
+            return "Вы успешно изменили group_id";
         }
 
         return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
@@ -145,3 +185,4 @@ public class WordsDBSource {
         return "Слова нет в базе данных!";
     }
 }
+

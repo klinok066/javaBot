@@ -69,10 +69,10 @@ public class RequestHandler {
             case "word_add" -> wordAdd(params, info);
             case "translate" -> translateWord(params);
             case "remove" -> deleteWord(params);
+            case "edit" -> edit(params);
             case    "group_list",
                     "group_create",
                     "word_list",
-                    "word_to",
                     "testing_all",
                     "test",
                     "test_in_group_all",
