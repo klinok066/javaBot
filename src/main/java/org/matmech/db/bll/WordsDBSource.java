@@ -86,6 +86,27 @@ public class WordsDBSource {
     }
 
     /**
+     * Возвращает dictonary_id слова из базы данные. Возвращает строку - dictonary_id
+     */
+    public String getDictonaryId(Words words, DBConnection dbConnection) {
+        try {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", words.getWordValue()));
+
+            String geDictonaryIdSQL = "select * from words where word_value=?";
+
+            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(geDictonaryIdSQL, params);
+
+            for (HashMap<String, String> item : response)
+                return item.get("dictonary_id");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "Не удалось получить группу";
+    }
+
+    /**
      * <p>Меняет параметр word_translate</p>
      * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
      */

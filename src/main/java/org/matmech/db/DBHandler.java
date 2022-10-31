@@ -133,16 +133,18 @@ public class DBHandler {
      *
      * @param wordValue - слово, переданное в параметрах
      */
-    public String getGroup(String wordValue) throws SQLException {
-        Words words = new Words();
+    public String getGroup(String wordValue) {
+        try {
+            Words words = new Words();
 
-        words.setWordValue(wordValue);
+            words.setWordValue(wordValue);
+            words.setDictonaryId(Integer.parseInt(wordsDBSource.getDictonaryId(words, dbConnection)));
 
-        int groupID = words.getDictonaryId();
-
-        return groupsDBSource.getGroupTitle(groupID, dbConnection);
-
-
+            return groupsDBSource.getGroupTitle(words.getDictonaryId(), dbConnection);
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить группу");
+            throw new RuntimeException(e);
+        }
     }
 
     /**
