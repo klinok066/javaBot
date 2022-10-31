@@ -57,6 +57,9 @@ public class RequestHandler {
         return db.edit(params[0], params[1], params[2]);
     }
 
+    private String getGroup(String[] params) {
+        return db.getGroup(params[0]);
+    }
 
     private String deleteWord(String[] params) {
         return db.deleteWord(params[0]);
@@ -69,6 +72,8 @@ public class RequestHandler {
             case "word_add" -> wordAdd(params, info);
             case "translate" -> translateWord(params);
             case "remove" -> deleteWord(params);
+            case "edit" -> edit(params);
+            case "get_group" -> getGroup(params);
             case    "group_list",
                     "group_create",
                     "word_list",
