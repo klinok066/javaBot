@@ -42,7 +42,6 @@ public class UsersDBSource {
             throw new RuntimeException(e);
         }
     }
-
     /***
      * Возврат user_id с помощью тега
      * @param users - объект с информацией о пользователе
@@ -58,8 +57,6 @@ public class UsersDBSource {
             String getWordsSQL = "select * from users where tag=?";
 
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
-
-            System.out.println(response.size() != 0);
 
             for (HashMap<String, String> item : response)
                 userId = Integer.parseInt(item.get("id"));

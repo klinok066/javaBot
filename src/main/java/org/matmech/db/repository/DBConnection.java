@@ -162,7 +162,7 @@ public class DBConnection {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Не удалось выполнить запрос");
+            System.out.println("Не удалось выполнить запрос: " + e.getMessage());
             throw new RuntimeException(e);
         } finally {
             close();

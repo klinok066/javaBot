@@ -124,12 +124,18 @@ public class DBHandler {
                     Groups groups = new Groups();
                     groups.setTitle(paramValue);
                     // вытягиваю dictionary_id из слова
+
                     int dictionaryID = Integer.parseInt(wordsDBSource.getDictonaryId(words, dbConnection));
                     groups.setDictonaryId(dictionaryID);
                     // поиск по d_id group_id с title из paramValue
+
                     int groupID = groupsDBSource.getGroupId(groups, dbConnection);
 
+                    if (groupID == -1)
+                        return "Такой группы не существует! Создайте группу, пожалуйста!";
+
                     words.setGroupId(groupID);
+
                     return wordsDBSource.editGroupId(words, dbConnection);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
