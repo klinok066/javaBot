@@ -63,7 +63,7 @@ public class GroupsDBSource {
             params.add(createParams("int", Integer.toString(groups.getDictonaryId())));
             params.add(createParams("string", groups.getTitle()));
 
-            String getGroupIdSQL = "select id from groups where dictonary_id=? and where group_title=?";
+            String getGroupIdSQL = "select id from groups where dictonary_id=? and title=?";
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
             for (HashMap<String, String> item : response)
