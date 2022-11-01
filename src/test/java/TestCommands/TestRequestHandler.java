@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class TestRequestHandler extends TestCase {
-    private final Map messages = new HashMap();
-
     private DataSaver data;
     private String DB_URL;
     private String DB_USERNAME;
