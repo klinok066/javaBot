@@ -68,9 +68,13 @@ public class UsersDBSource {
     }
 
     /**
-     * <p>Добавляет нового пользователя в систему</p>
+     * Добавляет нового пользователя в систему
+     * @param users - объект с информацией о пользователе. Обязательные поля:
+     *                <i>firstname</i>, <i>surname</i>, <i>tag</i>
+     * @param dbConnection
+     * @return
      */
-    public String regUser(Users users, Dictonary dictonary, DictonaryDBSource dictonaryDBSource, DBConnection dbConnection) {
+    public boolean regUser(Users users, DBConnection dbConnection) {
         try {
             if (!isExist(users, dbConnection)) {
                 ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
@@ -82,15 +86,11 @@ public class UsersDBSource {
                 String insertUserSQL = "insert into users(firstname, surname, tag) values(?, ?, ?)";
                 dbConnection.executeUpdateWithParams(insertUserSQL, params);
 
-                // create dictonary
-                dictonary.setUserId(getUserIdByTag(users, dbConnection));
-                dictonaryDBSource.createDictonary(dictonary, dbConnection);
-
-                return "Привет, добро пожаловать в нашего бота для изучения английского языка!\n"
-                        + "Список всех команд можете посмотреть с помощью /help";
+                return true;
             }
 
-            return "Вы уже зарегистрированны в нашей системе";
+            return false;
+//            return "Вы уже зарегистрированны в нашей системе";
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

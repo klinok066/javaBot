@@ -22,6 +22,11 @@ public class GroupsDBSource {
         return item;
     }
 
+    /**
+     * Проверка на существование группы по названию
+     * @param groups - объект с информацией о группе. Обязательно должен быть заполнен параметр <i>title</i>
+     * @param dbConnection - репозиторий
+     */
     private boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
@@ -36,6 +41,12 @@ public class GroupsDBSource {
         }
     }
 
+    /**
+     * Создает группу для какого-то пользователя
+     * @param groups - объект с информацией о группы. Обязательно должны быть заполнены поля
+     *                 dictonaryId и title
+     * @param dbConnection - репозиторий
+     */
     public String createGroup(Groups groups, DBConnection dbConnection) {
         try {
             if (!isExist(groups, dbConnection)) {
@@ -55,8 +66,14 @@ public class GroupsDBSource {
         }
     }
 
+
+    /**
+     * Возвращает groupId по id словаря и названию группы
+     * @param groups - объект с информацией о группе (должны быть заполнены значения <i>dictonaryId</i> и <i>title</i>)
+     * @param dbConnection - репозиторий
+     */
     public int getGroupId(Groups groups, DBConnection dbConnection) throws SQLException {
-        int groupId = -1;
+        int groupId = -1; // возвращает если такой группы не существует
 
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
@@ -75,6 +92,11 @@ public class GroupsDBSource {
         return groupId;
     }
 
+    /**
+     * Возвращает название группы по dictonaryId
+     * @param DictonaryId - id словаря
+     * @param dbConnection - репозиторий
+     */
     public String getGroupTitle(int DictonaryId, DBConnection dbConnection) throws SQLException {
         String groupTitle = "";
 

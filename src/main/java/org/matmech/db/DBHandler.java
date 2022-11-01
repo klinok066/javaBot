@@ -26,6 +26,12 @@ public class DBHandler {
         wordsDBSource = new WordsDBSource();
     }
 
+    /**
+     * Подключение к базе данных
+     * @param DB_URL - url адрес базы данных
+     * @param DB_USERNAME - пользователь в базед данных
+     * @param DB_PASSWORD - пароль пользователя
+     */
     public void setDbConnection(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
         dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
     }
@@ -38,23 +44,42 @@ public class DBHandler {
      * @param tag - username человека
      */
     public String usersInsert(String firstname, String surname, String tag) {
-        Users user = new Users();
-        Dictonary dictonary = new Dictonary();
+        try {
+            Users user = new Users();
+            Dictonary dictonary = new Dictonary();
 
-        user.setFirstname(firstname);
-        user.setSurname(surname);
-        user.setTag(tag);
+            user.setFirstname(firstname);
+            user.setSurname(surname);
+            user.setTag(tag);
 
-        return usersDBSource.regUser(user, dictonary, dictonaryDBSource, dbConnection);
+            boolean answer = usersDBSource.regUser(user, dbConnection);
+
+            if (answer) {
+                // создание словаря для пользователя
+                dictonary.setUserId(usersDBSource.getUserIdByTag(user, dbConnection));
+                dictonaryDBSource.createDictonary(dictonary, dbConnection);
+
+                return "Привет, добро пожаловать в нашего бота для изучения английского языка!\n"
+                        + "Список всех команд можете посмотреть с помощью /help";
+            }
+
+            return "Вы уже зарегистрированны в нашей системе";
+        } catch (SQLException e) {
+            System.out.println("Не удалось зарегистрировать пользователя");
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     /**
-     * <p>Выводите всех пользователей из базы данных</p>
+     * Выводит всех пользователей на экран
      */
     public void getAllUsers() {
         try {
             usersDBSource.getAllUsers(dbConnection);
         } catch (SQLException e) {
+            System.out.println("Не удалось получить пользователей");
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }

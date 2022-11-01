@@ -106,6 +106,11 @@ public class WordsDBSource {
         return "Не удалось получить группу";
     }
 
+    /**
+     * Достает groupId с базы данных
+     * @param words - объект с информацией о слове. Обязательно нужно заполнить поле <i>wordValue</i>
+     * @param dbConnection - репозиторий
+     */
     public String getGroupId(Words words, DBConnection dbConnection) {
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
