@@ -98,7 +98,7 @@ public class WordsDBSource {
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
 
             for (HashMap<String, String> item : response)
-                return item.get("dictionary_id");
+                return item.get("dictonary_id");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -132,9 +132,10 @@ public class WordsDBSource {
     public String editTranslation(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", words.getWordTranslate()));
             params.add(createParams("string", words.getWordValue()));
 
-            String translateValueSQL = "UPDATE words SET word_translate = " + words.getWordTranslate() + " WHERE word_value = ?";
+            String translateValueSQL = "UPDATE words SET word_translate=? WHERE word_value=?";
 
 
             dbConnection.executeUpdateWithParams(translateValueSQL, params);
@@ -153,9 +154,10 @@ public class WordsDBSource {
     public String editGroupId(Words words, DBConnection dbConnection){
         if (isExist(words, dbConnection)){
             ArrayList<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
+            params.add(createParams("int", String.valueOf(words.getGroupId())));
             params.add(createParams("string", words.getWordValue()));
 
-            String groupIdValueSQL = "UPDATE words SET group_id = " + words.getGroupId() + " WHERE word_value = ?";
+            String groupIdValueSQL = "UPDATE words SET group_id=? WHERE word_value=?";
 
 
             dbConnection.executeUpdateWithParams(groupIdValueSQL, params);
