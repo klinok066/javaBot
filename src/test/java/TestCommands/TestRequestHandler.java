@@ -16,38 +16,43 @@ public class TestRequestHandler extends TestCase {
     private final Map messages = new HashMap();
 
     private DataSaver data;
-    private String DB_URL = System.getenv("DB_URL");
-    private String DB_USERNAME = System.getenv("DB_USERNAME");
-    private String DB_PASSWORD = System.getenv("DB_PASSWORD");
-    private DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
-    private RequestHandler handler = new RequestHandler(db);
+    private String DB_URL;
+    private String DB_USERNAME;
+    private String DB_PASSWORD;
+    private DBHandler db;
+    private RequestHandler handler;
 
     @Before
     public void setUpCommandsArray() { // исправить тесты
+        DB_URL = System.getenv("DB_URL");
+        DB_USERNAME = System.getenv("DB_USERNAME");
+        DB_PASSWORD = System.getenv("DB_PASSWORD");
         data = new DataSaver("User", "Unknown", "Unknown", -1);
-        messages.put("group_list", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("word_add", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("group_create", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("word_list", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("word_to", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("testing_all", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("test", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("test_in_group_all", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("test_in_group", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("stop_test", "So far, work is underway on this function, but in the near future it will be revived");
-        messages.put("hello", "Hello, " + data.getFirstname());
-        messages.put("привет", "Sorry, I'm don't understand you...");
-        messages.put("dasasdas", "Sorry, I'm don't understand you...");
+        db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
+        handler = new RequestHandler(db);
     }
 
     @Test
     public void testOnUse() {
-        for (Iterator iterator = messages.keySet().iterator(); iterator.hasNext(); ) {
-            final String key = iterator.next().toString();
-            final String trueAnswer = messages.get(key).toString();
-            final String answer = handler.onUse(key, data);
-            assertEquals(trueAnswer, answer);
-        }
+        assertEquals(handler.onUse("/group_list", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/group_list", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/group_create", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/group_create", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/word_list", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/word_list", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/test", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/test", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/stop_test", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("/stop_test", data), "So far, work is underway on this function, but in the near future it will be revived");
+        assertEquals(handler.onUse("sdfsdfsdf", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("xzc", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("xcv", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("укеуке", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("привет", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("спам", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("бот", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("ничего", data), "Sorry, I'm don't understand you...");
+        assertEquals(handler.onUse("hello", data), "Hello, " + data.getFirstname());
     }
 
     @Test

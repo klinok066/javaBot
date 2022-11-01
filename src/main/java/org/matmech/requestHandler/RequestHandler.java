@@ -77,11 +77,7 @@ public class RequestHandler {
             case    "group_list",
                     "group_create",
                     "word_list",
-                    "word_to",
-                    "testing_all",
                     "test",
-                    "test_in_group_all",
-                    "test_in_group",
                     "stop_test" -> functionInProgress();
 
             default -> toDefaultAnswer();
