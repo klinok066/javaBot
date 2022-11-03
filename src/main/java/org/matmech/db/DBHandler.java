@@ -1,6 +1,8 @@
 package org.matmech.db;
 
 import java.sql.*;
+
+import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.bll.GroupsDBSource;
 import org.matmech.db.bll.UsersDBSource;
 import org.matmech.db.bll.DictonaryDBSource;
@@ -202,5 +204,39 @@ public class DBHandler {
         words.setWordValue(wordValue);
 
         return wordsDBSource.deleteWord(words, dbConnection);
+    }
+
+    /**
+     * Устанавливает пользователю режим тестирования
+     * @param testMode - режим тестирования, который желает установить пользователь
+     * @param tag - тег пользователя
+     */
+    public String setMode(String testMode, String tag) {
+        return switch (testMode) {
+            case "easy", "difficult" -> {
+                Users user = new Users();
+                user.setTestMode(testMode);
+                user.setTag(tag);
+
+                yield usersDBSource.setMode(user, dbConnection);
+            }
+            default -> "Вы выбрали не существующий режим тестирования. Надо выбрать либо easy, либо difficult!";
+        };
+    }
+
+    /**
+     * Возвращает режим тестирования пользователя
+     * @param tag - тег пользователя
+     */
+    public String getMode(String tag) {
+        Users user = new Users();
+        user.setTag(tag);
+
+        String testMode = usersDBSource.getMode(user, dbConnection);
+
+        if (testMode != null)
+            return "Режим тестирования = " + testMode;
+
+        return "Произошла ошибка: у вас не установлен режим тестирования\nУстановить вы его можете с помощью /set_mode";
     }
 }

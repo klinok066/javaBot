@@ -113,4 +113,53 @@ public class UsersDBSource {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Устанавливает режим тестирования для пользователя
+     * @param users - объект с информацией о пользователе. Обязательные поля: <i>tag</i>, <i>testMode</i>
+     * @param dbConnection - репозиторий
+     */
+    public String setMode(Users users, DBConnection dbConnection) {
+        try {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", String.valueOf(users.getTestMode())));
+            params.add(createParams("string", users.getTag()));
+
+            if (this.getMode(users, dbConnection).equals(users.getTestMode()))
+                return "У вас уже итак стоит этот режим, вы можете поменять его на другой";
+
+            String setTestModeSQL = "update users set test_mode=? where tag=?";
+
+            dbConnection.executeUpdateWithParams(setTestModeSQL, params);
+
+            return "Режим тестирования был изменен на " + users.getTestMode();
+        } catch (Exception e) {
+            System.out.println("Не удалось установить режим тестирования\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Получает режим тестирования из базы данных
+     * @param users - объект с информацией о пользователе. Обязательные поля: <i>tag</i>
+     * @param dbConnection - репозиторий
+     */
+    public String getMode(Users users, DBConnection dbConnection) {
+        try {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", users.getTag()));
+
+            String getTestMode = "select test_mode from users where tag=?";
+
+            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getTestMode, params);
+
+            for (HashMap<String, String> item : response)
+                return item.get("test_mode");
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить режим тестирования\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
 }
