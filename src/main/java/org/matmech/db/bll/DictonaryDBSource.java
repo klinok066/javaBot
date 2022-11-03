@@ -56,6 +56,7 @@ public class DictonaryDBSource {
             for (HashMap<String, String> item : response)
                 dictonaryId = Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
+            System.out.println("Не удалось получить dictonary_id.\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 

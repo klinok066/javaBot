@@ -38,6 +38,7 @@ public class WordsDBSource {
 
             return response.size() != 0;
         } catch (SQLException e) {
+            System.out.println("Не удалось проверить на существование слово\n" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -81,6 +82,7 @@ public class WordsDBSource {
 
             return "Ошибка! В словаре нет этого слова!\n Полный список команд можете посмотреть с помощью /help";
         } catch (SQLException e) {
+            System.out.println("Не удалось получить перевод слова\n" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -100,6 +102,7 @@ public class WordsDBSource {
             for (HashMap<String, String> item : response)
                 return item.get("dictonary_id");
         } catch (SQLException e) {
+            System.out.println("Не удалось получить dictonary_id\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -123,6 +126,7 @@ public class WordsDBSource {
             for (HashMap<String, String> item : response)
                 return item.get("group_id");
         } catch (SQLException e) {
+            System.out.println("Не удалось получить id группы по слову\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 

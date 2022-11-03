@@ -39,6 +39,7 @@ public class UsersDBSource {
 
             return response.size() != 0;
         } catch (SQLException e) {
+            System.out.println("Не удалось проверить пользователя на существование\n" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -61,6 +62,7 @@ public class UsersDBSource {
             for (HashMap<String, String> item : response)
                 userId = Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
+            System.out.println("Не удалось получить тег пользователя по id\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -71,8 +73,7 @@ public class UsersDBSource {
      * Добавляет нового пользователя в систему
      * @param users - объект с информацией о пользователе. Обязательные поля:
      *                <i>firstname</i>, <i>surname</i>, <i>tag</i>
-     * @param dbConnection
-     * @return
+     * @param dbConnection - репозиторий
      */
     public boolean regUser(Users users, DBConnection dbConnection) {
         try {
@@ -90,8 +91,8 @@ public class UsersDBSource {
             }
 
             return false;
-//            return "Вы уже зарегистрированны в нашей системе";
         } catch (SQLException e) {
+            System.out.println("Не удалось зарегистрировать пользователя\n" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -108,6 +109,7 @@ public class UsersDBSource {
                 System.out.println(item.get("id") + item.get("firstname") + item.get("surname") + item.get("tag"));
 
         } catch (SQLException e) {
+            System.out.println("Не удалось получить всех пользователей\n" + e.getMessage());
             throw new RuntimeException(e);
         }
     }

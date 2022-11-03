@@ -62,6 +62,7 @@ public class GroupsDBSource {
 
             return "Группа уже существует!";
         } catch (SQLException e) {
+            System.out.println("Не удалось создать группу\n" + e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -86,6 +87,7 @@ public class GroupsDBSource {
             for (HashMap<String, String> item : response)
                 groupId = Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
+            System.out.println("Не удалось получить id группы\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -110,6 +112,7 @@ public class GroupsDBSource {
             for (HashMap<String, String> item : response)
                 groupTitle = item.get("title");
         } catch (SQLException e) {
+            System.out.println("Не удалось получить заголовок группы\n" + e.getMessage());
             throw new RuntimeException(e);
         }
         return groupTitle;
