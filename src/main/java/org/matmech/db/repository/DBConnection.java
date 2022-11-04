@@ -68,6 +68,7 @@ public class DBConnection {
         switch (type.toLowerCase()) {
             case "int" -> preparedStatement.setInt(index + 1, Integer.parseInt(value));
             case "string" -> preparedStatement.setString(index + 1, value);
+            case "boolean" -> preparedStatement.setBoolean(index + 1, Boolean.getBoolean(value));
             default -> {
                 System.out.println("Неправильный тип данных");
                 throw new IllegalStateException("Unexpected value: " + type);

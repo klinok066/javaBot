@@ -5,6 +5,7 @@ public class Users extends BaseModel{
     private String surname;
     private String tag;
     private String testMode;
+    private boolean testing;
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
@@ -21,6 +22,9 @@ public class Users extends BaseModel{
     public void setTestMode(String testMode) {
         this.testMode = testMode;
     }
+    public void setTesting(boolean testing) {
+        this.testing = testing;
+    }
 
     public String getFirstname() {
         return this.firstname;
@@ -36,5 +40,8 @@ public class Users extends BaseModel{
 
     public String getTestMode() {
         return testMode;
+    }
+    public boolean getTesting() {
+        return testing;
     }
 }

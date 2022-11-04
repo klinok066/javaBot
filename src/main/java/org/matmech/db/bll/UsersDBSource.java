@@ -9,24 +9,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class UsersDBSource {
-    /***
-     * Создает HashMap объект с параметром
-     * @param type - тип параметра
-     * @param value - значение параметра
-     */
-    private HashMap<String, String> createParams(String type, String value) {
-        HashMap<String, String> item = new HashMap<String, String>();
-
-        item.put("type", type);
-        item.put("value", value);
-
-        return item;
-    }
-
+public class UsersDBSource extends DBSource {
     /**
      * <p>Проверяет на существование какого-то пользователя</p>
      * <p>Перед этим нужно проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @return - возвращает существует пользователь в виде boolean
      */
     private boolean isExist(Users users, DBConnection dbConnection) throws SQLException {
         try {
@@ -47,6 +34,7 @@ public class UsersDBSource {
      * Возврат user_id с помощью тега
      * @param users - объект с информацией о пользователе
      * @param dbConnection - объект базы данных
+     * @return - возвращает userId
      */
     public int getUserIdByTag(Users users, DBConnection dbConnection) throws SQLException {
         int userId = -1;
@@ -74,6 +62,7 @@ public class UsersDBSource {
      * @param users - объект с информацией о пользователе. Обязательные поля:
      *                <i>firstname</i>, <i>surname</i>, <i>tag</i>
      * @param dbConnection - репозиторий
+     * @return - возвращает результат выполнения операции. <i>True</i> - если успешно, <i>False</i> - если не успешно
      */
     public boolean regUser(Users users, DBConnection dbConnection) {
         try {
@@ -118,6 +107,7 @@ public class UsersDBSource {
      * Устанавливает режим тестирования для пользователя
      * @param users - объект с информацией о пользователе. Обязательные поля: <i>tag</i>, <i>testMode</i>
      * @param dbConnection - репозиторий
+     * @return - возвращает строчку с готовым текстом о результате выполнения операции
      */
     public String setMode(Users users, DBConnection dbConnection) {
         try {
@@ -143,6 +133,7 @@ public class UsersDBSource {
      * Получает режим тестирования из базы данных
      * @param users - объект с информацией о пользователе. Обязательные поля: <i>tag</i>
      * @param dbConnection - репозиторий
+     * @return - возвращает значение поля test_mode в виде строки
      */
     public String getMode(Users users, DBConnection dbConnection) {
         try {
@@ -161,5 +152,56 @@ public class UsersDBSource {
         }
 
         return null;
+    }
+
+    /**
+     * Возвращает значение поля testing
+     * @param users - объект с информацией о пользователе. Обязательные поля: <i>tag</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает поле testing в виде строки
+     */
+    public String getTesting(Users users, DBConnection dbConnection) {
+        try {
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", users.getTag()));
+
+            String getTestingSQL = "select testing from users where tag=?";
+
+            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getTestingSQL, params);
+
+            for (HashMap<String, String> item : response)
+                return item.get("testing");
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить поле testing у пользователя");
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Устанавливает значение полю testing
+     * @param users - объект с информацией о пользователе. Обязательные поля: <i>testing</i>, <i>tag</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает результат выполнения операции. <i>True</i> - выполнилась успешно, и наоборот <i>False</i>
+     */
+    public boolean setTesting(Users users, DBConnection dbConnection) {
+        try {
+            if (isExist(users, dbConnection))
+                return false;
+
+            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("string", String.valueOf(users.getTesting())));
+            params.add(createParams("string", users.getTag()));
+
+            String setTestingSQL = "update users set testing=? where tag=?";
+
+            dbConnection.executeUpdateWithParams(setTestingSQL, params);
+
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Не удалось установить значение полю testing");
+            throw new RuntimeException(e);
+        }
     }
 }

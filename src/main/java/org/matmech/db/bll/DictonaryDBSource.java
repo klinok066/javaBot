@@ -7,21 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DictonaryDBSource {
-    /***
-     * Создает HashMap объект с параметром
-     * @param type - тип параметра
-     * @param value - значение параметра
-     */
-    private HashMap<String, String> createParams(String type, String value) {
-        HashMap<String, String> item = new HashMap<String, String>();
-
-        item.put("type", type);
-        item.put("value", value);
-
-        return item;
-    }
-
+public class DictonaryDBSource extends DBSource {
     /***
      * <p>Метод, который создает словарь какому-то пользователю</p>
      * <p>Перед этим надо инициализировать поле <i>userId</i> с помощью сеттера</p>

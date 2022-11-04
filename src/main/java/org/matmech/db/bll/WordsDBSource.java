@@ -8,24 +8,11 @@ import java.util.HashMap;
 import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
 
-public class WordsDBSource {
-    /***
-     * Создает HashMap объект с параметром
-     * @param type - тип параметра
-     * @param value - значение параметра
-     */
-    private HashMap<String, String> createParams(String type, String value) {
-        HashMap<String, String> item = new HashMap<String, String>();
-
-        item.put("type", type);
-        item.put("value", value);
-
-        return item;
-    }
-
+public class WordsDBSource extends DBSource {
     /**
      * <p>Проверяет на существование какого-то слова</p>
      * <p>Перед этим нужно проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @return - возвращает существование слова в бд
      */
     private boolean isExist(Words words, DBConnection dbConnection) {
         try {
@@ -45,6 +32,7 @@ public class WordsDBSource {
 
     /**
      * <p>Добавляет слово в базу данных. Если слово уже существует, то будет возвращаенно соответствующее сообщение</p>
+     * @return - возвращает строчку о результате работы метода
      */
     public String wordAdd(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection))
@@ -65,6 +53,7 @@ public class WordsDBSource {
     /**
      * <p>Достает слово из базы данных</p>
      * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @return - возвращает строчку с ошибкой или со значением поля translate (в красивом виде)
      */
     public String translate(Words words, DBConnection dbConnection) {
         try {
@@ -89,6 +78,7 @@ public class WordsDBSource {
 
     /**
      * Возвращает dictonary_id слова из базы данные. Возвращает строку - dictonary_id
+     * @return - возвращает строчку с ошибкой или со значением поля dictonary_id
      */
     public String getDictonaryId(Words words, DBConnection dbConnection) {
         try {
@@ -113,6 +103,7 @@ public class WordsDBSource {
      * Достает groupId с базы данных
      * @param words - объект с информацией о слове. Обязательно нужно заполнить поле <i>wordValue</i>
      * @param dbConnection - репозиторий
+     * @return - возвращает строчку об ошибке или строчку со значением поля group_id
      */
     public String getGroupId(Words words, DBConnection dbConnection) {
         try {
@@ -137,6 +128,7 @@ public class WordsDBSource {
     /**
      * <p>Меняет параметр word_translate</p>
      * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @return - возвращает строчку о результате работы метода
      */
     public String editTranslation(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
@@ -159,6 +151,7 @@ public class WordsDBSource {
     /**
      * <p>Меняет параметр group_id</p>
      * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @return - возвращает строчку о результате работы метода
      */
     public String editGroupId(Words words, DBConnection dbConnection){
         if (isExist(words, dbConnection)){
@@ -180,6 +173,7 @@ public class WordsDBSource {
     /**
      * <p>Удаляет слово из базы данных</p>
      * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @return - возвращает строчку о результате работы метода
      */
     public String deleteWord(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {

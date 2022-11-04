@@ -7,25 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GroupsDBSource {
-    /***
-     * Создает HashMap объект с параметром
-     * @param type - тип параметра
-     * @param value - значение параметра
-     */
-    private HashMap<String, String> createParams(String type, String value) {
-        HashMap<String, String> item = new HashMap<String, String>();
-
-        item.put("type", type);
-        item.put("value", value);
-
-        return item;
-    }
-
+public class GroupsDBSource extends DBSource {
     /**
      * Проверка на существование группы по названию
      * @param groups - объект с информацией о группе. Обязательно должен быть заполнен параметр <i>title</i>
      * @param dbConnection - репозиторий
+     * @return - возвращает результат работы метода. <i>True</i> - если успешно, <i>False</i> - если не успешно
      */
     private boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
@@ -46,6 +33,7 @@ public class GroupsDBSource {
      * @param groups - объект с информацией о группы. Обязательно должны быть заполнены поля
      *                 dictonaryId и title
      * @param dbConnection - репозиторий
+     * @return - создает группу
      */
     public String createGroup(Groups groups, DBConnection dbConnection) {
         try {
@@ -72,6 +60,7 @@ public class GroupsDBSource {
      * Возвращает groupId по id словаря и названию группы
      * @param groups - объект с информацией о группе (должны быть заполнены значения <i>dictonaryId</i> и <i>title</i>)
      * @param dbConnection - репозиторий
+     * @return - возвращает значение group_id
      */
     public int getGroupId(Groups groups, DBConnection dbConnection) throws SQLException {
         int groupId = -1; // возвращает если такой группы не существует
@@ -98,6 +87,7 @@ public class GroupsDBSource {
      * Возвращает название группы по dictonaryId
      * @param DictonaryId - id словаря
      * @param dbConnection - репозиторий
+     * @return - возвращает значение поля dictonary_id в виде строчки
      */
     public String getGroupTitle(int DictonaryId, DBConnection dbConnection) throws SQLException {
         String groupTitle = "";
