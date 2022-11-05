@@ -10,11 +10,11 @@ public class Main {
     public static void main(String[] args) {
         // environment variables
 
-        String TELEGRAM_BOT_USERNAME = System.getenv("TELEGRAM_BOT_USERNAME");
-        String TELEGRAM_BOT_TOKEN = System.getenv("TELEGRAM_BOT_TOKEN");
-        String DB_URL = System.getenv("DB_URL");
-        String DB_USERNAME = System.getenv("DB_USERNAME");
-        String DB_PASSWORD = System.getenv("DB_PASSWORD");
+        final String TELEGRAM_BOT_USERNAME = System.getenv("TELEGRAM_BOT_USERNAME");
+        final String TELEGRAM_BOT_TOKEN = System.getenv("TELEGRAM_BOT_TOKEN");
+        final String DB_URL = System.getenv("DB_URL");
+        final String DB_USERNAME = System.getenv("DB_USERNAME");
+        final String DB_PASSWORD = System.getenv("DB_PASSWORD");
 
         // database
 
