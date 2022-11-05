@@ -13,23 +13,12 @@ public class CmdLogic {
     private String lastName;
     private String tag;
 
-    private void initUser() {
-        System.out.println("Добро пожаловать! Авторизуйте свой компьютер!");
-        System.out.print("Введите свое имя:");
-        this.firstName = input.nextLine();
-        System.out.print("Введите свою фамилию:");
-        this.lastName = input.nextLine();
-        System.out.print("Введите/придумайте себе тег:");
-        this.tag = input.nextLine();
-
-        System.out.println("Вы были успешно авторизированы! Для того, чтобы начать работать с ботом, напишите /start");
-    }
-
-    public CmdLogic(RequestHandler requestHandler) {
+    public CmdLogic(String firstName, String lastName, String tag, RequestHandler requestHandler) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.tag = tag;
         this.requestHandler = requestHandler;
         this.input = new Scanner(System.in);
-
-        initUser();
     }
 
     public void responseForCDM() {

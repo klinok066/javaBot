@@ -1,5 +1,6 @@
 package org.matmech;
 
+import org.matmech.connector.cmdBot.CmdBot;
 import org.matmech.connector.cmdLogic.CmdLogic;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegramBot.TelegramBot;
@@ -29,7 +30,7 @@ public class Main {
         Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN, requestHandler);
         bot.start();
 
-        CmdLogic cmd = new CmdLogic(requestHandler);
-        cmd.responseForCDM();
+        CmdBot cmdBot = new CmdBot(requestHandler);
+        cmdBot.start();
     }
 }
