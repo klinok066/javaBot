@@ -25,7 +25,7 @@ public class TestRequestHandler extends TestCase {
         DB_URL = System.getenv("DB_URL");
         DB_USERNAME = System.getenv("DB_USERNAME");
         DB_PASSWORD = System.getenv("DB_PASSWORD");
-        data = new DataSaver("User", "Unknown", "Unknown", -1);
+        data = new DataSaver("User", "Unknown", "Unknown");
         db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
         handler = new RequestHandler(db);
     }

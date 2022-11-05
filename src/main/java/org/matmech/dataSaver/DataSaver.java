@@ -4,13 +4,11 @@ final public class DataSaver {
     private final String firstname;
     private final String surname;
     private final String tag;
-    private final long id;
 
-    public DataSaver(String firstname, String surname, String tag, long id) {
+    public DataSaver(String firstname, String surname, String tag) {
         this.firstname = firstname;
         this.surname = surname;
         this.tag = tag;
-        this.id = id;
     }
 
     public String getFirstname() {
@@ -23,9 +21,5 @@ final public class DataSaver {
 
     public String getTag() {
         return tag;
-    }
-
-    public long id() {
-        return id;
     }
 }

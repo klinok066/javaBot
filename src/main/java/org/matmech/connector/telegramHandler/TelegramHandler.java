@@ -42,8 +42,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
             DataSaver data = new DataSaver(update.getMessage().getFrom().getFirstName(),
                                            update.getMessage().getFrom().getLastName(),
-                                           update.getMessage().getFrom().getUserName(),
-                                           update.getMessage().getFrom().getId()
+                                           update.getMessage().getFrom().getUserName()
                                           );
 
             String messageString = update.getMessage().getText();

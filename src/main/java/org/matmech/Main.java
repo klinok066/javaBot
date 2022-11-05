@@ -29,7 +29,7 @@ public class Main {
         Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN, requestHandler);
         bot.start();
 
-        CmdLogic cmd = new CmdLogic("User", "Unknown", "Unknown", -1, requestHandler);
+        CmdLogic cmd = new CmdLogic(requestHandler);
         cmd.responseForCDM();
     }
 }
