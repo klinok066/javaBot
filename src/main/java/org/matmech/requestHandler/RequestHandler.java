@@ -124,6 +124,6 @@ public class RequestHandler {
         if (!isCmd(command))
             return command;
 
-        return command.substring(1, command.length());
+        return command.substring(1);
     }
 }
