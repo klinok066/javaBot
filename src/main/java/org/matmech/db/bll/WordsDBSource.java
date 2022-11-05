@@ -11,7 +11,8 @@ import org.matmech.db.repository.DBConnection;
 public class WordsDBSource extends DBSource {
     /**
      * <p>Проверяет на существование какого-то слова</p>
-     * <p>Перед этим нужно проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
+     * @param dbConnection - репозиторий
      * @return - возвращает существование слова в бд
      */
     private boolean isExist(Words words, DBConnection dbConnection) {
@@ -31,12 +32,18 @@ public class WordsDBSource extends DBSource {
     }
 
     /**
-     * <p>Добавляет слово в базу данных. Если слово уже существует, то будет возвращаенно соответствующее сообщение</p>
-     * @return - возвращает строчку о результате работы метода
+     * <p>Добавляет слово в базу данных</p>
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения:
+     *                                                  <i>dictonaryId</i>
+     *                                                  <i>groupId</i>
+     *                                                  <i>wordValue</i>
+     *                                                  <i>wordTranslate</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает <i>true</i> при успешном выполнении метода и <i>false</i> при случае, когда слово уже существует
      */
-    public String wordAdd(Words words, DBConnection dbConnection) {
+    public boolean wordAdd(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection))
-            return "Ошибка! Слово уже существует!\nЕсли хотите что-то поменять в слове, то воспользуйтесь командой /edit";
+            return false;
 
         ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
         params.add(createParams("int", Integer.toString(words.getDictonaryId())));
@@ -47,12 +54,13 @@ public class WordsDBSource extends DBSource {
         String wordAddSQL = "insert into words(dictonary_id, group_id, word_value, word_translate) values(?, ?, ?, ?)";
         dbConnection.executeUpdateWithParams(wordAddSQL, params);
 
-        return "Слово было успешно добавлено!";
+        return true;
     }
 
     /**
      * <p>Достает слово из базы данных</p>
-     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
+     * @param dbConnection - репозиторий
      * @return - возвращает строчку с ошибкой или со значением поля translate (в красивом виде)
      */
     public String translate(Words words, DBConnection dbConnection) {
@@ -66,21 +74,23 @@ public class WordsDBSource extends DBSource {
                 ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(translateValueSQL, params);
 
                 for (HashMap<String, String> item : response)
-                    return "Перевод слова " + words.getWordValue() + " - " + item.get("word_translate");
+                    return item.get("word_translate");
             }
-
-            return "Ошибка! В словаре нет этого слова!\n Полный список команд можете посмотреть с помощью /help";
         } catch (SQLException e) {
             System.out.println("Не удалось получить перевод слова\n" + e.getMessage());
             throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     /**
-     * Возвращает dictonary_id слова из базы данные. Возвращает строку - dictonary_id
-     * @return - возвращает строчку с ошибкой или со значением поля dictonary_id
+     * Возвращает dictonary_id слова из базы данных
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает dictonary_id или -1 в случае не существования словаря
      */
-    public String getDictonaryId(Words words, DBConnection dbConnection) {
+    public int getDictonaryId(Words words, DBConnection dbConnection) {
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
@@ -90,22 +100,22 @@ public class WordsDBSource extends DBSource {
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
 
             for (HashMap<String, String> item : response)
-                return item.get("dictonary_id");
+                return Integer.parseInt(item.get("dictonary_id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить dictonary_id\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
-        return "Не удалось получить группу";
+        return -1;
     }
 
     /**
      * Достает groupId с базы данных
      * @param words - объект с информацией о слове. Обязательно нужно заполнить поле <i>wordValue</i>
      * @param dbConnection - репозиторий
-     * @return - возвращает строчку об ошибке или строчку со значением поля group_id
+     * @return - возвращает group_id или -1 в случае не существования словаря
      */
-    public String getGroupId(Words words, DBConnection dbConnection) {
+    public int getGroupId(Words words, DBConnection dbConnection) {
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
@@ -115,22 +125,23 @@ public class WordsDBSource extends DBSource {
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
             for (HashMap<String, String> item : response)
-                return item.get("group_id");
+                return Integer.parseInt(item.get("group_id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить id группы по слову\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
-        return "Не удалось получить группу";
+        return -1;
     }
 
 
     /**
      * <p>Меняет параметр word_translate</p>
-     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
-     * @return - возвращает строчку о результате работы метода
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>, <i>wordTranslate</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public String editTranslation(Words words, DBConnection dbConnection) {
+    public boolean editTranslation(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordTranslate()));
@@ -138,22 +149,22 @@ public class WordsDBSource extends DBSource {
 
             String translateValueSQL = "UPDATE words SET word_translate=? WHERE word_value=?";
 
-
             dbConnection.executeUpdateWithParams(translateValueSQL, params);
-            return "вы успешно изменили translation";
+
+            return true;
         }
 
-        return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
-
+        return false;
     }
 
 
     /**
      * <p>Меняет параметр group_id</p>
-     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
-     * @return - возвращает строчку о результате работы метода
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public String editGroupId(Words words, DBConnection dbConnection){
+    public boolean editGroupId(Words words, DBConnection dbConnection){
         if (isExist(words, dbConnection)){
             ArrayList<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
             params.add(createParams("int", String.valueOf(words.getGroupId())));
@@ -163,19 +174,21 @@ public class WordsDBSource extends DBSource {
 
 
             dbConnection.executeUpdateWithParams(groupIdValueSQL, params);
-            return "Вы успешно изменили group_id";
+
+            return true;
         }
 
-        return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
+        return false;
 
     }
 
     /**
      * <p>Удаляет слово из базы данных</p>
-     * <p>Перед этим надо проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
-     * @return - возвращает строчку о результате работы метода
+     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает <i>true</i> при успеха и <i>false</i> при неудаче
      */
-    public String deleteWord(Words words, DBConnection dbConnection) {
+    public boolean deleteWord(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
@@ -184,10 +197,10 @@ public class WordsDBSource extends DBSource {
 
             dbConnection.executeUpdateWithParams(deleteWordSQL, params);
 
-            return "Слово было удалено из базы данных!";
+            return true;
         }
 
-        return "Слова нет в базе данных!";
+        return false;
     }
 }
 

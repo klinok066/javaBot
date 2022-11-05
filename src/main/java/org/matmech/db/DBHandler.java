@@ -15,10 +15,10 @@ import org.matmech.db.repository.DBConnection;
 
 public class DBHandler {
     private DBConnection dbConnection = null;
-    private UsersDBSource usersDBSource;
-    private GroupsDBSource groupsDBSource;
-    private DictonaryDBSource dictonaryDBSource;
-    private WordsDBSource wordsDBSource;
+    private final UsersDBSource usersDBSource;
+    private final GroupsDBSource groupsDBSource;
+    private final DictonaryDBSource dictonaryDBSource;
+    private final WordsDBSource wordsDBSource;
 
     public DBHandler(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
         dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -107,15 +107,28 @@ public class DBHandler {
             users.setTag(tag);
 
             dictonary.setUserId(usersDBSource.getUserIdByTag(users, dbConnection));
-            words.setDictonaryId(dictonaryDBSource.getDictonaryId(dictonary, dbConnection));
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(dictonary, dbConnection);
+
+            if (dictonaryId == -1)
+                return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
+                        "Для регистрации напишите /start";
+
+            words.setDictonaryId(dictonaryId);
 
             groups.setTitle(group);
-            groups.setDictonaryId(dictonaryDBSource.getDictonaryId(dictonary, dbConnection));
+            groups.setDictonaryId(dictonaryId);
 
             groupsDBSource.createGroup(groups, dbConnection);
 
             words.setGroupId(groupsDBSource.getGroupId(groups, dbConnection));
-            return wordsDBSource.wordAdd(words, dbConnection);
+
+            boolean response = wordsDBSource.wordAdd(words, dbConnection);
+
+            if (response)
+                return "Слово было успешно добавлено!";
+            else
+                return "Ошибка! Слово уже существует!\nЕсли хотите что-то поменять в слове, то воспользуйтесь командой /edit";
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -131,7 +144,12 @@ public class DBHandler {
 
         words.setWordValue(wordValue);
 
-        return wordsDBSource.translate(words, dbConnection);
+        String wordTranslate = wordsDBSource.translate(words, dbConnection);
+
+        if (wordTranslate != null)
+            return "Перевод слова " + wordValue + ": " + wordTranslate;
+        else
+            return "Ошибка! В словаре нет этого слова!\n Полный список команд можете посмотреть с помощью /help";
     }
 
     /**
@@ -152,7 +170,12 @@ public class DBHandler {
                     groups.setTitle(paramValue);
                     // вытягиваю dictionary_id из слова
 
-                    int dictionaryID = Integer.parseInt(wordsDBSource.getDictonaryId(words, dbConnection));
+                    int dictionaryID = wordsDBSource.getDictonaryId(words, dbConnection);
+
+                    if (dictionaryID == -1)
+                        return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
+                                "Для регистрации напишите /start";
+
                     groups.setDictonaryId(dictionaryID);
                     // поиск по d_id group_id с title из paramValue
 
@@ -163,14 +186,26 @@ public class DBHandler {
 
                     words.setGroupId(groupID);
 
-                    return wordsDBSource.editGroupId(words, dbConnection);
+                    boolean response = wordsDBSource.editGroupId(words, dbConnection);
+
+                    if (response)
+                        return "Вы успешно изменили group_id";
+
+                    return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
             case("translation"):
                 words.setWordTranslate(paramValue);
-                return wordsDBSource.editTranslation(words,dbConnection);
+
+                boolean response = wordsDBSource.editTranslation(words,dbConnection);
+
+                if (response)
+                    return "Вы успешно изменили translation";
+
+                return "Ошибка, редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь";
         }
+
         return "Этот параметр не подлежит изменению.\n Полный список команд можете посмотреть с помощью /help";
     }
 
@@ -184,9 +219,21 @@ public class DBHandler {
             Words words = new Words();
 
             words.setWordValue(wordValue);
-            words.setDictonaryId(Integer.parseInt(wordsDBSource.getDictonaryId(words, dbConnection)));
 
-            return groupsDBSource.getGroupTitle(words.getDictonaryId(), dbConnection);
+            int dictonaryId = wordsDBSource.getDictonaryId(words, dbConnection);
+
+            if (dictonaryId == -1)
+                return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
+                        "Для регистрации напишите /start";
+
+            words.setDictonaryId(dictonaryId);
+
+            String groupTitle = groupsDBSource.getGroupTitle(words.getDictonaryId(), dbConnection);
+
+            if (groupTitle != null)
+                return "Группа у слова " + wordValue + ": " + groupTitle;
+
+            return "Не удалось получить группу у слова: либо слова не существует, либо группы у слова нет";
         } catch (SQLException e) {
             System.out.println("Не удалось получить группу");
             throw new RuntimeException(e);
@@ -203,7 +250,12 @@ public class DBHandler {
 
         words.setWordValue(wordValue);
 
-        return wordsDBSource.deleteWord(words, dbConnection);
+        boolean response = wordsDBSource.deleteWord(words, dbConnection);
+
+        if (response)
+            return "Слово было удалено из базы данных!";
+
+        return "Слова нет в базе данных!";
     }
 
     /**
@@ -218,7 +270,12 @@ public class DBHandler {
                 user.setTestMode(testMode);
                 user.setTag(tag);
 
-                yield usersDBSource.setMode(user, dbConnection);
+                boolean response = usersDBSource.setMode(user, dbConnection);
+
+                if (response)
+                    yield "Режим тестирования был изменен на " + testMode;
+                else
+                    yield "Не удалось изменить режим: либо произошла ошибка, либо у вас уже этот режим установлен";
             }
             default -> "Вы выбрали не существующий режим тестирования. Надо выбрать либо easy, либо difficult!";
         };

@@ -31,11 +31,11 @@ public class GroupsDBSource extends DBSource {
     /**
      * Создает группу для какого-то пользователя
      * @param groups - объект с информацией о группы. Обязательно должны быть заполнены поля
-     *                 dictonaryId и title
+     *                 <i>dictonaryId</i> и <i>title</i>
      * @param dbConnection - репозиторий
-     * @return - создает группу
+     * @return - возвращает либо <i>true</i> при успешно выполнении функции, либо <i>false</i> при неудаче
      */
-    public String createGroup(Groups groups, DBConnection dbConnection) {
+    public boolean createGroup(Groups groups, DBConnection dbConnection) {
         try {
             if (!isExist(groups, dbConnection)) {
                 ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
@@ -45,10 +45,10 @@ public class GroupsDBSource extends DBSource {
                 String groupAddSQL = "insert into groups(title, dictonary_id) values(?, ?)";
                 dbConnection.executeUpdateWithParams(groupAddSQL, params);
 
-                return "Группа успешно создана!";
+                return true;
             }
 
-            return "Группа уже существует!";
+            return false;
         } catch (SQLException e) {
             System.out.println("Не удалось создать группу\n" + e.getMessage());
             throw new RuntimeException(e);
@@ -60,11 +60,9 @@ public class GroupsDBSource extends DBSource {
      * Возвращает groupId по id словаря и названию группы
      * @param groups - объект с информацией о группе (должны быть заполнены значения <i>dictonaryId</i> и <i>title</i>)
      * @param dbConnection - репозиторий
-     * @return - возвращает значение group_id
+     * @return - возвращает либо значение group_id, либо -1 в случае если группа не нашлась
      */
     public int getGroupId(Groups groups, DBConnection dbConnection) throws SQLException {
-        int groupId = -1; // возвращает если такой группы не существует
-
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("int", String.valueOf(groups.getDictonaryId())));
@@ -74,24 +72,22 @@ public class GroupsDBSource extends DBSource {
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
             for (HashMap<String, String> item : response)
-                groupId = Integer.parseInt(item.get("id"));
+                return Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить id группы\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
-        return groupId;
+        return -1;
     }
 
     /**
      * Возвращает название группы по dictonaryId
      * @param DictonaryId - id словаря
      * @param dbConnection - репозиторий
-     * @return - возвращает значение поля dictonary_id в виде строчки
+     * @return - возвращает значение поля dictonary_id в виде строчки, либо null при неудаче
      */
     public String getGroupTitle(int DictonaryId, DBConnection dbConnection) throws SQLException {
-        String groupTitle = "";
-
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("int", Integer.toString(DictonaryId)));
@@ -100,11 +96,12 @@ public class GroupsDBSource extends DBSource {
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
 
             for (HashMap<String, String> item : response)
-                groupTitle = item.get("title");
+                return item.get("title");
         } catch (SQLException e) {
             System.out.println("Не удалось получить заголовок группы\n" + e.getMessage());
             throw new RuntimeException(e);
         }
-        return groupTitle;
+
+        return null;
     }
 }

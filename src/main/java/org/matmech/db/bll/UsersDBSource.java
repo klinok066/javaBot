@@ -109,20 +109,25 @@ public class UsersDBSource extends DBSource {
      * @param dbConnection - репозиторий
      * @return - возвращает строчку с готовым текстом о результате выполнения операции
      */
-    public String setMode(Users users, DBConnection dbConnection) {
+    public boolean setMode(Users users, DBConnection dbConnection) {
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", String.valueOf(users.getTestMode())));
             params.add(createParams("string", users.getTag()));
 
+            String testMode = this.getMode(users, dbConnection);
+
+            if (testMode == null)
+                return false;
+
             if (this.getMode(users, dbConnection).equals(users.getTestMode()))
-                return "У вас уже итак стоит этот режим, вы можете поменять его на другой";
+                return false;
 
             String setTestModeSQL = "update users set test_mode=? where tag=?";
 
             dbConnection.executeUpdateWithParams(setTestModeSQL, params);
 
-            return "Режим тестирования был изменен на " + users.getTestMode();
+            return true;
         } catch (Exception e) {
             System.out.println("Не удалось установить режим тестирования\n" + e.getMessage());
             throw new RuntimeException(e);

@@ -10,28 +10,28 @@ import java.util.HashMap;
 public class DictonaryDBSource extends DBSource {
     /***
      * <p>Метод, который создает словарь какому-то пользователю</p>
-     * <p>Перед этим надо инициализировать поле <i>userId</i> с помощью сеттера</p>
+     * @param dictonary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
+     * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public void createDictonary(Dictonary dictonary, DBConnection dbConnection) {
-        if (dictonary.getUserId() == -1) {
-            System.out.println("UserId equals null");
-            return;
-        }
+    public boolean createDictonary(Dictonary dictonary, DBConnection dbConnection) {
+        if (dictonary.getUserId() == -1)
+            return false;
 
         ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
         params.add(createParams("int", Integer.toString(dictonary.getUserId())));
 
         String createDictionarySQL = "insert into dictonary(user_id) values(?)";
         dbConnection.executeUpdateWithParams(createDictionarySQL, params);
+
+        return true;
     }
 
     /***
      * <p>Возвращает значение <i>dictonaryId</i> для какого-то конкретного пользователя</p>
-     * <p>Перед этим надо инициализировать поле <i>userId</i> с помощью сеттера</p>
+     * @param dictonary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
+     * @return - возвращает либо <i>dictonaryId</i>, либо -1 в случае если словаря не существует
      */
     public int getDictonaryId(Dictonary dictonary, DBConnection dbConnection) throws SQLException {
-        int dictonaryId = -1;
-
         try {
             ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("int", Integer.toString(dictonary.getUserId())));
@@ -40,12 +40,12 @@ public class DictonaryDBSource extends DBSource {
             ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictonaryIdSQL, params);
 
             for (HashMap<String, String> item : response)
-                dictonaryId = Integer.parseInt(item.get("id"));
+                return Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить dictonary_id.\n" + e.getMessage());
             throw new RuntimeException(e);
         }
 
-        return dictonaryId;
+        return -1;
     }
 }
