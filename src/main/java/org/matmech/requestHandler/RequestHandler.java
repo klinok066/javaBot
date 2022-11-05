@@ -1,10 +1,13 @@
 package org.matmech.requestHandler;
 
+import org.checkerframework.checker.units.qual.A;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class RequestHandler {
     private DBHandler db;
@@ -45,35 +48,35 @@ public class RequestHandler {
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    private String wordAdd(String[] params, DataSaver data) {
-        return db.wordAdd(params[0], params[1], params[2], data.getTag());
+    private String wordAdd(ArrayList<String> params, DataSaver data) {
+        return db.wordAdd(params.get(0), params.get(1), params.get(2), data.getTag());
     }
 
-    private String translateWord(String[] params) {
-        return db.translateWord(params[0]);
+    private String translateWord(ArrayList<String> params) {
+        return db.translateWord(params.get(0));
     }
 
-    private String edit(String[] params) {
-        return db.edit(params[0], params[1], params[2]);
+    private String edit(ArrayList<String> params) {
+        return db.edit(params.get(0), params.get(1), params.get(2));
     }
 
-    private String getGroup(String[] params) {
-        return db.getGroup(params[0]);
+    private String getGroup(ArrayList<String> params) {
+        return db.getGroup(params.get(0));
     }
 
-    private String deleteWord(String[] params) {
-        return db.deleteWord(params[0]);
+    private String deleteWord(ArrayList<String> params) {
+        return db.deleteWord(params.get(0));
     }
 
-    private String setMode(String[] params, DataSaver data) {
-        return db.setMode(params[0], data.getTag());
+    private String setMode(ArrayList<String> params, DataSaver data) {
+        return db.setMode(params.get(0), data.getTag());
     }
 
     private String getMode(DataSaver data) {
         return db.getMode(data.getTag());
     }
 
-    private String useCommand(String command, DataSaver info, String[] params) { // ответ на команды
+    private String useCommand(String command, DataSaver info, ArrayList params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart(info);
@@ -107,14 +110,11 @@ public class RequestHandler {
 
     public String onUse(String messageString, DataSaver info) {
         if (isCmd(messageString)) {
-            String[] messageStringWords = messageString.split(" ");
-            String[] params = new String[messageStringWords.length - 1];
+            ArrayList<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
+            String firstWord = params.get(0);
+            params.remove(0);
 
-            for (int i = 1; i < messageStringWords.length; i++) {
-                params[i - 1] = messageStringWords[i];
-            }
-
-            return useCommand(formatCommandFromTelegram(messageStringWords[0]), info, params);
+            return useCommand(formatCommandFromTelegram(firstWord), info, params);
         }
         else
             return toAnswer(messageString, info);
