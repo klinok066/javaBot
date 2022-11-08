@@ -5,6 +5,6 @@ import TestCommands.TestRequestHandler;
 import testServiceClasses.TestGroupsDBSource;
 import testServiceClasses.TestUsersDBSource;
 
-@Suite.SuiteClasses({ TestRequestHandler.class, TestGroupsDBSource.class })
+@Suite.SuiteClasses({ TestRequestHandler.class, TestGroupsDBSource.class, TestUsersDBSource.class })
 @RunWith(Suite.class)
 public class TestCollector {}
