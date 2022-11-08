@@ -10,10 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class RequestHandler {
-    private DBHandler db;
+    private final DBHandler db;
 
     private String toHelp() {
-        return  "Bot\'s commands:\n" +
+        return "Bot's commands:\n" +
                 "/start - start the bot\n\n" +
                 "Groups:\n" +
                 "/group_list - list of all groups\n" +
@@ -76,7 +76,7 @@ public class RequestHandler {
         return db.getMode(data.getTag());
     }
 
-    private String useCommand(String command, DataSaver info, ArrayList params) { // ответ на команды
+    private String useCommand(String command, DataSaver info, ArrayList<String> params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart(info);

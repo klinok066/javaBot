@@ -32,7 +32,7 @@ public class UsersDBSource extends DBSource {
     }
     /***
      * Возврат user_id с помощью тега
-     * @param users - объект с информацией о пользователе
+     * @param users - объект с информацией о пользователе. Обязательные параметры: <i>tag</i>
      * @param dbConnection - объект базы данных
      * @return - возвращает userId
      */

@@ -7,31 +7,20 @@ import org.junit.Test;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.requestHandler.RequestHandler;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import org.mockito.Mockito;
 
 public class TestRequestHandler extends TestCase {
-    private DataSaver data;
-    private String DB_URL;
-    private String DB_USERNAME;
-    private String DB_PASSWORD;
-    private DBHandler db;
-    private RequestHandler handler;
+    private final DataSaver data = new DataSaver("User", "Unknown", "Unknown");
+    private final DBHandler dbMock = Mockito.mock(DBHandler.class);
+    private RequestHandler handler = new RequestHandler(dbMock);
 
     @Before
     public void setUpCommandsArray() { // исправить тесты
-        DB_URL = System.getenv("DB_URL");
-        DB_USERNAME = System.getenv("DB_USERNAME");
-        DB_PASSWORD = System.getenv("DB_PASSWORD");
-        data = new DataSaver("User", "Unknown", "Unknown");
-        db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
-        handler = new RequestHandler(db);
+        handler = new RequestHandler(dbMock);
     }
 
     @Test
-    public void testOnUse() {
+    public void testOnUseGeneral() {
         assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_list", data));
         assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_list", data));
         assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_create", data));
