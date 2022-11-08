@@ -48,23 +48,23 @@ public class RequestHandler {
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    private String wordAdd(ArrayList<String> params, DataSaver data) {
+    private String wordAdd(List<String> params, DataSaver data) {
         return db.wordAdd(params.get(0), params.get(1), params.get(2), data.getTag());
     }
 
-    private String translateWord(ArrayList<String> params) {
+    private String translateWord(List<String> params) {
         return db.translateWord(params.get(0));
     }
 
-    private String edit(ArrayList<String> params) {
+    private String edit(List<String> params) {
         return db.edit(params.get(0), params.get(1), params.get(2));
     }
 
-    private String getGroup(ArrayList<String> params) {
+    private String getGroup(List<String> params) {
         return db.getGroup(params.get(0));
     }
 
-    private String deleteWord(ArrayList<String> params) {
+    private String deleteWord(List<String> params) {
         return db.deleteWord(params.get(0));
     }
 
@@ -76,7 +76,7 @@ public class RequestHandler {
 //        return db.getMode(data.getTag());
 //    }
 
-    private String useCommand(String command, DataSaver info, ArrayList<String> params) { // ответ на команды
+    private String useCommand(String command, DataSaver info, List<String> params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart(info);
@@ -110,7 +110,7 @@ public class RequestHandler {
 
     public String onUse(String messageString, DataSaver info) {
         if (isCmd(messageString)) {
-            ArrayList<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
+            List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
             String firstWord = params.get(0);
             params.remove(0);
 
