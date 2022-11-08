@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DictonaryDBSource extends DBSource {
     /***
@@ -17,7 +18,7 @@ public class DictonaryDBSource extends DBSource {
         if (dictonary.getUserId() == -1)
             return false;
 
-        ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
         params.add(createParams("int", Integer.toString(dictonary.getUserId())));
 
         String createDictionarySQL = "insert into dictonary(user_id) values(?)";
@@ -33,11 +34,11 @@ public class DictonaryDBSource extends DBSource {
      */
     public int getDictonaryId(Dictonary dictonary, DBConnection dbConnection) throws SQLException {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("int", Integer.toString(dictonary.getUserId())));
 
             String getDictonaryIdSQL = "select id from dictonary where user_id=?";
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictonaryIdSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictonaryIdSQL, params);
 
             for (HashMap<String, String> item : response)
                 return Integer.parseInt(item.get("id"));

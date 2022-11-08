@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class UsersDBSource extends DBSource {
     /**
@@ -17,12 +18,12 @@ public class UsersDBSource extends DBSource {
      */
     private boolean isExist(Users users, DBConnection dbConnection) throws SQLException {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", users.getTag()));
 
             String getWordsSQL = "select * from users where tag=?";
 
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -40,12 +41,12 @@ public class UsersDBSource extends DBSource {
         int userId = -1;
 
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", users.getTag()));
 
             String getWordsSQL = "select * from users where tag=?";
 
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
 
             for (HashMap<String, String> item : response)
                 userId = Integer.parseInt(item.get("id"));
@@ -67,7 +68,7 @@ public class UsersDBSource extends DBSource {
     public boolean regUser(Users users, DBConnection dbConnection) {
         try {
             if (!isExist(users, dbConnection)) {
-                ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+                List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
                 params.add(createParams("string", users.getFirstname()));
                 params.add(createParams("string", users.getSurname()));
                 params.add(createParams("string", users.getTag()));
@@ -92,7 +93,7 @@ public class UsersDBSource extends DBSource {
     public void getAllUsers(DBConnection dbConnection) throws SQLException {
         try {
             String getUsersSQL = "select * from users";
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQuery(getUsersSQL);
+            List<HashMap<String, String>> response = dbConnection.executeQuery(getUsersSQL);
 
             for (HashMap<String, String> item : response)
                 System.out.println(item.get("id") + item.get("firstname") + item.get("surname") + item.get("tag"));

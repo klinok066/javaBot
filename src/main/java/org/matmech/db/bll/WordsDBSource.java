@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
@@ -17,12 +18,12 @@ public class WordsDBSource extends DBSource {
      */
     private boolean isExist(Words words, DBConnection dbConnection) {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
 
             String getWordsSQL = "select * from words where word_value=?";
 
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -45,7 +46,7 @@ public class WordsDBSource extends DBSource {
         if (isExist(words, dbConnection))
             return false;
 
-        ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+        List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
         params.add(createParams("int", Integer.toString(words.getDictonaryId())));
         params.add(createParams("int", Integer.toString(words.getGroupId())));
         params.add(createParams("string", words.getWordValue()));
@@ -66,12 +67,12 @@ public class WordsDBSource extends DBSource {
     public String translate(Words words, DBConnection dbConnection) {
         try {
             if (isExist(words, dbConnection)) {
-                ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+                List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
                 params.add(createParams("string", words.getWordValue()));
 
                 String translateValueSQL = "select word_translate from words where word_value=?";
 
-                ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(translateValueSQL, params);
+                List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(translateValueSQL, params);
 
                 for (HashMap<String, String> item : response)
                     return item.get("word_translate");
@@ -92,12 +93,12 @@ public class WordsDBSource extends DBSource {
      */
     public int getDictonaryId(Words words, DBConnection dbConnection) {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
 
             String getDictionaryIdSQL = "select * from words where word_value=?";
 
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
 
             for (HashMap<String, String> item : response)
                 return Integer.parseInt(item.get("dictonary_id"));
@@ -117,12 +118,12 @@ public class WordsDBSource extends DBSource {
      */
     public int getGroupId(Words words, DBConnection dbConnection) {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
 
             String getGroupIdSQL = "select * from words where word_value=?";
 
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
             for (HashMap<String, String> item : response)
                 return Integer.parseInt(item.get("group_id"));
@@ -143,7 +144,7 @@ public class WordsDBSource extends DBSource {
      */
     public boolean editTranslation(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordTranslate()));
             params.add(createParams("string", words.getWordValue()));
 
@@ -166,7 +167,7 @@ public class WordsDBSource extends DBSource {
      */
     public boolean editGroupId(Words words, DBConnection dbConnection){
         if (isExist(words, dbConnection)){
-            ArrayList<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
+            List<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
             params.add(createParams("int", String.valueOf(words.getGroupId())));
             params.add(createParams("string", words.getWordValue()));
 
@@ -190,7 +191,7 @@ public class WordsDBSource extends DBSource {
      */
     public boolean deleteWord(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", words.getWordValue()));
 
             String deleteWordSQL = "delete from words where word_value=?";

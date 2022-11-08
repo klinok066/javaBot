@@ -3,6 +3,7 @@ package org.matmech.db.repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DBConnection {
     private final String DB_URL;
@@ -12,9 +13,9 @@ public class DBConnection {
     private Statement statement;
     private PreparedStatement preparedStatement;
 
-    private ArrayList<HashMap<String, String>> getDataFromResponse(ResultSet result) throws SQLException {
-        try {
-            ArrayList<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+    private List<HashMap<String, String>> getDataFromResponse(ResultSet result) throws SQLException {
+        try (result) {
+            List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
 
             while (result.next()) {
                 int size = result.getMetaData().getColumnCount();
@@ -30,8 +31,6 @@ public class DBConnection {
             }
 
             return data;
-        } finally {
-            result.close();
         }
     }
 
@@ -85,7 +84,7 @@ public class DBConnection {
     /***
      * Выполняет простой запрос без параметров в базу данных. Возвращает результат в ArrayList, где каждый элемент HashMap
      */
-    public ArrayList<HashMap<String, String>> executeQuery(String sql) throws SQLException {
+    public List<HashMap<String, String>> executeQuery(String sql) throws SQLException {
         try {
             connect();
             statement = connection.createStatement();
@@ -125,7 +124,7 @@ public class DBConnection {
      *  type: тип параметра
      *  value: сам параметр
      */
-    public ArrayList<HashMap<String, String>> executeQueryWithParams(String sql, ArrayList<HashMap<String, String>> params) throws SQLException {
+    public List<HashMap<String, String>> executeQueryWithParams(String sql, List<HashMap<String, String>> params) throws SQLException {
         try {
             connect();
 
@@ -153,7 +152,7 @@ public class DBConnection {
      *  type: тип параметра
      *  value: сам параметр
      */
-    public void executeUpdateWithParams(String sql, ArrayList<HashMap<String, String>> params) {
+    public void executeUpdateWithParams(String sql, List<HashMap<String, String>> params) {
         try {
             connect();
             preparedStatement = connection.prepareStatement(sql);

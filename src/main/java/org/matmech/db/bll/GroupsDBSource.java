@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class GroupsDBSource extends DBSource {
     /**
@@ -16,11 +17,11 @@ public class GroupsDBSource extends DBSource {
      */
     private boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", groups.getTitle()));
 
             String groupsSQL = "select * from groups where title=?";
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(groupsSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(groupsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -64,12 +65,12 @@ public class GroupsDBSource extends DBSource {
      */
     public int getGroupId(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("int", String.valueOf(groups.getDictonaryId())));
             params.add(createParams("string", groups.getTitle()));
 
             String getGroupIdSQL = "select * from groups where dictonary_id=? and title=?";
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
             for (HashMap<String, String> item : response)
                 return Integer.parseInt(item.get("id"));
@@ -89,11 +90,11 @@ public class GroupsDBSource extends DBSource {
      */
     public String getGroupTitle(int DictonaryId, DBConnection dbConnection) throws SQLException {
         try {
-            ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("int", Integer.toString(DictonaryId)));
 
             String getGroupTitleSQL = "select title from groups where dictonary_id=?";
-            ArrayList<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
 
             for (HashMap<String, String> item : response)
                 return item.get("title");
