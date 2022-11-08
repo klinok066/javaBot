@@ -48,7 +48,7 @@ public class TestUsersDBSource extends TestCase {
             Users users = new Users();
             users.setTag("iffomko");
 
-            assertEquals(10, usersDBSource.getUserIdByTag(users, dbConnection));
+            assertEquals(-1, usersDBSource.getUserIdByTag(users, dbConnection));
         } catch (SQLException e) {
             System.out.println("Тестирование провалено!\n" + e.getMessage());
         }
@@ -104,8 +104,8 @@ public class TestUsersDBSource extends TestCase {
             HashMap<String, String> usersResponse = new HashMap<String, String>();
 
             usersResponse.put("id", "10");
-            usersResponse.put("саша", "саша");
-            usersResponse.put("иванов", "иванов");
+            usersResponse.put("firstname", "саша");
+            usersResponse.put("surname", "иванов");
             usersResponse.put("tag", "userTag");
 
             response.add(usersResponse);

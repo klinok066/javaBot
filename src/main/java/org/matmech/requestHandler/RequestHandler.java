@@ -68,13 +68,13 @@ public class RequestHandler {
         return db.deleteWord(params.get(0));
     }
 
-    private String setMode(ArrayList<String> params, DataSaver data) {
-        return db.setMode(params.get(0), data.getTag());
-    }
-
-    private String getMode(DataSaver data) {
-        return db.getMode(data.getTag());
-    }
+//    private String setMode(ArrayList<String> params, DataSaver data) {
+//        return db.setMode(params.get(0), data.getTag());
+//    }
+//
+//    private String getMode(DataSaver data) {
+//        return db.getMode(data.getTag());
+//    }
 
     private String useCommand(String command, DataSaver info, ArrayList<String> params) { // ответ на команды
         return switch (command) {
@@ -85,8 +85,8 @@ public class RequestHandler {
             case "remove" -> deleteWord(params);
             case "edit" -> edit(params);
             case "get_group" -> getGroup(params);
-            case "set_mode" -> setMode(params, info);
-            case "get_mode" -> getMode(info);
+//            case "set_mode" -> setMode(params, info);
+//            case "get_mode" -> getMode(info);
             case    "group_list",
                     "group_create",
                     "word_list",
