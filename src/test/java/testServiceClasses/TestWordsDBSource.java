@@ -19,7 +19,7 @@ public class TestWordsDBSource extends TestCase {
     private final WordsDBSource wordsDBSource = new WordsDBSource();
 
     @Test
-    public void testWordAdd() {
+    public void testNotWordAdd() {
         try {
             ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
             HashMap<String, String> wordResponse = new HashMap<String, String>();
@@ -46,7 +46,7 @@ public class TestWordsDBSource extends TestCase {
     }
 
     @Test
-    public void testNotWordAdd() {
+    public void testWordAdd() {
         try {
             ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
 
