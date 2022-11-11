@@ -1,12 +1,9 @@
 package org.matmech.requestHandler;
 
-import org.checkerframework.checker.units.qual.A;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RequestHandler {
@@ -68,6 +65,10 @@ public class RequestHandler {
         return db.deleteWord(params.get(0));
     }
 
+    private String authentication(DataSaver info) {
+        return db.userIsExist(info);
+    }
+
 //    private String setMode(ArrayList<String> params, DataSaver data) {
 //        return db.setMode(params.get(0), data.getTag());
 //    }
@@ -108,7 +109,14 @@ public class RequestHandler {
         this.db = db;
     }
 
-    public String onUse(String messageString, DataSaver info) {
+    public String processCmd(String messageString, DataSaver info) {
+        String authentication = authentication(info);
+
+        if (authentication(info) != null)
+            return authentication;
+
+
+
         if (isCmd(messageString)) {
             List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
             String firstWord = params.get(0);

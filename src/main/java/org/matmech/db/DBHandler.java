@@ -67,7 +67,6 @@ public class DBHandler {
 
             return "Вы уже зарегистрированны в нашей системе";
         } catch (SQLException e) {
-            System.out.println("Не удалось зарегистрировать пользователя");
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -80,7 +79,6 @@ public class DBHandler {
         try {
             usersDBSource.getAllUsers(dbConnection);
         } catch (SQLException e) {
-            System.out.println("Не удалось получить пользователей");
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -130,6 +128,7 @@ public class DBHandler {
             else
                 return "Ошибка! Слово уже существует!\nЕсли хотите что-то поменять в слове, то воспользуйтесь командой /edit";
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -159,7 +158,7 @@ public class DBHandler {
      * @param wordParam - параметр для изменения, переданное в параметрах
      * @param paramValue - значение изменяемого параметра, переданное в параметрах
      */
-    //если ломается обернуть в isExist()
+
     public String edit(String wordValue, String wordParam, String paramValue){
         Words words = new Words();
         words.setWordValue(wordValue);
@@ -235,7 +234,7 @@ public class DBHandler {
 
             return "Не удалось получить группу у слова: либо слова не существует, либо группы у слова нет";
         } catch (SQLException e) {
-            System.out.println("Не удалось получить группу");
+            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -256,6 +255,21 @@ public class DBHandler {
             return "Слово было удалено из базы данных!";
 
         return "Слова нет в базе данных!";
+    }
+
+    public String userIsExist(DataSaver info) {
+        try {
+            Users users = new Users();
+            users.setTag(info.getTag());
+
+            if (!usersDBSource.isExist(users, dbConnection))
+                return "Вы не зарегистрированы! Напишите регистрации напиишите команду /start";
+
+            return null;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
 //    /**

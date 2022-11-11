@@ -16,7 +16,7 @@ public class UsersDBSource extends DBSource {
      * <p>Перед этим нужно проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
      * @return - возвращает существует пользователь в виде boolean
      */
-    private boolean isExist(Users users, DBConnection dbConnection) throws SQLException {
+    public boolean isExist(Users users, DBConnection dbConnection) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", users.getTag()));
