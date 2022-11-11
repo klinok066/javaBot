@@ -69,14 +69,6 @@ public class RequestHandler {
         return db.userIsExist(info);
     }
 
-//    private String setMode(ArrayList<String> params, DataSaver data) {
-//        return db.setMode(params.get(0), data.getTag());
-//    }
-//
-//    private String getMode(DataSaver data) {
-//        return db.getMode(data.getTag());
-//    }
-
     private String useCommand(String command, DataSaver info, List<String> params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
@@ -86,8 +78,6 @@ public class RequestHandler {
             case "remove" -> deleteWord(params);
             case "edit" -> edit(params);
             case "get_group" -> getGroup(params);
-//            case "set_mode" -> setMode(params, info);
-//            case "get_mode" -> getMode(info);
             case    "group_list",
                     "group_create",
                     "word_list",
