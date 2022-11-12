@@ -1,7 +1,7 @@
-package org.matmech.connector.telegramBot;
+package org.matmech.connector.telegram.telegramBot;
 
 import org.matmech.connector.Connector;
-import org.matmech.connector.telegramHandler.TelegramHandler;
+import org.matmech.connector.telegram.telegramHandler.TelegramHandler;
 import org.matmech.requestHandler.RequestHandler;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;

@@ -1,4 +1,4 @@
-package org.matmech.connector.cmdLogic;
+package org.matmech.connector.cmd.cmdLogic;
 
 import org.json.JSONObject;
 import org.matmech.dataSaver.DataSaver;

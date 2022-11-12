@@ -1,4 +1,4 @@
-package org.matmech.connector.telegramHandler;
+package org.matmech.connector.telegram.telegramHandler;
 
 import org.json.JSONObject;
 import org.matmech.dataSaver.DataSaver;

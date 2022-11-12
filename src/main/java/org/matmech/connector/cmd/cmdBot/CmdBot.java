@@ -1,7 +1,7 @@
-package org.matmech.connector.cmdBot;
+package org.matmech.connector.cmd.cmdBot;
 
 import org.matmech.connector.Connector;
-import org.matmech.connector.cmdLogic.CmdLogic;
+import org.matmech.connector.cmd.cmdLogic.CmdLogic;
 import org.matmech.requestHandler.RequestHandler;
 
 import java.util.Scanner;

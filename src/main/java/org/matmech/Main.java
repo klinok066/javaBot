@@ -1,9 +1,8 @@
 package org.matmech;
 
-import org.matmech.connector.cmdBot.CmdBot;
-import org.matmech.connector.cmdLogic.CmdLogic;
+import org.matmech.connector.cmd.cmdBot.CmdBot;
 import org.matmech.connector.Connector;
-import org.matmech.connector.telegramBot.TelegramBot;
+import org.matmech.connector.telegram.telegramBot.TelegramBot;
 import org.matmech.db.DBHandler;
 import org.matmech.requestHandler.RequestHandler;
 
