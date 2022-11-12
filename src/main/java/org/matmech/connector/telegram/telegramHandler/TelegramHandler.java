@@ -40,14 +40,16 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
             // creating Data Saver object which save information about user
 
-            DataSaver data = new DataSaver(update.getMessage().getFrom().getFirstName(),
-                                           update.getMessage().getFrom().getLastName(),
-                                           update.getMessage().getFrom().getUserName()
-                                          );
+            DataSaver data = new DataSaver(
+                    update.getMessage().getFrom().getFirstName(),
+                    update.getMessage().getFrom().getLastName(),
+                    update.getMessage().getFrom().getUserName(),
+                    update.getMessage().getChatId()
+            );
 
             String messageString = update.getMessage().getText();
 
-            answer.append(requestHandler.onUse(messageString, data));
+            answer.append(requestHandler.processCmd(messageString, data));
 
             message.setText(answer.toString());
         }

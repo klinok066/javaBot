@@ -7,16 +7,18 @@ import java.util.Scanner;
 
 
 public class CmdLogic {
-    private Scanner input;
-    private RequestHandler requestHandler;
-    private String firstName;
-    private String lastName;
-    private String tag;
+    private final Scanner input;
+    private final RequestHandler requestHandler;
+    private final String firstName;
+    private final String lastName;
+    private final String tag;
+    private final int chatId;
 
-    public CmdLogic(String firstName, String lastName, String tag, RequestHandler requestHandler) {
+    public CmdLogic(String firstName, String lastName, String tag, int chatId, RequestHandler requestHandler) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.tag = tag;
+        this.chatId = chatId;
         this.requestHandler = requestHandler;
         this.input = new Scanner(System.in);
     }
@@ -25,9 +27,9 @@ public class CmdLogic {
         while(true) {
             String messageFromCMD = input.nextLine();
             StringBuilder answer = new StringBuilder("");
-            DataSaver data = new DataSaver(firstName, lastName, tag);
+            DataSaver data = new DataSaver(firstName, lastName, tag, chatId);
 
-            answer.append(requestHandler.onUse(messageFromCMD, data));
+            answer.append(requestHandler.processCmd(messageFromCMD, data));
 
             System.out.println(answer);
         }

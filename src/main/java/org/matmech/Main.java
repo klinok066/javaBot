@@ -1,5 +1,6 @@
 package org.matmech;
 
+import org.matmech.cache.Cache;
 import org.matmech.connector.cmd.cmdBot.CmdBot;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegram.telegramBot.TelegramBot;
@@ -20,9 +21,13 @@ public class Main {
 
         DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
 
+        // cache
+
+        Cache cache = new Cache();
+
         // request handler
 
-        RequestHandler requestHandler = new RequestHandler(db);
+        RequestHandler requestHandler = new RequestHandler(db, cache);
 
         // bots
 

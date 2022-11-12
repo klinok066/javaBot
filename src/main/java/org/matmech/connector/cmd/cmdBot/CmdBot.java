@@ -10,6 +10,7 @@ public class CmdBot implements Connector {
     private String firstName;
     private String lastName;
     private String tag;
+    private int chatId;
     private final Scanner input;
     private final RequestHandler requestHandler;
 
@@ -23,6 +24,8 @@ public class CmdBot implements Connector {
         this.lastName = input.nextLine();
         System.out.print("Введите/придумайте себе тег:");
         this.tag = input.nextLine();
+        System.out.print("Введите/придумайте себе id чата:");
+        this.chatId = input.nextInt();
 
         System.out.println("Вы были успешно авторизированы! Для того, чтобы начать работать с ботом, напишите /start");
     }
@@ -33,7 +36,7 @@ public class CmdBot implements Connector {
 
         initUser();
 
-        bot = new CmdLogic(firstName, lastName, tag, requestHandler);
+        bot = new CmdLogic(firstName, lastName, tag, chatId, requestHandler);
     }
 
     public void start() {

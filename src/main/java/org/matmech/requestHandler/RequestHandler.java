@@ -1,5 +1,6 @@
 package org.matmech.requestHandler;
 
+import org.matmech.cache.Cache;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 public class RequestHandler {
     private final DBHandler db;
+    private final Cache cache;
 
     private String toHelp() {
         return "Bot's commands:\n" +
@@ -95,8 +97,9 @@ public class RequestHandler {
         };
     }
 
-    public RequestHandler(DBHandler db) {
+    public RequestHandler(DBHandler db, Cache cache) {
         this.db = db;
+        this.cache = cache;
     }
 
     public String processCmd(String messageString, DataSaver info) {
@@ -107,7 +110,7 @@ public class RequestHandler {
 
 
 
-        if (isCmd(messageString)) {
+        if (isCmd(messageString) && cache.isBusy(info.getChatId())) {
             List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
             String firstWord = params.get(0);
             params.remove(0);
