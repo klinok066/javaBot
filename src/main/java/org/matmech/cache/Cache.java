@@ -20,9 +20,9 @@ public class Cache {
      * @return - возвращает коллекцию HashMap, где ключ и значение - строки, с кешем пользователя или null,
      *           если кеш не найден
      */
-    private HashMap<String, String> searchItem(int chatId) {
+    private HashMap<String, String> searchItem(long chatId) {
         for (HashMap<String, String> item : cache)
-            if (Integer.parseInt(item.get("chatId")) == chatId)
+            if (Long.parseLong(item.get("chatId")) == chatId)
                 return item;
 
         return null;
@@ -39,7 +39,7 @@ public class Cache {
      * @param itemName - имя параметра, который мы хотим добавить в кеш
      * @param itemValue - значение параметра, который мы хотим добавить в кеш
      */
-    public void addParams(int chatId, String processName, String itemName, String itemValue) {
+    public void addParams(long chatId, String processName, String itemName, String itemValue) {
         HashMap<String, String> item = searchItem(chatId);
 
         if (item == null) {
@@ -62,7 +62,7 @@ public class Cache {
      * @param chatId - идентификатор чата с пользователем
      * @return - возвращает HashMap со всеми параметрами пользователя в кеше
      */
-    public HashMap<String, String> getParams(int chatId) {
+    public HashMap<String, String> getParams(long chatId) {
         return searchItem(chatId);
     }
 
@@ -71,7 +71,7 @@ public class Cache {
      * @param chatId - идентификатор чата с пользователем
      * @return - возвращает <i>true</i> - если занят, и <i>false</i> - если свободен
      */
-    public boolean isBusy(int chatId) {
+    public boolean isBusy(long chatId) {
         HashMap<String, String> item = searchItem(chatId);
 
         if (item == null)
@@ -85,7 +85,7 @@ public class Cache {
      * Последнему устанавливает значение <i>null</i>
      * @param chatId - идентификатор чата с пользователем
      */
-    public void clear(int chatId) {
+    public void clear(long chatId) {
         HashMap<String, String> item = searchItem(chatId);
 
         if (item != null) {
