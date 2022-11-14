@@ -21,24 +21,27 @@ public class TestRequestHandler extends TestCase {
 
     @Test
     public void testOnUseGeneral() {
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_list", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_list", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_create", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/group_create", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/word_list", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/word_list", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/test", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/test", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/stop_test", data));
-        assertEquals("So far, work is underway on this function, but in the near future it will be revived", handler.onUse("/stop_test", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("sdfsdfsdf", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("xzc", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("укеуке", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("привет", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("спам", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("бот", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("ничего", data));
-        assertEquals("Sorry, I'm don't understand you...", handler.onUse("xcv", data));
+        String inFuture = "So far, work is underway on this function, but in the near future it will be revived";
+        String wrongCmd = "Sorry, I'm don't understand you...";
+
+        assertEquals(inFuture, handler.onUse("/group_list", data));
+        assertEquals(inFuture, handler.onUse("/group_list", data));
+        assertEquals(inFuture, handler.onUse("/group_create", data));
+        assertEquals(inFuture, handler.onUse("/group_create", data));
+        assertEquals(inFuture, handler.onUse("/word_list", data));
+        assertEquals(inFuture, handler.onUse("/word_list", data));
+        assertEquals(inFuture, handler.onUse("/test", data));
+        assertEquals(inFuture, handler.onUse("/test", data));
+        assertEquals(inFuture, handler.onUse("/stop_test", data));
+        assertEquals(inFuture, handler.onUse("/stop_test", data));
+        assertEquals(wrongCmd, handler.onUse("sdfsdfsdf", data));
+        assertEquals(wrongCmd, handler.onUse("xzc", data));
+        assertEquals(wrongCmd, handler.onUse("укеуке", data));
+        assertEquals(wrongCmd, handler.onUse("привет", data));
+        assertEquals(wrongCmd, handler.onUse("спам", data));
+        assertEquals(wrongCmd, handler.onUse("бот", data));
+        assertEquals(wrongCmd, handler.onUse("ничего", data));
+        assertEquals(wrongCmd, handler.onUse("xcv", data));
         assertEquals("Hello, " + data.getFirstname(), handler.onUse("hello", data));
     }
 
