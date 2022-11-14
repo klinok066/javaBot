@@ -3,13 +3,18 @@ package org.matmech.requestHandler;
 import org.matmech.cache.Cache;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
+import org.matmech.paramsHandler.ParamsHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
+
+// все методы с выводом текста надо убрать в отдельный класс
+
 public class RequestHandler {
     private final DBHandler db;
     private final Cache cache;
+    private final ParamsHandler paramsHandler;
 
     private String toHelp() {
         return "Bot's commands:\n" +
@@ -100,6 +105,7 @@ public class RequestHandler {
     public RequestHandler(DBHandler db, Cache cache) {
         this.db = db;
         this.cache = cache;
+        this.paramsHandler = new ParamsHandler(cache);
     }
 
     public String processCmd(String messageString, DataSaver info) {
@@ -108,9 +114,10 @@ public class RequestHandler {
         if (authentication(info) != null)
             return authentication;
 
+        if (cache.isBusy(info.getChatId()))
+            return paramsHandler.handler(info.getChatId());
 
-
-        if (isCmd(messageString) && cache.isBusy(info.getChatId())) {
+        if (isCmd(messageString)) {
             List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
             String firstWord = params.get(0);
             params.remove(0);
