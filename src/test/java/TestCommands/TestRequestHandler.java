@@ -21,19 +21,19 @@ public class TestRequestHandler extends TestCase {
 
     @Test
     public void testOnUseGeneral() {
-        String inFuture = "So far, work is underway on this function, but in the near future it will be revived";
-        String wrongCmd = "Sorry, I'm don't understand you...";
+        final String IN_FUTURE = "So far, work is underway on this function, but in the near future it will be revived";
+        final String WRONG_CMD = "Sorry, I'm don't understand you...";
 
-        assertEquals(inFuture, handler.onUse("/group_list", data));
-        assertEquals(inFuture, handler.onUse("/group_list", data));
-        assertEquals(inFuture, handler.onUse("/group_create", data));
-        assertEquals(inFuture, handler.onUse("/group_create", data));
-        assertEquals(inFuture, handler.onUse("/word_list", data));
-        assertEquals(inFuture, handler.onUse("/word_list", data));
-        assertEquals(inFuture, handler.onUse("/test", data));
-        assertEquals(inFuture, handler.onUse("/test", data));
-        assertEquals(inFuture, handler.onUse("/stop_test", data));
-        assertEquals(inFuture, handler.onUse("/stop_test", data));
+        assertEquals(IN_FUTURE, handler.onUse("/group_list", data));
+        assertEquals(IN_FUTURE, handler.onUse("/group_list", data));
+        assertEquals(IN_FUTURE, handler.onUse("/group_create", data));
+        assertEquals(IN_FUTURE, handler.onUse("/group_create", data));
+        assertEquals(IN_FUTURE, handler.onUse("/word_list", data));
+        assertEquals(IN_FUTURE, handler.onUse("/word_list", data));
+        assertEquals(IN_FUTURE, handler.onUse("/test", data));
+        assertEquals(IN_FUTURE, handler.onUse("/test", data));
+        assertEquals(IN_FUTURE, handler.onUse("/stop_test", data));
+        assertEquals(IN_FUTURE, handler.onUse("/stop_test", data));
         assertEquals(wrongCmd, handler.onUse("sdfsdfsdf", data));
         assertEquals(wrongCmd, handler.onUse("xzc", data));
         assertEquals(wrongCmd, handler.onUse("укеуке", data));
