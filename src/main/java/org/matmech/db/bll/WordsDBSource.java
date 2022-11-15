@@ -161,8 +161,8 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Меняет параметр group_id</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param words Объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
+     * @param dbConnection Репозиторий
      * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
     public boolean editGroupId(Words words, DBConnection dbConnection){

@@ -100,4 +100,45 @@ public class TestGroupsDBSource extends TestCase {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    public void testGetGroupTitle(){
+        try{
+            ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> item = new HashMap<String, String>();
+            item.put("id", "3");
+            item.put("title", "глаголы");
+            item.put("dictonary_id", "123");
+            response.add(item);
+
+            when(dbConnectionMock.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
+
+            Groups groups = new Groups();
+
+            groups.setId(3);
+            groups.setDictonaryId(123);
+
+            assertEquals("глаголы", groupsDBSource.getGroupTitle(groups.getDictonaryId(),dbConnectionMock));
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void testNotGetGroupTitle(){
+        try{
+            ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
+
+            when(dbConnectionMock.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
+
+            Groups groups = new Groups();
+
+            groups.setId(3);
+            groups.setDictonaryId(123);
+
+            assertNull(groupsDBSource.getGroupTitle(groups.getDictonaryId(), dbConnectionMock));
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 }
