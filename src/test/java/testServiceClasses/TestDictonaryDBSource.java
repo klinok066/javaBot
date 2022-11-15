@@ -31,7 +31,7 @@ public class TestDictonaryDBSource extends TestCase {
     }
 
     /**
-     * Тест ошибки при создании словаря
+     * Unit-тест метода createDictonary: проверяет его неправильную работу
      */
     @Test
     public void testNotCreateDictonary() {
@@ -66,7 +66,7 @@ public class TestDictonaryDBSource extends TestCase {
     }
 
     /**
-     * Тест ошибки при получении dictionary_id
+     * Unit-тест метода getDictonaryId: проверяет его неправильную работу
      */
     @Test
     public void testNotGetDictonaryId() {

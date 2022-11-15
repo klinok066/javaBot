@@ -126,7 +126,7 @@ public class TestWordsDBSource extends TestCase {
     }
 
     /**
-     * Unit-тест метода deleteWord: проверяет его правильную работу
+     * Unit-тест метода getDictonaryId: проверяет его правильную работу
      */
     @Test
     public void testGetDictonaryId(){
@@ -161,6 +161,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getDictonaryId: проверяет его неправильную работу
+     */
     @Test
     public void testNotGetDictonaryId(){
         try {
@@ -177,6 +180,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGroupId: проверяет его правильную работу
+     */
     @Test
     public void testGetGroupId(){
         try {
@@ -210,6 +216,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGroupId: проверяет его неправильную работу
+     */
     @Test
     public void testNotGetGroupId(){
         try {
@@ -226,6 +235,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода editTranslation: проверяет его правильную работу
+     */
     @Test
     public void testEditTranslation(){
         try {
@@ -250,6 +262,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода editTranslation: проверяет его неправильную работу
+     */
     @Test
     public void testNotEditTranslation(){
         try {
@@ -266,6 +281,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода editGroupId: проверяет его правильную работу
+     */
     @Test
     public void testEditGroupId(){
         try {
@@ -290,6 +308,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода editGroupId: проверяет его неправильную работу
+     */
     @Test
     public void testNotEditGroupId(){
         try {
@@ -306,6 +327,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода deleteWord: проверяет его правильную работу
+     */
     @Test
     public void testDeleteWord() {
         try {

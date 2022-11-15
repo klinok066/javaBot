@@ -18,6 +18,9 @@ public class TestUsersDBSource extends TestCase {
     private final DBConnection dbConnection = Mockito.mock(DBConnection.class);
     private final UsersDBSource usersDBSource = new UsersDBSource();
 
+    /**
+     * Unit-тест метода getUserIdByTag: проверяет его правильную работу
+     */
     @Test
     public void testGetUserIdByTag() {
         try {
@@ -38,6 +41,9 @@ public class TestUsersDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getUserIdByTag: проверяет его неправильную работу
+     */
     @Test
     public void testNotGetUserIdByTag() {
         try {
@@ -54,6 +60,9 @@ public class TestUsersDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода regUser: проверяет его неправильную работу
+     */
     @Test
     public void testNotRegUser() {
         try {
@@ -78,6 +87,9 @@ public class TestUsersDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода regUser: проверяет его правильную работу
+     */
     @Test
     public void testRegUser() {
         try {
@@ -96,6 +108,9 @@ public class TestUsersDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getAllUser: проверяет его правильную работу
+     */
     @Test
     public void testGetAllUsers() {
         try {

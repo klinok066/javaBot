@@ -21,6 +21,9 @@ public class TestGroupsDBSource extends TestCase {
     private final DBConnection dbConnectionMock = Mockito.mock(DBConnection.class);
     private final GroupsDBSource groupsDBSource = new GroupsDBSource();
 
+    /**
+     * Unit-тест метода createGroup: проверяет его неправильную работу
+     */
     @Test
     public void testNotCreateGroup() {
         try {
@@ -42,6 +45,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода createGroup: проверяет его правильную работу
+     */
     @Test
     public void testCreateGroup() {
         try {
@@ -60,6 +66,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGruopId: проверяет его правильную работу
+     */
     @Test
     public void testGetGroupId() {
         try {
@@ -83,6 +92,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGruopId: проверяет его неправильную работу
+     */
     @Test
     public void testNotGetGroupId() {
         try {
@@ -101,6 +113,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGroupTitle: проверяет его правильную работу
+     */
     @Test
     public void testGetGroupTitle(){
         try{
@@ -124,6 +139,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGroupTitle: проверяет его неправильную работу
+     */
     @Test
     public void testNotGetGroupTitle(){
         try{
