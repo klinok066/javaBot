@@ -1,8 +1,7 @@
 package org.matmech.connector.cmd.cmdLogic;
 
-import org.json.JSONObject;
 import org.matmech.dataSaver.DataSaver;
-import org.matmech.requestHandler.RequestHandler;
+import org.matmech.requests.requestHandler.RequestHandler;
 import java.util.Scanner;
 
 

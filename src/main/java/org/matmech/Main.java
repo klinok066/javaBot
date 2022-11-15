@@ -5,7 +5,7 @@ import org.matmech.connector.cmd.cmdBot.CmdBot;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegram.telegramBot.TelegramBot;
 import org.matmech.db.DBHandler;
-import org.matmech.requestHandler.RequestHandler;
+import org.matmech.requests.requestHandler.RequestHandler;
 
 public class Main {
     public static void main(String[] args) {

@@ -2,7 +2,7 @@ package org.matmech.connector.cmd.cmdBot;
 
 import org.matmech.connector.Connector;
 import org.matmech.connector.cmd.cmdLogic.CmdLogic;
-import org.matmech.requestHandler.RequestHandler;
+import org.matmech.requests.requestHandler.RequestHandler;
 
 import java.util.Scanner;
 

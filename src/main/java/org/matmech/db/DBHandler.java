@@ -272,4 +272,16 @@ public class DBHandler {
         }
     }
 
+
+    public boolean groupIsExist(String groupTitle) {
+        try {
+            Groups groups = new Groups();
+            groups.setTitle(groupTitle);
+
+            return groupsDBSource.isExist(groups, dbConnection);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
 }

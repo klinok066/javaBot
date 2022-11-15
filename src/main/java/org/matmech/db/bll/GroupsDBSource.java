@@ -15,7 +15,7 @@ public class GroupsDBSource extends DBSource {
      * @param dbConnection - репозиторий
      * @return - возвращает результат работы метода. <i>True</i> - если успешно, <i>False</i> - если не успешно
      */
-    private boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
+    public boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", groups.getTitle()));

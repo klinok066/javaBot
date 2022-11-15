@@ -90,7 +90,7 @@ public class Cache {
 
         if (item != null) {
             for (String key : item.keySet())
-                if (key.equals("chatId"))
+                if (!key.equals("chatId"))
                     item.remove(key);
 
             item.put("processName", null);

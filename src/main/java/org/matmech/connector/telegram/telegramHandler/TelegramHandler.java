@@ -1,13 +1,12 @@
 package org.matmech.connector.telegram.telegramHandler;
 
-import org.json.JSONObject;
 import org.matmech.dataSaver.DataSaver;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import org.matmech.requestHandler.RequestHandler;
+import org.matmech.requests.requestHandler.RequestHandler;
 
 public class TelegramHandler extends TelegramLongPollingBot {
     private final String botUsername;

@@ -1,14 +1,12 @@
 package TestCommands;
 
 import junit.framework.TestCase;
-import org.checkerframework.checker.units.qual.C;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.matmech.cache.Cache;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
-import org.matmech.requestHandler.RequestHandler;
+import org.matmech.requests.requestHandler.RequestHandler;
 import org.mockito.Mockito;
 
 public class TestRequestHandler extends TestCase {

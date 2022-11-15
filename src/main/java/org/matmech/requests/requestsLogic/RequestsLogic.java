@@ -1,4 +1,4 @@
-package org.matmech.requestsLogic;
+package org.matmech.requests.requestsLogic;
 
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;

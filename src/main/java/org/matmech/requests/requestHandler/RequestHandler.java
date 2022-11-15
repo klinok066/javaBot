@@ -1,10 +1,10 @@
-package org.matmech.requestHandler;
+package org.matmech.requests.requestHandler;
 
 import org.matmech.cache.Cache;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.paramsHandler.ParamsHandler;
-import org.matmech.requestsLogic.RequestsLogic;
+import org.matmech.requests.requestsLogic.RequestsLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,6 @@ import java.util.List;
 // все методы с выводом текста надо убрать в отдельный класс
 
 public class RequestHandler {
-    private final DBHandler db;
     private final Cache cache;
     private final ParamsHandler paramsHandler;
     private final RequestsLogic requestsLogic;
@@ -49,13 +48,17 @@ public class RequestHandler {
     }
 
     public RequestHandler(DBHandler db, Cache cache) {
-        this.db = db;
         this.cache = cache;
-        this.paramsHandler = new ParamsHandler(cache);
+        this.paramsHandler = new ParamsHandler(cache, db);
         this.requestsLogic = new RequestsLogic(db);
     }
 
-    public String processCmd(String messageString, DataSaver info) {
+    /*
+        Я думаю, что стоит оставить только paramsHandler, там будет выполняться вся основная логика
+        тут будет промежуточный узел назначения контекста
+        В paramsHandler будет только очищения контекста
+     */
+    public String processCmd(String messageString, DataSaver info) { // подумать над архитектурой этого класса
         String authentication = requestsLogic.authentication(info);
 
         if (requestsLogic.authentication(info) != null)
