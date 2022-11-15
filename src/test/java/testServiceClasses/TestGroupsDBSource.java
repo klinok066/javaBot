@@ -118,7 +118,7 @@ public class TestGroupsDBSource extends TestCase {
             groups.setId(3);
             groups.setDictonaryId(123);
 
-            assertEquals("глаголы", groupsDBSource.getGroupTitle(groups.getDictonaryId(),dbConnectionMock));
+            assertEquals("глаголы", groupsDBSource.getGroupTitle(groups,dbConnectionMock));
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
@@ -136,7 +136,7 @@ public class TestGroupsDBSource extends TestCase {
             groups.setId(3);
             groups.setDictonaryId(123);
 
-            assertNull(groupsDBSource.getGroupTitle(groups.getDictonaryId(), dbConnectionMock));
+            assertNull(groupsDBSource.getGroupTitle(groups, dbConnectionMock));
         }catch (SQLException e){
             throw new RuntimeException(e);
         }

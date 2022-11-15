@@ -19,6 +19,9 @@ public class TestDictonaryDBSource extends TestCase {
     private final DBConnection dbConnection = Mockito.mock(DBConnection.class);
     private final DictonaryDBSource dictonaryDBSource = new DictonaryDBSource();
 
+    /**
+     * Unit-тест метода createDictonary: проверяет его правильную работу
+     */
     @Test
     public void testCreateDictonary() {
         Dictonary dictonary = new Dictonary();
@@ -27,6 +30,9 @@ public class TestDictonaryDBSource extends TestCase {
         assertTrue(dictonaryDBSource.createDictonary(dictonary, dbConnection));
     }
 
+    /**
+     * Тест ошибки при создании словаря
+     */
     @Test
     public void testNotCreateDictonary() {
         Dictonary dictonary = new Dictonary();
@@ -35,6 +41,9 @@ public class TestDictonaryDBSource extends TestCase {
         assertFalse(dictonaryDBSource.createDictonary(dictonary, dbConnection));
     }
 
+    /**
+     * Unit-тест метода getDictonaryId: проверяет его правильную работу
+     */
     @Test
     public void testGetDictonaryId() {
         try {
@@ -56,6 +65,9 @@ public class TestDictonaryDBSource extends TestCase {
         }
     }
 
+    /**
+     * Тест ошибки при получении dictionary_id
+     */
     @Test
     public void testNotGetDictonaryId() {
         try {
