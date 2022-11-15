@@ -6,6 +6,9 @@ import org.matmech.requestHandler.RequestHandler;
 
 import java.util.Scanner;
 
+/**
+ * Класс-интерфейс, который реализует консольную обертку над ботом
+ */
 public class CmdBot implements Connector {
     private String firstName;
     private String lastName;
@@ -15,6 +18,9 @@ public class CmdBot implements Connector {
 
     private CmdLogic bot;
 
+    /**
+     * Инициализирует пользователя, который пользуется сейчас консольным ботом
+     */
     private void initUser() {
         System.out.println("Добро пожаловать! Авторизуйте свой компьютер!");
         System.out.print("Введите свое имя:");
@@ -36,6 +42,9 @@ public class CmdBot implements Connector {
         bot = new CmdLogic(firstName, lastName, tag, requestHandler);
     }
 
+    /**
+     * Этот метод запускает консольного бота
+     */
     public void start() {
         bot.responseForCDM();
     }

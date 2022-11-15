@@ -9,6 +9,11 @@ import java.util.List;
 import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
 
+/**
+ * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Words</b>
+ * Каждый метод реализует какой-то нужный функционал.
+ * На вход подается модель, а на выходе будет возвращенно какое-то значение
+ */
 public class WordsDBSource extends DBSource {
     /**
      * <p>Проверяет на существование какого-то слова</p>

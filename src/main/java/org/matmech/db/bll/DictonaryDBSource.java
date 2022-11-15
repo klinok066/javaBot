@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Dictonary</b>
+ * Каждый метод реализует какой-то нужный функционал.
+ * На вход подается модель, а на выходе будет возвращенно какое-то значение
+ */
 public class DictonaryDBSource extends DBSource {
     /***
      * <p>Метод, который создает словарь какому-то пользователю</p>

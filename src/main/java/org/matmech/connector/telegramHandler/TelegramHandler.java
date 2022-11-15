@@ -9,6 +9,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import org.matmech.requestHandler.RequestHandler;
 
+/**
+ * Логика класса-интерфейса телеграмм бота
+ */
 public class TelegramHandler extends TelegramLongPollingBot {
     private final String botUsername;
     private final String botToken;
@@ -30,6 +33,10 @@ public class TelegramHandler extends TelegramLongPollingBot {
         return botToken;
     }
 
+    /**
+     * Метод, который реагирует на новые обновления в чате с ботом
+     * @param update - объект, который хранит в себе информацию о новом обновлении в чате с ботом
+     */
     @Override
     public void onUpdateReceived(Update update) {
         SendMessage message = new SendMessage();
