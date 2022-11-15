@@ -220,15 +220,14 @@ public class DBHandler {
 
             words.setWordValue(wordValue);
 
-            int dictonaryId = wordsDBSource.getDictonaryId(words, dbConnection);
+            int groupId = wordsDBSource.getGroupId(words, dbConnection);
 
-            if (dictonaryId == -1)
-                return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
-                        "Для регистрации напишите /start";
+            if (groupId == -1)
+                return "Слова нет в вашем словаре. Введите существующее слово!";
 
-            words.setDictonaryId(dictonaryId);
+            words.setGroupId(groupId);
 
-            String groupTitle = groupsDBSource.getGroupTitle(words.getDictonaryId(), dbConnection);
+            String groupTitle = groupsDBSource.getGroupTitle(words.getGroupId(), dbConnection);
 
             if (groupTitle != null)
                 return "Группа у слова " + wordValue + ": " + groupTitle;
