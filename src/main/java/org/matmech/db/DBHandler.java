@@ -227,7 +227,10 @@ public class DBHandler {
 
             words.setGroupId(groupId);
 
-            String groupTitle = groupsDBSource.getGroupTitle(words.getGroupId(), dbConnection);
+            Groups groups = new Groups();
+            groups.setId(words.getGroupId());
+
+            String groupTitle = groupsDBSource.getGroupTitle(groups, dbConnection);
 
             if (groupTitle != null)
                 return "Группа у слова " + wordValue + ": " + groupTitle;

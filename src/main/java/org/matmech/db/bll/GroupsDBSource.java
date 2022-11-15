@@ -84,14 +84,14 @@ public class GroupsDBSource extends DBSource {
 
     /**
      * Возвращает название группы по groupId
-     * @param groupId - id словаря
+     * @param groups - объект с информацией о группах. Обязательные поля: <i>id</i>
      * @param dbConnection - репозиторий
      * @return - возвращает значение поля title в виде строчки, либо null при неудаче
      */
-    public String getGroupTitle(int groupId, DBConnection dbConnection) throws SQLException {
+    public String getGroupTitle(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", Integer.toString(groupId)));
+            params.add(createParams("int", Integer.toString(groups.getId())));
 
             String getGroupTitleSQL = "select title from groups where id=?";
             List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
