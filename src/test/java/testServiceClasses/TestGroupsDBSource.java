@@ -100,4 +100,25 @@ public class TestGroupsDBSource extends TestCase {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    public void testGetGroupTitle() {
+        try {
+            ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
+
+            HashMap<String, String> item = new HashMap<String, String>();
+            item.put("title", "глаголы");
+
+            response.add(item);
+
+            when(dbConnectionMock.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
+
+            Groups groups = new Groups();
+            groups.setId(10);
+
+            assertEquals("глаголы", groupsDBSource.getGroupTitle(groups, dbConnectionMock));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
