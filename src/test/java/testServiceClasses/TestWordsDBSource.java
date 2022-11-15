@@ -18,6 +18,9 @@ public class TestWordsDBSource extends TestCase {
     private final DBConnection dbConnection = Mockito.mock(DBConnection.class);
     private final WordsDBSource wordsDBSource = new WordsDBSource();
 
+    /**
+     * Unit-тест метода wordAdd: проверяет его некорректную работу
+     */
     @Test
     public void testNotWordAdd() {
         try {
@@ -45,6 +48,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода wordAdd: проверяет его правильную работу
+     */
     @Test
     public void testWordAdd() {
         try {
@@ -61,6 +67,10 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+
+    /**
+     * Unit-тест метода translate: проверяет его правильную работу
+     */
     @Test
     public void testTranslate() {
         try {
@@ -94,6 +104,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода translate: проверяет его некорректную работу
+     */
     @Test
     public void testNotTranslate() {
         try {
@@ -112,6 +125,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода deleteWord: проверяет его правильную работу
+     */
     @Test
     public void testGetDictonaryId(){
         try {
@@ -314,6 +330,9 @@ public class TestWordsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода deleteWord: проверяет его некорректную работу
+     */
     @Test
     public void testNotDeleteWord() {
         try {

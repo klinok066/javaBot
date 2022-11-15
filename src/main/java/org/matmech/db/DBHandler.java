@@ -13,6 +13,10 @@ import org.matmech.db.models.Dictonary;
 import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
 
+/**
+ * Класс <b>DBHandler</b> реализует обертку над классами сервисами. Каждый метод работает с методами
+ * классов-сервисов и возвращает готовое сообщение пользователю в текстовом виде
+ */
 public class DBHandler {
     private DBConnection dbConnection = null;
     private final UsersDBSource usersDBSource;
@@ -159,7 +163,7 @@ public class DBHandler {
      * @param wordParam - параметр для изменения, переданное в параметрах
      * @param paramValue - значение изменяемого параметра, переданное в параметрах
      */
-    //если ломается обернуть в isExist()
+
     public String edit(String wordValue, String wordParam, String paramValue){
         Words words = new Words();
         words.setWordValue(wordValue);
@@ -220,15 +224,17 @@ public class DBHandler {
 
             words.setWordValue(wordValue);
 
-            int dictonaryId = wordsDBSource.getDictonaryId(words, dbConnection);
+            int groupId = wordsDBSource.getGroupId(words, dbConnection);
 
-            if (dictonaryId == -1)
-                return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
-                        "Для регистрации напишите /start";
+            if (groupId == -1)
+                return "Слова нет в вашем словаре. Введите существующее слово!";
 
-            words.setDictonaryId(dictonaryId);
+            words.setGroupId(groupId);
 
-            String groupTitle = groupsDBSource.getGroupTitle(words.getDictonaryId(), dbConnection);
+            Groups groups = new Groups();
+            groups.setId(words.getGroupId());
+
+            String groupTitle = groupsDBSource.getGroupTitle(groups, dbConnection);
 
             if (groupTitle != null)
                 return "Группа у слова " + wordValue + ": " + groupTitle;
@@ -257,43 +263,4 @@ public class DBHandler {
 
         return "Слова нет в базе данных!";
     }
-
-//    /**
-//     * Устанавливает пользователю режим тестирования
-//     * @param testMode - режим тестирования, который желает установить пользователь
-//     * @param tag - тег пользователя
-//     */
-//    public String setMode(String testMode, String tag) {
-//        return switch (testMode) {
-//            case "easy", "difficult" -> {
-//                Users user = new Users();
-//                user.setTestMode(testMode);
-//                user.setTag(tag);
-//
-//                boolean response = usersDBSource.setMode(user, dbConnection);
-//
-//                if (response)
-//                    yield "Режим тестирования был изменен на " + testMode;
-//                else
-//                    yield "Не удалось изменить режим: либо произошла ошибка, либо у вас уже этот режим установлен";
-//            }
-//            default -> "Вы выбрали не существующий режим тестирования. Надо выбрать либо easy, либо difficult!";
-//        };
-//    }
-//
-//    /**
-//     * Возвращает режим тестирования пользователя
-//     * @param tag - тег пользователя
-//     */
-//    public String getMode(String tag) {
-//        Users user = new Users();
-//        user.setTag(tag);
-//
-//        String testMode = usersDBSource.getMode(user, dbConnection);
-//
-//        if (testMode != null)
-//            return "Режим тестирования = " + testMode;
-//
-//        return "Произошла ошибка: у вас не установлен режим тестирования\nУстановить вы его можете с помощью /set_mode";
-//    }
 }

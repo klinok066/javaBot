@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Groups</b>
+ * Каждый метод реализует какой-то нужный функционал.
+ * На вход подается модель, а на выходе будет возвращенно какое-то значение
+ */
 public class GroupsDBSource extends DBSource {
     /**
      * Проверка на существование группы по названию
@@ -83,17 +88,17 @@ public class GroupsDBSource extends DBSource {
     }
 
     /**
-     * Возвращает название группы по dictonaryId
-     * @param DictonaryId - id словаря
+     * Возвращает название группы по groupId
+     * @param groups - объект с информацией о группах. Обязательные поля: <i>id</i>
      * @param dbConnection - репозиторий
-     * @return - возвращает значение поля dictonary_id в виде строчки, либо null при неудаче
+     * @return - возвращает значение поля title в виде строчки, либо null при неудаче
      */
-    public String getGroupTitle(int DictonaryId, DBConnection dbConnection) throws SQLException {
+    public String getGroupTitle(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", Integer.toString(DictonaryId)));
+            params.add(createParams("int", Integer.toString(groups.getId())));
 
-            String getGroupTitleSQL = "select title from groups where dictonary_id=?";
+            String getGroupTitleSQL = "select title from groups where id=?";
             List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
 
             for (HashMap<String, String> item : response)
