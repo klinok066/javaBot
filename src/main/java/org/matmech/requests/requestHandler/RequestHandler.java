@@ -1,6 +1,7 @@
 package org.matmech.requests.requestHandler;
 
 import org.matmech.cache.Cache;
+import org.matmech.contextManager.ContextManager;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.paramsHandler.ParamsHandler;
@@ -13,8 +14,7 @@ import java.util.List;
 // все методы с выводом текста надо убрать в отдельный класс
 
 public class RequestHandler {
-    private final Cache cache;
-    private final ParamsHandler paramsHandler;
+    private final ContextManager contextManager;
     private final RequestsLogic requestsLogic;
 
     private boolean isCmd(String command) {
@@ -48,9 +48,8 @@ public class RequestHandler {
     }
 
     public RequestHandler(DBHandler db, Cache cache) {
-        this.cache = cache;
-        this.paramsHandler = new ParamsHandler(cache, db);
         this.requestsLogic = new RequestsLogic(db);
+        this.contextManager = new ContextManager(cache, db);
     }
 
     /*
@@ -58,24 +57,23 @@ public class RequestHandler {
         тут будет промежуточный узел назначения контекста
         В paramsHandler будет только очищения контекста
      */
-    public String processCmd(String messageString, DataSaver info) { // подумать над архитектурой этого класса
+    public String processCmd(String message, DataSaver info) { // подумать над архитектурой этого класса
         String authentication = requestsLogic.authentication(info);
 
         if (requestsLogic.authentication(info) != null)
             return authentication;
 
-        if (cache.isBusy(info.getChatId()))
-            return paramsHandler.handler(info.getChatId());
+        return contextManager.detectContext(message, info);
 
-        if (isCmd(messageString)) {
-            List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
-            String firstWord = params.get(0);
-            params.remove(0);
-
-            return useCommand(formatCommandFromTelegram(firstWord), info, params);
-        }
-        else
-            return toAnswer(messageString, info);
+//        if (isCmd(messageString)) {
+//            List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
+//            String firstWord = params.get(0);
+//            params.remove(0);
+//
+//            return useCommand(formatCommandFromTelegram(firstWord), info, params);
+//        }
+//        else
+//            return toAnswer(messageString, info);
     }
 
     public String formatCommandFromTelegram(String command) {

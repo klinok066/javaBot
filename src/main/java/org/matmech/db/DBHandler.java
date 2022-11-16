@@ -264,15 +264,29 @@ public class DBHandler {
         return "Слова нет в базе данных!";
     }
 
+    /**
+     * Проверяет существование группы по названию
+     * @param group - название группы
+     * @return - возвращает <i>true</i>, если группа существует, и <i>false</i>, если группа не существует
+     */
     public boolean groupIsExist(String group) {
-        try {
-            Groups groups = new Groups();
+        Groups groups = new Groups();
 
-            groups.setTitle(group);
+        groups.setTitle(group);
 
-            return groupsDBSource.isExist(groups, dbConnection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        return groupsDBSource.groupIsExist(groups, dbConnection);
+    }
+
+    /**
+     * Проверяет существование пользователя по тегу
+     * @param tag - тег пользователя
+     * @return - возвращает <i>true</i>, если пользователь существует, и <i>false</i>, если пользователя не существует
+     */
+    public boolean userIsExist(String tag) {
+        Users users = new Users();
+
+        users.setTag(tag);
+
+        return usersDBSource.userIsExist(users, dbConnection);
     }
 }

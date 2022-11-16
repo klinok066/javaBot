@@ -39,7 +39,7 @@ public class Cache {
      * @param itemName - имя параметра, который мы хотим добавить в кеш
      * @param itemValue - значение параметра, который мы хотим добавить в кеш
      */
-    public void addParams(long chatId, String processName, String itemName, String itemValue) {
+    public boolean addParams(long chatId, String processName, String itemName, String itemValue) {
         HashMap<String, String> item = searchItem(chatId);
 
         if (item == null) {
@@ -50,11 +50,16 @@ public class Cache {
             item.put(itemName, itemValue);
 
             cache.add(item);
-            return;
+            return true;
         }
+
+            if (item.get("processName") == null)
+                return false;
 
         if (item.get("processName").equals(processName))
             item.put(itemName, itemValue);
+
+        return true;
     }
 
     /**
@@ -89,11 +94,32 @@ public class Cache {
         HashMap<String, String> item = searchItem(chatId);
 
         if (item != null) {
-            for (String key : item.keySet())
-                if (!key.equals("chatId"))
-                    item.remove(key);
-
+            String chatIdValue = item.get("chatId");
+            item.clear();
+            item.put("chatId", chatIdValue);
             item.put("processName", null);
         }
+    }
+
+    /**
+     * Присваивает значение полю processName у пользовательского кеша. Если кеш под пользователя
+     * не был выделен, то он сначала будет выделен, а потом будет присвоено значение полю processName
+     * <b>Имя процессу не будет присвоено, если там уже лежит какое-то значение</b>
+     * @param chatId - идентификатор чата с пользователем
+     * @param processName - имя процесса, которое хотите присвоить
+     */
+    public void setProcessName(long chatId, String processName) {
+        HashMap<String, String> item = searchItem(chatId);
+
+        if (item == null) {
+            item = new HashMap<String, String>();
+
+            item.put("chatId", String.valueOf(chatId));
+            item.put("processName", processName);
+
+            cache.add(item);
+        }
+
+        item.putIfAbsent("processName", processName);
     }
 }

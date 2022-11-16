@@ -21,7 +21,7 @@ public class UsersDBSource extends DBSource {
      * <p>Перед этим нужно проинициализировать поле <i>wordValue</i> с помощью сеттера</p>
      * @return - возвращает существует пользователь в виде boolean
      */
-    public boolean isExist(Users users, DBConnection dbConnection) throws SQLException {
+    private boolean isExist(Users users, DBConnection dbConnection) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", users.getTag()));
@@ -105,6 +105,20 @@ public class UsersDBSource extends DBSource {
 
         } catch (SQLException e) {
             System.out.println("Не удалось получить всех пользователей\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Проверяет существование пользователя в системе
+     * @param users - объект с информацией о пользователе. Обязательные поля: <i>tag</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает <i>true</i> - если пользователь существует, <i>false</i> - если пользователя не существует
+     */
+    public boolean userIsExist(Users users, DBConnection dbConnection) {
+        try {
+            return isExist(users, dbConnection);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }

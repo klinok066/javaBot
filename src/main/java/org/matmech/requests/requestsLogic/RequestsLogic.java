@@ -64,6 +64,9 @@ public class RequestsLogic {
     }
 
     public String authentication(DataSaver info) {
-        return db.userIsExist(info);
+        if (!db.userIsExist(info.getTag()))
+            return "Вы не зарегистрированы в системе! Чтобы зарегистрироваться в системе напишите /start";
+
+        return null;
     }
 }

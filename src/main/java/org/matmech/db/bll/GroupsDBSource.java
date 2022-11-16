@@ -20,7 +20,7 @@ public class GroupsDBSource extends DBSource {
      * @param dbConnection - репозиторий
      * @return - возвращает результат работы метода. <i>True</i> - если успешно, <i>False</i> - если не успешно
      */
-    public boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
+    private boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
             params.add(createParams("string", groups.getTitle()));
@@ -109,5 +109,20 @@ public class GroupsDBSource extends DBSource {
         }
 
         return null;
+    }
+
+    /**
+     * Проверяет существование группы по названию
+     * @param groups - объект с информацией о группе. Обязательные параметры: <i>title</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает <i>true</i>, если группа существует, и <i>false</i>, если группа не существует
+     */
+    public boolean groupIsExist(Groups groups, DBConnection dbConnection) {
+        try {
+            return isExist(groups, dbConnection);
+        } catch (SQLException e) {
+            System.out.println("Не удалось проверить существование группы\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
