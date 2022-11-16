@@ -13,6 +13,10 @@ import org.matmech.db.models.Dictonary;
 import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
 
+/**
+ * Класс <b>DBHandler</b> реализует обертку над классами сервисами. Каждый метод работает с методами
+ * классов-сервисов и возвращает готовое сообщение пользователю в текстовом виде
+ */
 public class DBHandler {
     private DBConnection dbConnection = null;
     private final UsersDBSource usersDBSource;
@@ -67,6 +71,7 @@ public class DBHandler {
 
             return "Вы уже зарегистрированны в нашей системе";
         } catch (SQLException e) {
+            System.out.println("Не удалось зарегистрировать пользователя");
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -79,6 +84,7 @@ public class DBHandler {
         try {
             usersDBSource.getAllUsers(dbConnection);
         } catch (SQLException e) {
+            System.out.println("Не удалось получить пользователей");
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
@@ -128,7 +134,6 @@ public class DBHandler {
             else
                 return "Ошибка! Слово уже существует!\nЕсли хотите что-то поменять в слове, то воспользуйтесь командой /edit";
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -219,22 +224,24 @@ public class DBHandler {
 
             words.setWordValue(wordValue);
 
-            int dictonaryId = wordsDBSource.getDictonaryId(words, dbConnection);
+            int groupId = wordsDBSource.getGroupId(words, dbConnection);
 
-            if (dictonaryId == -1)
-                return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
-                        "Для регистрации напишите /start";
+            if (groupId == -1)
+                return "Слова нет в вашем словаре. Введите существующее слово!";
 
-            words.setDictonaryId(dictonaryId);
+            words.setGroupId(groupId);
 
-            String groupTitle = groupsDBSource.getGroupTitle(words.getDictonaryId(), dbConnection);
+            Groups groups = new Groups();
+            groups.setId(words.getGroupId());
+
+            String groupTitle = groupsDBSource.getGroupTitle(groups, dbConnection);
 
             if (groupTitle != null)
                 return "Группа у слова " + wordValue + ": " + groupTitle;
 
             return "Не удалось получить группу у слова: либо слова не существует, либо группы у слова нет";
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Не удалось получить группу");
             throw new RuntimeException(e);
         }
     }
@@ -255,33 +262,5 @@ public class DBHandler {
             return "Слово было удалено из базы данных!";
 
         return "Слова нет в базе данных!";
-    }
-
-    public String userIsExist(DataSaver info) {
-        try {
-            Users users = new Users();
-            users.setTag(info.getTag());
-
-            if (!usersDBSource.isExist(users, dbConnection))
-                return "Вы не зарегистрированы! Напишите регистрации напиишите команду /start";
-
-            return null;
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public boolean groupIsExist(String groupTitle) {
-        try {
-            Groups groups = new Groups();
-            groups.setTitle(groupTitle);
-
-            return groupsDBSource.isExist(groups, dbConnection);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
     }
 }

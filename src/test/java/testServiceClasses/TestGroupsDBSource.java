@@ -21,6 +21,9 @@ public class TestGroupsDBSource extends TestCase {
     private final DBConnection dbConnectionMock = Mockito.mock(DBConnection.class);
     private final GroupsDBSource groupsDBSource = new GroupsDBSource();
 
+    /**
+     * Unit-тест метода createGroup: проверяет его неправильную работу
+     */
     @Test
     public void testNotCreateGroup() {
         try {
@@ -42,6 +45,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода createGroup: проверяет его правильную работу
+     */
     @Test
     public void testCreateGroup() {
         try {
@@ -60,6 +66,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGruopId: проверяет его правильную работу
+     */
     @Test
     public void testGetGroupId() {
         try {
@@ -83,6 +92,9 @@ public class TestGroupsDBSource extends TestCase {
         }
     }
 
+    /**
+     * Unit-тест метода getGruopId: проверяет его неправильную работу
+     */
     @Test
     public void testNotGetGroupId() {
         try {
@@ -97,6 +109,53 @@ public class TestGroupsDBSource extends TestCase {
 
             assertEquals(-1, groupsDBSource.getGroupId(groups, dbConnectionMock));
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Unit-тест метода getGroupTitle: проверяет его правильную работу
+     */
+    @Test
+    public void testGetGroupTitle(){
+        try{
+            ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
+            HashMap<String, String> item = new HashMap<String, String>();
+            item.put("id", "3");
+            item.put("title", "глаголы");
+            item.put("dictonary_id", "123");
+            response.add(item);
+
+            when(dbConnectionMock.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
+
+            Groups groups = new Groups();
+
+            groups.setId(3);
+            groups.setDictonaryId(123);
+
+            assertEquals("глаголы", groupsDBSource.getGroupTitle(groups,dbConnectionMock));
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Unit-тест метода getGroupTitle: проверяет его неправильную работу
+     */
+    @Test
+    public void testNotGetGroupTitle(){
+        try{
+            ArrayList<HashMap<String, String>> response = new ArrayList<HashMap<String, String>>();
+
+            when(dbConnectionMock.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
+
+            Groups groups = new Groups();
+
+            groups.setId(3);
+            groups.setDictonaryId(123);
+
+            assertNull(groupsDBSource.getGroupTitle(groups, dbConnectionMock));
+        }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

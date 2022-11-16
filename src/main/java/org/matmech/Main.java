@@ -17,6 +17,9 @@ public class Main {
         final String DB_USERNAME = System.getenv("DB_USERNAME");
         final String DB_PASSWORD = System.getenv("DB_PASSWORD");
 
+//        int groupId = Integer.parseInt(System.getenv("GROUP_ID"));
+//        String access_token = System.getenv("accessToken");
+
         // database
 
         DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);

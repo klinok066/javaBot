@@ -9,6 +9,11 @@ import java.util.List;
 import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
 
+/**
+ * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Words</b>
+ * Каждый метод реализует какой-то нужный функционал.
+ * На вход подается модель, а на выходе будет возвращенно какое-то значение
+ */
 public class WordsDBSource extends DBSource {
     /**
      * <p>Проверяет на существование какого-то слова</p>
@@ -161,8 +166,8 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Меняет параметр group_id</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param words Объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
+     * @param dbConnection Репозиторий
      * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
     public boolean editGroupId(Words words, DBConnection dbConnection){

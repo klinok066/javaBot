@@ -4,7 +4,9 @@ import org.matmech.dataSaver.DataSaver;
 import org.matmech.requests.requestHandler.RequestHandler;
 import java.util.Scanner;
 
-
+/**
+ * Логика класса-интерфейса, который реализует консольную обертку над ботом
+ */
 public class CmdLogic {
     private final Scanner input;
     private final RequestHandler requestHandler;
@@ -22,6 +24,9 @@ public class CmdLogic {
         this.input = new Scanner(System.in);
     }
 
+    /**
+     * Метод, получает сообщения с консоли и обрабатывает их
+     */
     public void responseForCDM() {
         while(true) {
             String messageFromCMD = input.nextLine();

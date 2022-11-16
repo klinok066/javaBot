@@ -2,6 +2,10 @@ package org.matmech.db.bll;
 
 import java.util.HashMap;
 
+/**
+ * Абстрактный класс-сервис, в котором содержится дублирующийся код всех классов-сервисов,
+ * которые от него наследуются
+ */
 abstract public class DBSource {
     /**
      * Создает HashMap объект с параметром
