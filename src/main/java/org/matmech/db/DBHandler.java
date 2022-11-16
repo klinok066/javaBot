@@ -263,4 +263,16 @@ public class DBHandler {
 
         return "Слова нет в базе данных!";
     }
+
+    public boolean groupIsExist(String group) {
+        try {
+            Groups groups = new Groups();
+
+            groups.setTitle(group);
+
+            return groupsDBSource.isExist(groups, dbConnection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
