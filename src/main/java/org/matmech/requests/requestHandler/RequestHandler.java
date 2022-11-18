@@ -63,7 +63,7 @@ public class RequestHandler {
         if (requestsLogic.authentication(info) != null)
             return authentication;
 
-        return contextManager.detectContext(message, info);
+        return contextManager.detectContext(message, info); // это оставить только для команд, а для ответа на простые сообщения написать ещё метод (либо оставить toAnswer)
 
 //        if (isCmd(messageString)) {
 //            List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));

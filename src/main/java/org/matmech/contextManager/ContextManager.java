@@ -11,6 +11,15 @@ public class ContextManager {
     final private ParamsHandler paramsHandler;
 
     /**
+     * Возвращает стандартный ответ на не определенную команду
+     * @return - возвращает строку, содержащую стандартный ответ
+     */
+    private String defaultAnswer() {
+        return "Простите, я не знаю такой команды" +
+                "Если хотите узнать полных список команд, то напишите /help";
+    }
+
+    /**
      * Возвращает название контекста
      * @param message - сообщение, которое отправил
      * @return - возвращает контекст
@@ -34,9 +43,13 @@ public class ContextManager {
      */
     public String detectContext(String message, DataSaver info) {
         final long CHAT_ID = info.getChatId();
+        final String CONTEXT = getContext(message);
+
+        if (CONTEXT == null)
+            return defaultAnswer();
 
         if (!cache.isBusy(CHAT_ID))
-            cache.setProcessName(CHAT_ID, getContext(message));
+            cache.setProcessName(CHAT_ID, CONTEXT);
 
         return paramsHandler.handler(CHAT_ID, message);
     }
