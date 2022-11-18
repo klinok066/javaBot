@@ -21,25 +21,6 @@ public class RequestHandler {
         return command.charAt(0) == '/';
     }
 
-    private String useCommand(String command, DataSaver info, List<String> params) { // ответ на команды
-        return switch (command) {
-            case "help" -> requestsLogic.toHelp();
-            case "start" -> requestsLogic.toStart(info);
-            case "word_add" -> requestsLogic.wordAdd(params, info);
-            case "translate" -> requestsLogic.translateWord(params);
-            case "remove" -> requestsLogic.deleteWord(params);
-            case "edit" -> requestsLogic.edit(params);
-            case "get_group" -> requestsLogic.getGroup(params);
-            case    "group_list",
-                    "group_create",
-                    "word_list",
-                    "test",
-                    "stop_test" -> requestsLogic.functionInProgress();
-
-            default -> requestsLogic.toDefaultAnswer();
-        };
-    }
-
     private String toAnswer(String messageString, DataSaver info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.getFirstname();
@@ -52,34 +33,15 @@ public class RequestHandler {
         this.contextManager = new ContextManager(cache, db);
     }
 
-    /*
-        Я думаю, что стоит оставить только paramsHandler, там будет выполняться вся основная логика
-        тут будет промежуточный узел назначения контекста
-        В paramsHandler будет только очищения контекста
-     */
     public String processCmd(String message, DataSaver info) { // подумать над архитектурой этого класса
         String authentication = requestsLogic.authentication(info);
 
         if (requestsLogic.authentication(info) != null)
             return authentication;
 
-        return contextManager.detectContext(message, info); // это оставить только для команд, а для ответа на простые сообщения написать ещё метод (либо оставить toAnswer)
+        if (isCmd(message))
+            return contextManager.detectContext(message, info);
 
-//        if (isCmd(messageString)) {
-//            List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
-//            String firstWord = params.get(0);
-//            params.remove(0);
-//
-//            return useCommand(formatCommandFromTelegram(firstWord), info, params);
-//        }
-//        else
-//            return toAnswer(messageString, info);
-    }
-
-    public String formatCommandFromTelegram(String command) {
-        if (!isCmd(command))
-            return command;
-
-        return command.substring(1);
+        return toAnswer(message, info);
     }
 }
