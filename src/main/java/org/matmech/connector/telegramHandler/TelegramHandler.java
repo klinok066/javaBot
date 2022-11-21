@@ -57,7 +57,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
             String messageString = update.getMessage().getText();
 
-            answer.append(requestHandler.onUse(messageString, data));
+            answer.append(requestHandler.makeAction(messageString, data));
 
             message.setText(answer.toString());
         }

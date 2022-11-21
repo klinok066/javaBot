@@ -26,25 +26,25 @@ public class TestRequestHandler extends TestCase {
         final String IN_FUTURE = "So far, work is underway on this function, but in the near future it will be revived";
         final String WRONG_CMD = "Sorry, I'm don't understand you...";
 
-        assertEquals(IN_FUTURE, handler.onUse("/group_list", data));
-        assertEquals(IN_FUTURE, handler.onUse("/group_list", data));
-        assertEquals(IN_FUTURE, handler.onUse("/group_create", data));
-        assertEquals(IN_FUTURE, handler.onUse("/group_create", data));
-        assertEquals(IN_FUTURE, handler.onUse("/word_list", data));
-        assertEquals(IN_FUTURE, handler.onUse("/word_list", data));
-        assertEquals(IN_FUTURE, handler.onUse("/test", data));
-        assertEquals(IN_FUTURE, handler.onUse("/test", data));
-        assertEquals(IN_FUTURE, handler.onUse("/stop_test", data));
-        assertEquals(IN_FUTURE, handler.onUse("/stop_test", data));
-        assertEquals(WRONG_CMD, handler.onUse("sdfsdfsdf", data));
-        assertEquals(WRONG_CMD, handler.onUse("xzc", data));
-        assertEquals(WRONG_CMD, handler.onUse("укеуке", data));
-        assertEquals(WRONG_CMD, handler.onUse("привет", data));
-        assertEquals(WRONG_CMD, handler.onUse("спам", data));
-        assertEquals(WRONG_CMD, handler.onUse("бот", data));
-        assertEquals(WRONG_CMD, handler.onUse("ничего", data));
-        assertEquals(WRONG_CMD, handler.onUse("xcv", data));
-        assertEquals("Hello, " + data.getFirstname(), handler.onUse("hello", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/group_list", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/group_list", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/group_create", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/group_create", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/word_list", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/word_list", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/test", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/test", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/stop_test", data));
+        assertEquals(IN_FUTURE, handler.makeAction("/stop_test", data));
+        assertEquals(WRONG_CMD, handler.makeAction("sdfsdfsdf", data));
+        assertEquals(WRONG_CMD, handler.makeAction("xzc", data));
+        assertEquals(WRONG_CMD, handler.makeAction("укеуке", data));
+        assertEquals(WRONG_CMD, handler.makeAction("привет", data));
+        assertEquals(WRONG_CMD, handler.makeAction("спам", data));
+        assertEquals(WRONG_CMD, handler.makeAction("бот", data));
+        assertEquals(WRONG_CMD, handler.makeAction("ничего", data));
+        assertEquals(WRONG_CMD, handler.makeAction("xcv", data));
+        assertEquals("Hello, " + data.getFirstname(), handler.makeAction("hello", data));
     }
 
     /**

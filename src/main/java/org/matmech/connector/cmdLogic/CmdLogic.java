@@ -36,7 +36,7 @@ public class CmdLogic {
             StringBuilder answer = new StringBuilder("");
             UserData data = new UserData(firstName, lastName, tag);
 
-            answer.append(requestHandler.onUse(messageFromCMD, data));
+            answer.append(requestHandler.makeAction(messageFromCMD, data));
 
             System.out.println(answer);
         }

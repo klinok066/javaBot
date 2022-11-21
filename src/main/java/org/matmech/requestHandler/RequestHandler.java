@@ -84,7 +84,7 @@ public class RequestHandler {
         };
     }
 
-    private String toAnswer(String messageString, UserData info) { // просто ответ на обычные сообщения
+    private String sayAnswer(String messageString, UserData info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.getFirstname();
             default -> toDefaultAnswer();
@@ -95,7 +95,7 @@ public class RequestHandler {
         this.db = db;
     }
 
-    public String onUse(String messageString, UserData info) {
+    public String makeAction(String messageString, UserData info) {
         if (isCmd(messageString)) {
             List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
             String firstWord = params.get(0);
@@ -104,7 +104,7 @@ public class RequestHandler {
             return useCommand(formatCommandFromTelegram(firstWord), info, params);
         }
         else
-            return toAnswer(messageString, info);
+            return sayAnswer(messageString, info);
     }
 
     public String formatCommandFromTelegram(String command) {
