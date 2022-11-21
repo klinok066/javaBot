@@ -1,7 +1,6 @@
 package org.matmech.connector.cmdLogic;
 
-import org.json.JSONObject;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.dataSaver.UserData;
 import org.matmech.requestHandler.RequestHandler;
 import java.util.Scanner;
 
@@ -35,7 +34,7 @@ public class CmdLogic {
         while(true) {
             String messageFromCMD = input.nextLine();
             StringBuilder answer = new StringBuilder("");
-            DataSaver data = new DataSaver(firstName, lastName, tag);
+            UserData data = new UserData(firstName, lastName, tag);
 
             answer.append(requestHandler.onUse(messageFromCMD, data));
 

@@ -1,11 +1,14 @@
 package org.matmech.dataSaver;
 
-final public class DataSaver {
+/**
+ * Класс хранящий в себе данные о пользователе, с которым ведется в данные момент диалог
+ */
+final public class UserData {
     private final String firstname;
     private final String surname;
     private final String tag;
 
-    public DataSaver(String firstname, String surname, String tag) {
+    public UserData(String firstname, String surname, String tag) {
         this.firstname = firstname;
         this.surname = surname;
         this.tag = tag;

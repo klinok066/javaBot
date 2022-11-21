@@ -1,7 +1,6 @@
 package org.matmech.connector.telegramHandler;
 
-import org.json.JSONObject;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.dataSaver.UserData;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -50,7 +49,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
             User userData = update.getMessage().getFrom();
 
-            DataSaver data = new DataSaver(
+            UserData data = new UserData(
                     userData.getFirstName(),
                     userData.getLastName(),
                     userData.getUserName()

@@ -1,16 +1,15 @@
 package TestCommands;
 
 import junit.framework.TestCase;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.dataSaver.UserData;
 import org.matmech.db.DBHandler;
 import org.matmech.requestHandler.RequestHandler;
 import org.mockito.Mockito;
 
 public class TestRequestHandler extends TestCase {
-    private final DataSaver data = new DataSaver("User", "Unknown", "Unknown");
+    private final UserData data = new UserData("User", "Unknown", "Unknown");
     private final DBHandler dbMock = Mockito.mock(DBHandler.class);
     private RequestHandler handler = new RequestHandler(dbMock);
 

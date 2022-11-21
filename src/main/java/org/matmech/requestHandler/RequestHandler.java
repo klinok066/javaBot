@@ -1,12 +1,9 @@
 package org.matmech.requestHandler;
 
-import org.checkerframework.checker.units.qual.A;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.dataSaver.UserData;
 import org.matmech.db.DBHandler;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RequestHandler {
@@ -40,7 +37,7 @@ public class RequestHandler {
     }
 
 
-    private String toStart(DataSaver data) {
+    private String toStart(UserData data) {
         return db.usersInsert(data.getFirstname(), data.getSurname(), data.getTag());
     }
 
@@ -48,7 +45,7 @@ public class RequestHandler {
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    private String wordAdd(List<String> params, DataSaver data) {
+    private String wordAdd(List<String> params, UserData data) {
         return db.wordAdd(params.get(0), params.get(1), params.get(2), data.getTag());
     }
 
@@ -76,7 +73,7 @@ public class RequestHandler {
 //        return db.getMode(data.getTag());
 //    }
 
-    private String useCommand(String command, DataSaver info, List<String> params) { // ответ на команды
+    private String useCommand(String command, UserData info, List<String> params) { // ответ на команды
         return switch (command) {
             case "help" -> toHelp();
             case "start" -> toStart(info);
@@ -97,7 +94,7 @@ public class RequestHandler {
         };
     }
 
-    private String toAnswer(String messageString, DataSaver info) { // просто ответ на обычные сообщения
+    private String toAnswer(String messageString, UserData info) { // просто ответ на обычные сообщения
         return switch (messageString.toLowerCase()) {
             case "hello" -> "Hello, " + info.getFirstname();
             default -> toDefaultAnswer();
@@ -108,7 +105,7 @@ public class RequestHandler {
         this.db = db;
     }
 
-    public String onUse(String messageString, DataSaver info) {
+    public String onUse(String messageString, UserData info) {
         if (isCmd(messageString)) {
             List<String> params = new ArrayList<String>(List.of(messageString.split(" ")));
             String firstWord = params.get(0);
