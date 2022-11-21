@@ -4,15 +4,14 @@ import org.matmech.connector.Connector;
 import org.matmech.connector.cmdLogic.CmdLogic;
 import org.matmech.requestHandler.RequestHandler;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
  * Класс-интерфейс, который реализует консольную обертку над ботом
  */
 public class CmdBot implements Connector {
-    private String firstName;
-    private String lastName;
-    private String tag;
     private final Scanner input;
     private final RequestHandler requestHandler;
 
@@ -21,25 +20,31 @@ public class CmdBot implements Connector {
     /**
      * Инициализирует пользователя, который пользуется сейчас консольным ботом
      */
-    private void initUser() {
+    private Map<String, String> initUser() {
+        Map<String, String> userData = new HashMap<String, String>();
+
         System.out.println("Добро пожаловать! Авторизуйте свой компьютер!");
         System.out.print("Введите свое имя:");
-        this.firstName = input.nextLine();
+        userData.put("firstname", input.nextLine());
+
         System.out.print("Введите свою фамилию:");
-        this.lastName = input.nextLine();
+        userData.put("lastname", input.nextLine());
+
         System.out.print("Введите/придумайте себе тег:");
-        this.tag = input.nextLine();
+        userData.put("tag", input.nextLine());
 
         System.out.println("Вы были успешно авторизированы! Для того, чтобы начать работать с ботом, напишите /start");
+
+        return userData;
     }
 
     public CmdBot(RequestHandler requestHandler) {
         this.requestHandler = requestHandler;
         this.input = new Scanner(System.in);
 
-        initUser();
+        Map<String, String> userData = initUser();
 
-        bot = new CmdLogic(firstName, lastName, tag, requestHandler);
+        bot = new CmdLogic(userData.get("firstname"), userData.get("lastname"), userData.get("tag"), requestHandler);
     }
 
     /**
