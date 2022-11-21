@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 /**
- * Этот класс-интерфейс, который реализует обертку над ботом в телеграмме
+ * Этот класс-интерфейс, который реализует обертку над логикой телеграмм-бота
  */
 public class TelegramBot implements Connector {
     private final TelegramHandler bot;
