@@ -5,6 +5,7 @@ import org.matmech.dataSaver.DataSaver;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import org.matmech.requestHandler.RequestHandler;
@@ -47,10 +48,13 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
             // creating Data Saver object which save information about user
 
-            DataSaver data = new DataSaver(update.getMessage().getFrom().getFirstName(),
-                                           update.getMessage().getFrom().getLastName(),
-                                           update.getMessage().getFrom().getUserName()
-                                          );
+            User userData = update.getMessage().getFrom();
+
+            DataSaver data = new DataSaver(
+                    userData.getFirstName(),
+                    userData.getLastName(),
+                    userData.getUserName()
+            );
 
             String messageString = update.getMessage().getText();
 
