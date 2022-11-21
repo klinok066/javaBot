@@ -13,8 +13,8 @@ import org.matmech.db.models.Words;
 import org.matmech.db.repository.DBConnection;
 
 /**
- * Класс <b>DBHandler</b> реализует обертку над классами сервисами. Каждый метод работает с методами
- * классов-сервисов и возвращает готовое сообщение пользователю в текстовом виде
+ * Этот общий класс для работы с базой данных. Каждый публичный его метод изменяет одну из таблиц в БД и возвращает
+ * соответствующее сообщение <b>для пользователя</b> о работе метода в виде строчки
  */
 public class DBHandler {
     private DBConnection dbConnection = null;
@@ -29,16 +29,6 @@ public class DBHandler {
         groupsDBSource = new GroupsDBSource();
         dictonaryDBSource = new DictonaryDBSource();
         wordsDBSource = new WordsDBSource();
-    }
-
-    /**
-     * Подключение к базе данных
-     * @param DB_URL - url адрес базы данных
-     * @param DB_USERNAME - пользователь в базед данных
-     * @param DB_PASSWORD - пароль пользователя
-     */
-    public void setDbConnection(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
-        dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
     }
 
     /**
