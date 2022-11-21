@@ -26,7 +26,7 @@ public class CmdLogic {
     /**
      * Метод, получает сообщения с консоли и обрабатывает их
      */
-    public void responseForCDM() {
+    public void startChat() {
         while(true) {
             String messageFromCMD = input.nextLine();
             StringBuilder answer = new StringBuilder("");
