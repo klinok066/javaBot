@@ -27,6 +27,11 @@ public class CmdLogic {
      * Метод, получает сообщения с консоли и обрабатывает их
      */
     public void startChat() {
+        System.out.println(
+                "Добро пожаловать в нашего бота по изучению английского!\n" +
+                "Для того, чтобы посмотреть полный список команд напишите /help"
+        );
+
         while(true) {
             String messageFromCMD = input.nextLine();
             StringBuilder answer = new StringBuilder("");
