@@ -1,14 +1,16 @@
-package org.matmech.paramsHandler;
+package org.matmech.params;
 
-import org.matmech.cache.Cache;
+import org.matmech.paramsCache.ParamsCache;
 import org.matmech.db.DBHandler;
-import org.matmech.paramsHandler.testingValidation.TestingValidation;
+import org.matmech.params.testingValidation.TestingValidation;
+import org.matmech.tests.Tests;
 
 import java.util.HashMap;
 
-public class ParamsHandler {
-    private final Cache cache;
+public class Params {
+    private final ParamsCache cache;
     private final DBHandler db;
+    private final Tests tests;
 
     /**
      * Проверяет является ли сообщение стоп-словом
@@ -39,7 +41,7 @@ public class ParamsHandler {
      * @param chatId - идентификатор чата с пользователем
      * @return - возвращает ответ пользователю
      */
-    private String testing(long chatId) {
+    private String testing(long chatId, String tag) {
         HashMap<String, String> params = cache.getParams(chatId);
 
         String groups = params.get("group");
@@ -54,7 +56,7 @@ public class ParamsHandler {
         String countWordsValidation = testingValidation.validationCountWords(params);
         String modeValidation = testingValidation.validationMode(params);
 
-        cache.addParams(chatId, params.get("processName"), "settingParams", "true"); // обязательная строка,
+        cache.addParams(chatId, "testing", "settingParams", "true"); // обязательная строка,
         // которая определяет контекст присваивания параметров
 
         // Валидация группы слова
@@ -74,12 +76,12 @@ public class ParamsHandler {
 
         params.putIfAbsent("currentQuestion", "0");
 
-        cache.addParams(chatId, params.get("processName"), "settingParams", null); // обязательная строка,
+        cache.addParams(chatId, "testing", "settingParams", null); // обязательная строка,
         // которая говорит нам, что параметры перестали обрабатываться
 
         // начало тестирования
 
-        if (Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(countWords)) {
+        if (!countWords.equals("по всем") && Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(countWords)) {
             cache.clear(chatId);
             return "Тест завершен";
         }
@@ -88,8 +90,7 @@ public class ParamsHandler {
         params.remove("currentQuestion");
         params.put("currentQuestion", currentQuestion);
 
-//            return db.getTestQuestion();
-        return "Вам задали вопрос. Ответьте!";
+        return tests.getQuestion(tag, groups, mode);
     }
 
     /**
@@ -136,9 +137,10 @@ public class ParamsHandler {
         }
     }
 
-    public ParamsHandler(Cache cache, DBHandler db) {
+    public Params(ParamsCache cache, DBHandler db) {
         this.cache = cache;
         this.db = db;
+        this.tests = new Tests(db);
     }
 
     /**
@@ -150,7 +152,7 @@ public class ParamsHandler {
      * @param message - сообщение, которое отправил пользователь
      * @return - возвращает сообщение пользователю в виде строки
      */
-    public String handler(long chatId, String message) {
+    public String handler(long chatId, String tag, String message) {
         final String PROCESS_NAME = cache.getParams(chatId).get("processName");
 
         if (isStopOperation(message)) {
@@ -164,7 +166,7 @@ public class ParamsHandler {
             setParams(chatId, message);
 
         return switch (PROCESS_NAME) {
-            case "testing" -> testing(chatId);
+            case "testing" -> testing(chatId, tag);
             default -> throw new IllegalArgumentException("Нет такого процесса");
         };
     }

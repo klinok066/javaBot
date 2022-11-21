@@ -1,4 +1,4 @@
-package org.matmech.cache;
+package org.matmech.paramsCache;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.HashMap;
  *      <i>processName</i> - имя процесса, который в данный момент использует кеш. Если никто не использует,
  *          то стоит null
  */
-public class Cache {
+public class ParamsCache {
     private final ArrayList<HashMap<String, String>> cache;
 
     /**
@@ -28,7 +28,7 @@ public class Cache {
         return null;
     }
 
-    public Cache() {
+    public ParamsCache() {
         cache = new ArrayList<HashMap<String, String>>();
     }
 

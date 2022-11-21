@@ -1,21 +1,20 @@
 package org.matmech.contextManager;
 
-import org.checkerframework.checker.units.qual.C;
-import org.matmech.cache.Cache;
+import org.matmech.paramsCache.ParamsCache;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
-import org.matmech.paramsHandler.ParamsHandler;
+import org.matmech.params.Params;
 
 public class ContextManager {
-    final private Cache cache;
-    final private ParamsHandler paramsHandler;
+    final private ParamsCache cache;
+    final private Params paramsHandler;
 
     /**
      * Возвращает стандартный ответ на не определенную команду
      * @return - возвращает строку, содержащую стандартный ответ
      */
     private String defaultAnswer() {
-        return "Простите, я не знаю такой команды" +
+        return "Простите, я не знаю такой команды\n" +
                 "Если хотите узнать полных список команд, то напишите /help";
     }
 
@@ -31,9 +30,9 @@ public class ContextManager {
         };
     }
 
-    public ContextManager(Cache cache, DBHandler dbHandler) {
+    public ContextManager(ParamsCache cache, DBHandler dbHandler) {
         this.cache = cache;
-        paramsHandler = new ParamsHandler(cache, dbHandler);
+        paramsHandler = new Params(cache, dbHandler);
     }
 
     /**
@@ -43,14 +42,15 @@ public class ContextManager {
      */
     public String detectContext(String message, DataSaver info) {
         final long CHAT_ID = info.getChatId();
+        final String TAG = info.getTag();
         final String CONTEXT = getContext(message);
 
-        if (CONTEXT == null)
+        if (CONTEXT == null && cache.getParams(CHAT_ID).get("processName") == null)
             return defaultAnswer();
 
         if (!cache.isBusy(CHAT_ID))
             cache.setProcessName(CHAT_ID, CONTEXT);
 
-        return paramsHandler.handler(CHAT_ID, message);
+        return paramsHandler.handler(CHAT_ID, TAG, message);
     }
 }

@@ -289,4 +289,66 @@ public class DBHandler {
 
         return usersDBSource.userIsExist(users, dbConnection);
     }
+
+    /**
+     * Возвращает случайное слово из базы данных у конкретного пользователя.\
+     * Может возвращать как по любым группам, так и по какой-то конкретной группе слов
+     * @param tag - тег пользователя, у которого должно лежать это слово
+     * @param group - название конкретной группы слов или если хотим по всем, то нужно указать значение <i>все</i>
+     * @return - возвращает случайно слово
+     */
+    public String getRandomWord(String tag, String group) {
+        try {
+            Users users = new Users();
+            users.setTag(tag);
+
+            int userId = usersDBSource.getUserIdByTag(users, dbConnection);
+
+            Dictonary dictonary = new Dictonary();
+            dictonary.setUserId(userId);
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(dictonary, dbConnection);
+
+            Groups groups = new Groups();
+            groups.setTitle(group);
+            groups.setDictonaryId(dictonaryId);
+
+            int groupId = groupsDBSource.getGroupId(groups, dbConnection);
+
+            Words words = new Words();
+            words.setGroupId(groupId);
+            words.setDictonaryId(dictonaryId);
+
+            group = group.toLowerCase();
+
+            if (group.equals("все"))
+                return wordsDBSource.getRandomWord(words, dbConnection);
+
+            return wordsDBSource.getRandomWordByGroup(words, dbConnection);
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить слово!\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getCountsWordsOfUser(String tag) {
+        try {
+            Users users = new Users();
+            users.setTag(tag);
+
+            int userId = usersDBSource.getUserIdByTag(users, dbConnection);
+
+            Dictonary dictonary = new Dictonary();
+            dictonary.setUserId(userId);
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(dictonary, dbConnection);
+
+            Words words = new Words();
+            words.setDictonaryId(dictonaryId);
+
+            return wordsDBSource.getCountWords(words, dbConnection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

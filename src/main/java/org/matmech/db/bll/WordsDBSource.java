@@ -192,7 +192,7 @@ public class WordsDBSource extends DBSource {
      * <p>Удаляет слово из базы данных</p>
      * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
      * @param dbConnection - репозиторий
-     * @return - возвращает <i>true</i> при успеха и <i>false</i> при неудаче
+     * @return - возвращает <i>true</i> при успехе и <i>false</i> при неудаче
      */
     public boolean deleteWord(Words words, DBConnection dbConnection) {
         if (isExist(words, dbConnection)) {
@@ -207,6 +207,85 @@ public class WordsDBSource extends DBSource {
         }
 
         return false;
+    }
+
+    /**
+     * Возвращает случайное слово для какого-то пользователя по группе
+     * @param words - модель Words. Обязательные поля: <i>dictonaryId</i> и <i>group_id</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает случайное слово
+     */
+    public String getRandomWordByGroup(Words words, DBConnection dbConnection) {
+        try {
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("int", String.valueOf(words.getDictonaryId())));
+            params.add(createParams("int", String.valueOf(words.getGroupId())));
+
+            String getRandomWord = "select word_value from words where dictonary_id=? and group_id=? order by random() limit 1";
+
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
+
+            if (response.size() == 0)
+                return null;
+
+            for (HashMap<String, String> item : response)
+                return item.get("word_value");
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить случайное слово по словарю и группе\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Возвращает случайное слово и его перевод для какого-то пользователя по ВСЕМ группам
+     * @param words - модель Words. Обязательные поля: <i>dictonaryId</i>
+     * @param dbConnection - репозиторий
+     * @return - возвращает случайное слово
+     */
+    public String getRandomWord(Words words, DBConnection dbConnection) {
+        try {
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("int", String.valueOf(words.getDictonaryId())));
+
+            String getRandomWord = "select word_value from words where dictonary_id=? order by random() limit 1";
+
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
+
+            if (response.size() == 0)
+                return null;
+
+            for (HashMap<String, String> item : response)
+                return item.get("word_value");
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить случайное слово по словарю\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Возвращает количество слов в словаре у пользователя
+     * @param words - модель Words. Обязательные поля: <i>dictonaryId</i>
+     * @param dbConnection - репозиторий
+     * @return - количество слов
+     */
+    public int getCountWords(Words words, DBConnection dbConnection) {
+        try {
+            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            params.add(createParams("int", String.valueOf(words.getDictonaryId())));
+
+            String getRandomWord = "select * from words where dictonary_id=?";
+
+            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
+
+            return response.size();
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить количество слов для пользователя\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }
 

@@ -1,14 +1,10 @@
 package org.matmech.requests.requestHandler;
 
-import org.matmech.cache.Cache;
+import org.matmech.paramsCache.ParamsCache;
 import org.matmech.contextManager.ContextManager;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
-import org.matmech.paramsHandler.ParamsHandler;
 import org.matmech.requests.requestsLogic.RequestsLogic;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 // все методы с выводом текста надо убрать в отдельный класс
@@ -28,7 +24,7 @@ public class RequestHandler {
         };
     }
 
-    public RequestHandler(DBHandler db, Cache cache) {
+    public RequestHandler(DBHandler db, ParamsCache cache) {
         this.requestsLogic = new RequestsLogic(db);
         this.contextManager = new ContextManager(cache, db);
     }
@@ -39,9 +35,11 @@ public class RequestHandler {
         if (requestsLogic.authentication(info) != null)
             return authentication;
 
-        if (isCmd(message))
-            return contextManager.detectContext(message, info);
+//        if (isCmd(message))
+//            return contextManager.detectContext(message, info);
 
-        return toAnswer(message, info);
+        return contextManager.detectContext(message, info);
+
+//        return toAnswer(message, info);
     }
 }

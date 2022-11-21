@@ -1,4 +1,4 @@
-package org.matmech.paramsHandler.testingValidation;
+package org.matmech.params.testingValidation;
 
 import org.matmech.db.DBHandler;
 
@@ -9,17 +9,22 @@ import java.util.Objects;
  * В этом классе происходит валидация параметров теста
  */
 public class TestingValidation {
-    private String groups;
-    private String countWords;
-    private String mode;
+    private String groups = null;
+    private String countWords = null;
+    private String mode = null;
     private final String DEBUG_MODE_ANSWER;
     private final String STANDARD_COUNT_WORDS;
     private final String STANDARD_MODE;
 
     public TestingValidation(String groups, String countWords, String mode) {
-        this.groups = Objects.requireNonNullElseGet(groups, groups::toLowerCase);
-        this.countWords = Objects.requireNonNullElseGet(countWords, countWords::toLowerCase);
-        this.mode = Objects.requireNonNullElseGet(mode, mode::toLowerCase);
+        if (groups != null)
+            this.groups = groups.toLowerCase();
+
+        if (countWords != null)
+            this.countWords = countWords.toLowerCase();
+
+        if (mode != null)
+            this.mode = mode.toLowerCase();
 
         DEBUG_MODE_ANSWER = "Вы ввели не существующий режим!\n";
         STANDARD_COUNT_WORDS = "10";

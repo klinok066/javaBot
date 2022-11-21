@@ -1,6 +1,6 @@
 package org.matmech;
 
-import org.matmech.cache.Cache;
+import org.matmech.paramsCache.ParamsCache;
 import org.matmech.connector.cmd.cmdBot.CmdBot;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegram.telegramBot.TelegramBot;
@@ -26,7 +26,7 @@ public class Main {
 
         // cache
 
-        Cache cache = new Cache();
+        ParamsCache cache = new ParamsCache();
 
         // request handler
 
