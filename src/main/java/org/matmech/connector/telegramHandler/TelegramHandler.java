@@ -63,12 +63,10 @@ public class TelegramHandler extends TelegramLongPollingBot {
             message.setText(answer.toString());
         }
 
-        {
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }
