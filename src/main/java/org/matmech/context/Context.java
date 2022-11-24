@@ -1,17 +1,17 @@
-package org.matmech.paramsCache;
+package org.matmech.context;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Этот класс отвечает за кеш всех пользователей, которые пользуются этим приложением.
- * Кеш может использовать только один какой-то процесс
- * Поэтому у кеша пользователя есть два обязательных поля:
+ * Этот класс отвечает за контекст всех пользователей, которые пользуются этим приложением.
+ * Контекст может использовать только один какой-то процесс
+ * Поэтому у контекста пользователя есть два обязательных поля:
  *      <i>chatId</i> - идентификатор чата с пользователем
- *      <i>processName</i> - имя процесса, который в данный момент использует кеш. Если никто не использует,
+ *      <i>processName</i> - имя процесса, который в данный момент использует контекст. Если никто не использует,
  *          то стоит null
  */
-public class ParamsCache {
+public class Context {
     private final ArrayList<HashMap<String, String>> cache;
 
     /**
@@ -28,7 +28,7 @@ public class ParamsCache {
         return null;
     }
 
-    public ParamsCache() {
+    public Context() {
         cache = new ArrayList<HashMap<String, String>>();
     }
 

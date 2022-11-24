@@ -1,19 +1,16 @@
 package org.matmech.params;
 
-import org.matmech.paramsCache.ParamsCache;
+import org.matmech.context.Context;
 import org.matmech.db.DBHandler;
 import org.matmech.params.testingValidation.TestingValidation;
-import org.matmech.tests.Tests;
 
 import java.util.HashMap;
 
 public class Params {
-    private final ParamsCache cache;
     private final DBHandler db;
-    private final Tests tests;
 
     /**
-     * Проверяет является ли сообщение стоп-словом
+     * Функция, которая проверяет является ли сообщение стоп-словом
      * @param message - сообщение, которое отправил пользователь
      * @return - возвращается <i>true</i> - если message стоп-слово, <i>false</i> - если message не является стоп-словом
      */
@@ -37,12 +34,12 @@ public class Params {
     }
 
     /**
-     * Функция, которая тестирует пользователя
+     * Функция, которая заполняет кеш контекста необходимыми параметрами
      * @param chatId - идентификатор чата с пользователем
-     * @return - возвращает ответ пользователю
+     * @return - возвращает сообщение-валидации или null, если валидация прошла успешно
      */
-    private String testing(long chatId, String tag) {
-        HashMap<String, String> params = cache.getParams(chatId);
+    private String testParams(final Context context, long chatId) {
+        HashMap<String, String> params = context.getParams(chatId);
 
         String groups = params.get("group");
         String countWords = params.get("countWords");
@@ -56,7 +53,7 @@ public class Params {
         String countWordsValidation = testingValidation.validationCountWords(params);
         String modeValidation = testingValidation.validationMode(params);
 
-        cache.addParams(chatId, "testing", "settingParams", "true"); // обязательная строка,
+        context.addParams(chatId, "testing", "settingParams", "true"); // обязательная строка,
         // которая определяет контекст присваивания параметров
 
         // Валидация группы слова
@@ -76,21 +73,10 @@ public class Params {
 
         params.putIfAbsent("currentQuestion", "0");
 
-        cache.addParams(chatId, "testing", "settingParams", null); // обязательная строка,
+        context.addParams(chatId, "testing", "settingParams", null); // обязательная строка,
         // которая говорит нам, что параметры перестали обрабатываться
 
-        // начало тестирования
-
-        if (!countWords.equals("по всем") && Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(countWords)) {
-            cache.clear(chatId);
-            return "Тест завершен";
-        }
-
-        String currentQuestion = String.valueOf(Integer.parseInt(params.get("currentQuestion")) + 1);
-        params.remove("currentQuestion");
-        params.put("currentQuestion", currentQuestion);
-
-        return tests.getQuestion(tag, groups, mode);
+        return null;
     }
 
     /**
@@ -98,8 +84,8 @@ public class Params {
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      */
-    private void setTestParams(long chatId, String message) {
-        HashMap<String, String> params = cache.getParams(chatId);
+    private void setTestParams(final Context context, long chatId, String message) {
+        HashMap<String, String> params = context.getParams(chatId);
 
         final String GROUP = params.get("group");
         final String COUNT_WORDS = params.get("countWords");
@@ -107,29 +93,30 @@ public class Params {
         final String PROCESS_NAME = params.get("processName");
 
         if (GROUP == null) {
-            cache.addParams(chatId, PROCESS_NAME, "group", message);
+            context.addParams(chatId, PROCESS_NAME, "group", message);
             return;
         }
 
         if (COUNT_WORDS == null) {
-            cache.addParams(chatId, PROCESS_NAME, "countWords", message);
+            context.addParams(chatId, PROCESS_NAME, "countWords", message);
             return;
         }
 
         if (MODE == null)
-            cache.addParams(chatId, PROCESS_NAME, "mode", message);
+            context.addParams(chatId, PROCESS_NAME, "mode", message);
     }
 
     /**
      * Присваивает параметры какому-то контексту
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
+     * @param context -
      */
-    private void setParams(long chatId, String message) {
-        final String PROCESS_NAME = cache.getParams(chatId).get("processName");
+    private void setParams(final Context context, long chatId, String message) {
+        final String PROCESS_NAME = context.getParams(chatId).get("processName");
 
         switch (PROCESS_NAME) {
-            case "testing" -> setTestParams(chatId, message);
+            case "testing" -> setTestParams(context, chatId, message);
             case "as" -> {
                 break;
             }
@@ -137,10 +124,8 @@ public class Params {
         }
     }
 
-    public Params(ParamsCache cache, DBHandler db) {
-        this.cache = cache;
+    public Params(DBHandler db) {
         this.db = db;
-        this.tests = new Tests(db);
     }
 
     /**
@@ -150,23 +135,23 @@ public class Params {
      * 3. В методе setParams написать новый кейс и соответствующий метод
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
-     * @return - возвращает сообщение пользователю в виде строки
+     * @return - возвращает сообщение-валидации или null, если заполнение параметров прошло успешно
      */
-    public String handler(long chatId, String tag, String message) {
-        final String PROCESS_NAME = cache.getParams(chatId).get("processName");
+    public String handler(final Context context, long chatId, String message) {
+        final String PROCESS_NAME = context.getParams(chatId).get("processName");
 
         if (isStopOperation(message)) {
-            cache.clear(chatId);
+            context.clear(chatId);
             return stopOperationMessage(PROCESS_NAME);
         }
 
-        cache.addParams(chatId, PROCESS_NAME, "message", message);
+        context.addParams(chatId, PROCESS_NAME, "message", message);
 
-        if (cache.getParams(chatId).get("settingParams") != null)
-            setParams(chatId, message);
+        if (context.getParams(chatId).get("settingParams") != null)
+            setParams(context, chatId, message);
 
         return switch (PROCESS_NAME) {
-            case "testing" -> testing(chatId, tag);
+            case "testing" -> testParams(context, chatId);
             default -> throw new IllegalArgumentException("Нет такого процесса");
         };
     }

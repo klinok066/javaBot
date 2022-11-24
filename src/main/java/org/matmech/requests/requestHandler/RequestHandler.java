@@ -1,7 +1,7 @@
 package org.matmech.requests.requestHandler;
 
-import org.matmech.paramsCache.ParamsCache;
-import org.matmech.contextManager.ContextManager;
+import org.matmech.context.Context;
+import org.matmech.context.contextManager.ContextManager;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.requests.requestsLogic.RequestsLogic;
@@ -13,18 +13,7 @@ public class RequestHandler {
     private final ContextManager contextManager;
     private final RequestsLogic requestsLogic;
 
-    private boolean isCmd(String command) {
-        return command.charAt(0) == '/';
-    }
-
-    private String toAnswer(String messageString, DataSaver info) { // просто ответ на обычные сообщения
-        return switch (messageString.toLowerCase()) {
-            case "hello" -> "Hello, " + info.getFirstname();
-            default -> requestsLogic.toDefaultAnswer();
-        };
-    }
-
-    public RequestHandler(DBHandler db, ParamsCache cache) {
+    public RequestHandler(DBHandler db, Context cache) {
         this.requestsLogic = new RequestsLogic(db);
         this.contextManager = new ContextManager(cache, db);
     }
@@ -35,11 +24,6 @@ public class RequestHandler {
         if (requestsLogic.authentication(info) != null)
             return authentication;
 
-//        if (isCmd(message))
-//            return contextManager.detectContext(message, info);
-
         return contextManager.detectContext(message, info);
-
-//        return toAnswer(message, info);
     }
 }

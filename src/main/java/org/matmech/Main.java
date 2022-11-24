@@ -1,6 +1,6 @@
 package org.matmech;
 
-import org.matmech.paramsCache.ParamsCache;
+import org.matmech.context.Context;
 import org.matmech.connector.cmd.cmdBot.CmdBot;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegram.telegramBot.TelegramBot;
@@ -17,16 +17,13 @@ public class Main {
         final String DB_USERNAME = System.getenv("DB_USERNAME");
         final String DB_PASSWORD = System.getenv("DB_PASSWORD");
 
-//        int groupId = Integer.parseInt(System.getenv("GROUP_ID"));
-//        String access_token = System.getenv("accessToken");
-
         // database
 
         DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
 
         // cache
 
-        ParamsCache cache = new ParamsCache();
+        Context cache = new Context();
 
         // request handler
 
