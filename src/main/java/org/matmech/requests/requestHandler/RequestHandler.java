@@ -21,7 +21,7 @@ public class RequestHandler {
     public String processCmd(String message, DataSaver info) { // подумать над архитектурой этого класса
         String authentication = requestsLogic.authentication(info);
 
-        if (requestsLogic.authentication(info) != null)
+        if (authentication != null)
             return authentication;
 
         return contextManager.detectContext(message, info);

@@ -4,17 +4,17 @@ import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.usuallyMessage.UsuallyMessage;
 import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
-import org.matmech.context.contextHandler.handlers.testContext.TestContext;
+import org.matmech.context.contextHandler.handlers.testContext.TestCommand;
 
 /**
  * В этом классе исполняется основной код контекстов после получения и валидации всех параметров
  */
 public class ContextHandler {
-    final private TestContext TEST_CONTEXT;
+    final private TestCommand TEST_CONTEXT;
     final private UsuallyMessage USUALLY_MESSAGE;
 
     public ContextHandler(DBHandler db) {
-        TEST_CONTEXT = new TestContext(db);
+        TEST_CONTEXT = new TestCommand(db);
         USUALLY_MESSAGE = new UsuallyMessage();
     }
 

@@ -139,11 +139,11 @@ public class DBHandler {
     }
 
     /**
-     * <p>Показать перевод слова</p>
+     * <p>Показать перевод слова без водной части для пользователя</p>
      *
      * @param wordValue - слово, переданное в параметрах
      */
-    public String translateWord(String wordValue) {
+    public String translateWordWithoutMessage(String wordValue) {
         Words words = new Words();
 
         words.setWordValue(wordValue);
@@ -151,7 +151,21 @@ public class DBHandler {
         String wordTranslate = wordsDBSource.translate(words, dbConnection);
 
         if (wordTranslate != null)
-            return "Перевод слова " + wordValue + ": " + wordTranslate;
+            return wordTranslate;
+
+        return null;
+    }
+
+    /**
+     * <p>Показать перевод слова</p>
+     *
+     * @param wordValue - слово, переданное в параметрах
+     */
+    public String translateWord(String wordValue) {
+        String wordTranslate = translateWordWithoutMessage(wordValue);
+
+        if (wordTranslate != null)
+            return "Перевод слова " + wordTranslate + ": " + wordTranslate;
         else
             return "Ошибка! В словаре нет этого слова!\n Полный список команд можете посмотреть с помощью /help";
     }
