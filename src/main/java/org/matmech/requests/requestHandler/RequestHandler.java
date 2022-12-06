@@ -6,6 +6,8 @@ import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.requests.requestsLogic.RequestsLogic;
 
+import java.util.List;
+
 
 // все методы с выводом текста надо убрать в отдельный класс
 
@@ -18,11 +20,11 @@ public class RequestHandler {
         this.contextManager = new ContextManager(cache, db);
     }
 
-    public String processCmd(String message, DataSaver info) { // подумать над архитектурой этого класса
+    public List<String> processCmd(String message, DataSaver info) { // подумать над архитектурой этого класса
         String authentication = requestsLogic.authentication(info);
 
         if (authentication != null)
-            return authentication;
+            return List.of(authentication);
 
         return contextManager.detectContext(message, info);
     }

@@ -5,10 +5,7 @@ import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.context.Context;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Этот класс отвечает за функционал контекста тестирования
@@ -51,7 +48,7 @@ public class TestCommand implements Command {
      * @param mode - режим тестирования
      * @return - готовый текст, содержащий ответы на вопрос
      */
-    private String getAnswers(String tag, String group, String mode, String trueWordTranslate) {
+    private String getAnswers(String tag, String group, String mode, String trueWord) {
         final int COUNT_ANSWERS = 4;
 
         if (mode.equals("difficult"))
@@ -77,7 +74,7 @@ public class TestCommand implements Command {
             answers.append(": ");
 
             if (i == trueAnswerIndex) {
-                answers.append(trueWordTranslate);
+                answers.append(db.translateWordWithoutMessage(trueWord));
                 answers.append("\n");
                 continue;
             }
@@ -106,13 +103,13 @@ public class TestCommand implements Command {
      * Запускает тест
      * @param context - информация о всех контекстов для всех пользователей
      * @param info - объект DataSaver с информацией о пользователе
-     * @return - возвращает сообщение пользователю (Вопрос или Завершающее тестирование)
+     * @return - возвращает список сообщений пользователю
      */
-    public String handle(Context context, DataSaver info) {
+    public List<String> handle(Context context, DataSaver info) {
         final long CHAT_ID = info.getChatId();
         final String TAG = info.getTag();
 
-        HashMap<String, String> params = context.getParams(CHAT_ID);
+        Map<String, String> params = context.getParams(CHAT_ID);
 
         final String GROUP = params.get("group").toLowerCase();
         final String COUNT_WORDS = params.get("countWords").toLowerCase();
@@ -121,19 +118,42 @@ public class TestCommand implements Command {
         if (!COUNT_WORDS.equals("по всем") && Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)) {
             context.clear(CHAT_ID);
             clearTestQuestions(TAG);
-            return "Тест завершен";
+            return List.of("Тест завершен");
         }
 
-        String currentQuestion = String.valueOf(Integer.parseInt(params.get("currentQuestion")) + 1);
-        params.remove("currentQuestion");
-        params.put("currentQuestion", currentQuestion);
-
-        Map<String, String> questionData = getQuestion(TAG, GROUP);
-
-        final String QUESTION = questionData.get("question");
+        final Map<String, String> questionData = getQuestion(TAG, GROUP);
         final String TRUE_WORD = questionData.get("word");
-        final String ANSWERS_FOR_QUESTION = getAnswers(TAG, GROUP, MODE, db.translateWordWithoutMessage(TRUE_WORD));
 
-        return QUESTION + "\n" + ANSWERS_FOR_QUESTION;
+        StringBuilder resultOfAnswer = new StringBuilder();
+
+        final String lastTrueAnswer = params.get("lastTrueAnswer");
+
+        if (lastTrueAnswer != null && lastTrueAnswer.equals(params.get("message"))) {
+            params.putIfAbsent("countTrueAnswers", "0");
+            params.replace("countTrueAnswers", String.valueOf(Integer.parseInt(params.get("countTrueAnswers")) + 1));
+            resultOfAnswer.append("Правильный ответ!");
+        } else if (lastTrueAnswer != null) {
+            resultOfAnswer.append("Неправильный ответ!\n");
+            resultOfAnswer.append("Правильный ответ: ");
+            resultOfAnswer.append(lastTrueAnswer);
+        }
+
+        params.remove("lastTrueAnswer");
+        params.put("lastTrueAnswer", db.translateWordWithoutMessage(TRUE_WORD));
+
+        String currentQuestion = String.valueOf(Integer.parseInt(params.get("currentQuestion")) + 1);
+        params.replace("currentQuestion", currentQuestion);
+
+        StringBuilder result = new StringBuilder(questionData.get("question"));
+        result.append("\n");
+        result.append(getAnswers(TAG, GROUP, MODE, TRUE_WORD));
+
+        if (currentQuestion.equals("1"))
+            return List.of(result.toString());
+
+        return List.of(
+                resultOfAnswer.toString(),
+                result.toString()
+        );
     }
 }

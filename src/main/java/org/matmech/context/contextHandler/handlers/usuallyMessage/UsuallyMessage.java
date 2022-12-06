@@ -2,6 +2,8 @@ package org.matmech.context.contextHandler.handlers.usuallyMessage;
 
 import org.matmech.dataSaver.DataSaver;
 
+import java.util.List;
+
 /**
  * Этот класс отвечает за обработку простого сообщения
  */
@@ -21,10 +23,10 @@ public class UsuallyMessage {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает сообщение для пользователя соответствующее
      */
-    public String handle(DataSaver info, String message) {
+    public List<String> handle(DataSaver info, String message) {
         return switch (message.toLowerCase()) {
-            case "привет!" -> sayHello(info.getFirstname());
-            default -> defaultMessage();
+            case "привет!" -> List.of(sayHello(info.getFirstname()));
+            default -> List.of(defaultMessage());
         };
     }
 }

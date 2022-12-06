@@ -6,6 +6,8 @@ import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.DBHandler;
 import org.matmech.context.contextHandler.handlers.testContext.TestCommand;
 
+import java.util.List;
+
 /**
  * В этом классе исполняется основной код контекстов после получения и валидации всех параметров
  */
@@ -24,7 +26,7 @@ public class ContextHandler {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает соответствующее сообщение для пользователя
      */
-    public String handle(Context context, DataSaver info, String message) {
+    public List<String> handle(Context context, DataSaver info, String message) {
         return switch (context.getParams(info.getChatId()).get("processName")) {
             case "testing" -> TEST_CONTEXT.handle(context, info);
             case null -> USUALLY_MESSAGE.handle(info, message);

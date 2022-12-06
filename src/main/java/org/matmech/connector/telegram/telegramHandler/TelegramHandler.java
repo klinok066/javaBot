@@ -3,10 +3,14 @@ package org.matmech.connector.telegram.telegramHandler;
 import org.matmech.dataSaver.DataSaver;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import org.matmech.requests.requestHandler.RequestHandler;
+
+import java.util.List;
 
 /**
  * Логика класса-интерфейса телеграмм бота
@@ -38,34 +42,31 @@ public class TelegramHandler extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        SendMessage message = new SendMessage();
-        message.setChatId(update.getMessage().getChatId());
+        try {
+            final Message LAST_MESSAGE = update.getMessage();
 
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            StringBuilder answer = new StringBuilder();
+            if (update.hasMessage() && LAST_MESSAGE.hasText()) {
+                SendMessage message = new SendMessage();
+                message.setChatId(LAST_MESSAGE.getChatId());
 
-            // creating Data Saver object which save information about user
+                DataSaver data = new DataSaver(
+                        LAST_MESSAGE.getFrom().getFirstName(),
+                        LAST_MESSAGE.getFrom().getLastName(),
+                        LAST_MESSAGE.getFrom().getUserName(),
+                        LAST_MESSAGE.getChatId()
+                );
 
-            DataSaver data = new DataSaver(
-                    update.getMessage().getFrom().getFirstName(),
-                    update.getMessage().getFrom().getLastName(),
-                    update.getMessage().getFrom().getUserName(),
-                    update.getMessage().getChatId()
-            );
+                String messageString = LAST_MESSAGE.getText();
 
-            String messageString = update.getMessage().getText();
+                List<String> answers = requestHandler.processCmd(messageString, data);
 
-            answer.append(requestHandler.processCmd(messageString, data));
-
-            message.setText(answer.toString());
-        }
-
-        {
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+                for (String answer : answers) {
+                    message.setText(answer);
+                    execute(message);
+                }
             }
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 }

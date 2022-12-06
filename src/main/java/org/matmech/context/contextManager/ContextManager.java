@@ -7,14 +7,27 @@ import org.matmech.db.DBHandler;
 import org.matmech.params.Params;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Класс, который обрабатывает контекст. Контекст = команда
  */
-public class ContextManager {
+public class ContextManager { // убрать стоп операцию из параметров и добавить её суда (сделать через контекст для каждого пользователя)
     final private Context context;
     final private Params paramsHandler;
     final private ContextHandler contextHandler;
+
+    /**
+     * Функция, которая проверяет является ли сообщение стоп-словом
+     * @param message - сообщение, которое отправил пользователь
+     * @return - возвращается <i>true</i> - если message стоп-слово, <i>false</i> - если message не является стоп-словом
+     */
+    private boolean isStopOperation(String message) {
+        return switch (message) {
+            case "/stop" -> true;
+            default -> false;
+        };
+    }
 
     /**
      * Метод проверяет является ли сообщение командой
@@ -56,8 +69,9 @@ public class ContextManager {
      * Определяет контекст общения с пользователем. Назначаем новый контекст
      * @param message - сообщение пользователя
      * @param info - информация о пользователе
+     * @return возвращает список сообщений для пользователя
      */
-    public String detectContext(String message, DataSaver info) {
+    public List<String> detectContext(String message, DataSaver info) {
         final long CHAT_ID = info.getChatId();
         final String CONTEXT = getContext(message);
 
@@ -68,7 +82,7 @@ public class ContextManager {
             if (!isCmd(message))
                 return contextHandler.handle(context, info, message);
 
-            return defaultAnswer();
+            return List.of(defaultAnswer());
         }
 
         if (!context.isBusy(CHAT_ID))
@@ -79,6 +93,6 @@ public class ContextManager {
         if (paramsAnswer == null)
             return contextHandler.handle(context, info, message);
 
-        return paramsAnswer;
+        return List.of(paramsAnswer);
     }
 }
