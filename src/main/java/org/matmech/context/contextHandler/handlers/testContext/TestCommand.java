@@ -59,7 +59,7 @@ public class TestCommand implements Command {
         words.add(word);
 
         for (int i = 0; i < 2; i++) {
-            while(words.contains(word))
+            while(words.contains(word) || word.equals(trueWord))
                 word = db.getRandomWord(tag, group);
 
             words.add(word);
@@ -70,8 +70,7 @@ public class TestCommand implements Command {
         int wordIndex = 0;
 
         for (int i = 0; i < COUNT_ANSWERS; i++) {
-            answers.append(i + 1);
-            answers.append(": ");
+            answers.append("-- ");
 
             if (i == trueAnswerIndex) {
                 answers.append(db.translateWordWithoutMessage(trueWord));
@@ -115,10 +114,24 @@ public class TestCommand implements Command {
         final String COUNT_WORDS = params.get("countWords").toLowerCase();
         final String MODE = params.get("mode").toLowerCase();
 
-        if (!COUNT_WORDS.equals("по всем") && Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)) {
+        params.putIfAbsent("countTrueAnswers", "0");
+
+        if (
+                (
+                        !COUNT_WORDS.equals("по всем") &&
+                        Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)
+                ) ||
+                params.get("message").equals("/stop")) {
+            StringBuilder textOfEndTest = new StringBuilder();
+            textOfEndTest.append("Тест завершен!\n");
+            textOfEndTest.append("Ты ответили правильно на ");
+            textOfEndTest.append(params.get("countTrueAnswers"));
+            textOfEndTest.append(" вопросов! Молодец!");
+
             context.clear(CHAT_ID);
             clearTestQuestions(TAG);
-            return List.of("Тест завершен");
+
+            return List.of(textOfEndTest.toString());
         }
 
         final Map<String, String> questionData = getQuestion(TAG, GROUP);
@@ -129,7 +142,6 @@ public class TestCommand implements Command {
         final String lastTrueAnswer = params.get("lastTrueAnswer");
 
         if (lastTrueAnswer != null && lastTrueAnswer.equals(params.get("message"))) {
-            params.putIfAbsent("countTrueAnswers", "0");
             params.replace("countTrueAnswers", String.valueOf(Integer.parseInt(params.get("countTrueAnswers")) + 1));
             resultOfAnswer.append("Правильный ответ!");
         } else if (lastTrueAnswer != null) {
