@@ -122,11 +122,22 @@ public class TestCommand implements Command {
                         Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)
                 ) ||
                 params.get("message").equals("/stop")) {
+            final int countTrueAnswers = Integer.parseInt(params.get("countTrueAnswers"));
+
             StringBuilder textOfEndTest = new StringBuilder();
             textOfEndTest.append("Тест завершен!\n");
             textOfEndTest.append("Ты ответили правильно на ");
-            textOfEndTest.append(params.get("countTrueAnswers"));
-            textOfEndTest.append(" вопросов! Молодец!");
+            textOfEndTest.append(countTrueAnswers);
+
+            if (
+                    countTrueAnswers % 10 >= 1 &&
+                    countTrueAnswers % 10 <= 4
+            )
+                textOfEndTest.append(" вопроса!");
+            else
+                textOfEndTest.append(" вопросов!");
+
+            textOfEndTest.append(" Молодец!");
 
             context.clear(CHAT_ID);
             clearTestQuestions(TAG);
