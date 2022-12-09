@@ -1,13 +1,19 @@
 package org.matmech.params;
 
+import org.jetbrains.annotations.NotNull;
 import org.matmech.context.Context;
+import org.matmech.context.contextHandler.handlers.TranslateWord.TranslateWord;
 import org.matmech.db.DBHandler;
+import org.matmech.db.models.Words;
+import org.matmech.db.repository.DBConnection;
 import org.matmech.params.testingValidation.TestingValidation;
+import org.matmech.db.bll.WordsDBSource;
 
 import java.util.HashMap;
 
 public class Params {
     private final DBHandler db;
+    private DBConnection dbConnection;
 
     /**
      * Функция, которая проверяет является ли сообщение стоп-словом
@@ -106,6 +112,32 @@ public class Params {
             context.addParams(chatId, PROCESS_NAME, "mode", message);
     }
 
+
+
+    private String TranslateValidation(final Context context, long chatId, String message){
+        HashMap<String, String> params = context.getParams(chatId);
+        final String PROCESS_NAME = params.get("processName");
+        if(db.IsWordExist(message)){
+            context.addParams(chatId, PROCESS_NAME , "word", message);
+        }
+        else{
+            return "Ой, кажется ты ввёл слово неправильно!";
+        }
+        return null;
+    }
+
+    private String getGroupValidation(final Context context, long chatId, String message){
+        HashMap<String, String> params = context.getParams(chatId);
+        final String PROCESS_NAME = params.get("processName");
+        if(db.groupIsExist(message)){
+            context.addParams(chatId, PROCESS_NAME , "group", message);
+        }
+        else{
+            return "Ошибка! Такой группы не существует!";
+        }
+        return null;
+    }
+
     /**
      * Присваивает параметры какому-то контексту
      * @param chatId - идентификатор чата с пользователем
@@ -117,9 +149,8 @@ public class Params {
 
         switch (PROCESS_NAME) {
             case "testing" -> setTestParams(context, chatId, message);
-            case "as" -> {
-                break;
-            }
+            case "translateWord" -> TranslateValidation(context,chatId,message);
+            case "getGroup" -> getGroupValidation(context, chatId, message);
             default -> throw new IllegalArgumentException("Неправильное имя процесса");
         }
     }
@@ -133,6 +164,7 @@ public class Params {
      * 1. Добавить для неё "стоп-операцию", если такая нужна
      * 2. Добавить для этой "стоп-операции" сообщение, если такая нужна
      * 3. В методе setParams написать новый кейс и соответствующий метод
+     * 4. Написать валидацию
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      * @return - возвращает сообщение-валидации или null, если заполнение параметров прошло успешно

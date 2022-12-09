@@ -2,7 +2,6 @@ package org.matmech.db;
 
 import java.sql.*;
 
-import org.matmech.dataSaver.DataSaver;
 import org.matmech.db.bll.GroupsDBSource;
 import org.matmech.db.bll.UsersDBSource;
 import org.matmech.db.bll.DictonaryDBSource;
@@ -30,6 +29,13 @@ public class DBHandler {
         groupsDBSource = new GroupsDBSource();
         dictonaryDBSource = new DictonaryDBSource();
         wordsDBSource = new WordsDBSource();
+    }
+
+
+    public boolean IsWordExist(String word){
+        WordsDBSource WordIsExist = new WordsDBSource();
+        Words words = new Words();
+        return WordIsExist.WordIsExist(words ,dbConnection);
     }
 
     /**
