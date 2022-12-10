@@ -117,24 +117,20 @@ public class Params {
     private String TranslateValidation(final Context context, long chatId, String message){
         HashMap<String, String> params = context.getParams(chatId);
         final String PROCESS_NAME = params.get("processName");
-        if(db.IsWordExist(message)){
-            context.addParams(chatId, PROCESS_NAME , "word", message);
-        }
-        else{
+        if(!db.IsWordExist(message)){
             return "Ой, кажется ты ввёл слово неправильно!";
         }
+        context.addParams(chatId, PROCESS_NAME , "word", message);
         return null;
     }
 
     private String getGroupValidation(final Context context, long chatId, String message){
         HashMap<String, String> params = context.getParams(chatId);
         final String PROCESS_NAME = params.get("processName");
-        if(db.groupIsExist(message)){
-            context.addParams(chatId, PROCESS_NAME , "group", message);
-        }
-        else{
+        if(!db.groupIsExist(message)){
             return "Ошибка! Такой группы не существует!";
         }
+        context.addParams(chatId, PROCESS_NAME , "group", message);
         return null;
     }
 
