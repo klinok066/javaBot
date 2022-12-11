@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.matmech.db.models.Word;
 import org.matmech.db.repository.DBConnection;
@@ -28,12 +29,12 @@ public class WordsDBSource extends DBSource {
      */
     private boolean isExist(Word word) {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", word.getWordValue()));
 
             String getWordsSQL = "select * from words where word_value=?";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -55,7 +56,7 @@ public class WordsDBSource extends DBSource {
         if (isExist(word))
             return false;
 
-        List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+        List<Map<String, String>> params = new ArrayList<Map<String, String>>();
         params.add(createParams("int", Integer.toString(word.getDictonaryId())));
         params.add(createParams("int", Integer.toString(word.getGroupId())));
         params.add(createParams("string", word.getWordValue()));
@@ -75,14 +76,14 @@ public class WordsDBSource extends DBSource {
     public String translate(Word word) {
         try {
             if (isExist(word)) {
-                List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+                List<Map<String, String>> params = new ArrayList<Map<String, String>>();
                 params.add(createParams("string", word.getWordValue()));
 
                 String translateValueSQL = "select word_translate from words where word_value=?";
 
-                List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(translateValueSQL, params);
+                List<Map<String, String>> response = dbConnection.executeQueryWithParams(translateValueSQL, params);
 
-                for (HashMap<String, String> item : response)
+                for (Map<String, String> item : response)
                     return item.get("word_translate");
             }
         } catch (SQLException e) {
@@ -100,14 +101,14 @@ public class WordsDBSource extends DBSource {
      */
     public int getDictonaryId(Word word) {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", word.getWordValue()));
 
             String getDictionaryIdSQL = "select * from words where word_value=?";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getDictionaryIdSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return Integer.parseInt(item.get("dictonary_id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить dictonary_id\n" + e.getMessage());
@@ -124,14 +125,14 @@ public class WordsDBSource extends DBSource {
      */
     public int getGroupId(Word word) {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", word.getWordValue()));
 
             String getGroupIdSQL = "select * from words where word_value=?";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return Integer.parseInt(item.get("group_id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить id группы по слову\n" + e.getMessage());
@@ -149,7 +150,7 @@ public class WordsDBSource extends DBSource {
      */
     public boolean editTranslation(Word word) {
         if (isExist(word)) {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", word.getWordTranslate()));
             params.add(createParams("string", word.getWordValue()));
 
@@ -171,12 +172,11 @@ public class WordsDBSource extends DBSource {
      */
     public boolean editGroupId(Word word){
         if (isExist(word)){
-            List<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
+            List<Map<String,String>> params = new ArrayList<Map<String,String>>();
             params.add(createParams("int", String.valueOf(word.getGroupId())));
             params.add(createParams("string", word.getWordValue()));
 
             String groupIdValueSQL = "UPDATE words SET group_id=? WHERE word_value=?";
-
 
             dbConnection.executeUpdateWithParams(groupIdValueSQL, params);
 
@@ -194,7 +194,7 @@ public class WordsDBSource extends DBSource {
      */
     public boolean deleteWord(Word word) {
         if (isExist(word)) {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", word.getWordValue()));
 
             String deleteWordSQL = "delete from words where word_value=?";
@@ -214,18 +214,18 @@ public class WordsDBSource extends DBSource {
      */
     public String getRandomWordByGroup(Word word) {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("int", String.valueOf(word.getDictonaryId())));
             params.add(createParams("int", String.valueOf(word.getGroupId())));
 
             String getRandomWord = "select word_value from words where dictonary_id=? and group_id=? order by random() limit 1";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
 
             if (response.size() == 0)
                 return null;
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return item.get("word_value");
         } catch (SQLException e) {
             System.out.println("Не удалось получить случайное слово по словарю и группе\n" + e.getMessage());
@@ -242,17 +242,17 @@ public class WordsDBSource extends DBSource {
      */
     public String getRandomWord(Word word) {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("int", String.valueOf(word.getDictonaryId())));
 
             String getRandomWord = "select word_value from words where dictonary_id=? order by random() limit 1";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
 
             if (response.size() == 0)
                 return null;
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return item.get("word_value");
         } catch (SQLException e) {
             System.out.println("Не удалось получить случайное слово по словарю\n" + e.getMessage());
@@ -269,12 +269,12 @@ public class WordsDBSource extends DBSource {
      */
     public int getCountWords(Word word) {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("int", String.valueOf(word.getDictonaryId())));
 
             String getRandomWord = "select * from words where dictonary_id=?";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getRandomWord, params);
 
             return response.size();
         } catch (SQLException e) {

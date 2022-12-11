@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Groups</b>
@@ -28,11 +29,11 @@ public class GroupsDBSource extends DBSource {
      */
     private boolean isExist(Group group) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", group.getTitle()));
 
             String groupsSQL = "select * from groups where title=?";
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(groupsSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(groupsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -49,7 +50,7 @@ public class GroupsDBSource extends DBSource {
     public boolean createGroup(Group group) {
         try {
             if (!isExist(group)) {
-                ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+                List<Map<String, String>> params = new ArrayList<Map<String, String>>();
                 params.add(createParams("string", group.getTitle()));
                 params.add(createParams("int", Integer.toString(group.getDictonaryId())));
 
@@ -74,14 +75,14 @@ public class GroupsDBSource extends DBSource {
      */
     public int getGroupId(Group group) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("int", String.valueOf(group.getDictonaryId())));
             params.add(createParams("string", group.getTitle()));
 
             String getGroupIdSQL = "select * from groups where dictonary_id=? and title=?";
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить id группы\n" + e.getMessage());
@@ -98,13 +99,13 @@ public class GroupsDBSource extends DBSource {
      */
     public String getGroupTitle(Group group) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("int", Integer.toString(group.getId())));
 
             String getGroupTitleSQL = "select title from groups where id=?";
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return item.get("title");
         } catch (SQLException e) {
             System.out.println("Не удалось получить заголовок группы\n" + e.getMessage());

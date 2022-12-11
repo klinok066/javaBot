@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Users</b>
@@ -28,12 +29,12 @@ public class UsersDBSource extends DBSource {
      */
     private boolean isExist(User user) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", user.getTag()));
 
             String getWordsSQL = "select * from users where tag=?";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -50,14 +51,14 @@ public class UsersDBSource extends DBSource {
         int userId = -1;
 
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
             params.add(createParams("string", user.getTag()));
 
             String getWordsSQL = "select * from users where tag=?";
 
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getWordsSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 userId = Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить тег пользователя по id\n" + e.getMessage());
@@ -76,7 +77,7 @@ public class UsersDBSource extends DBSource {
     public boolean regUser(User user) {
         try {
             if (!isExist(user)) {
-                List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
+                List<Map<String, String>> params = new ArrayList<Map<String, String>>();
                 params.add(createParams("string", user.getFirstname()));
                 params.add(createParams("string", user.getSurname()));
                 params.add(createParams("string", user.getTag()));
@@ -101,9 +102,9 @@ public class UsersDBSource extends DBSource {
     public void getAllUsers() throws SQLException {
         try {
             String getUsersSQL = "select * from users";
-            List<HashMap<String, String>> response = dbConnection.executeQuery(getUsersSQL);
+            List<Map<String, String>> response = dbConnection.executeQuery(getUsersSQL);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 System.out.println(item.get("id") + item.get("firstname") + item.get("surname") + item.get("tag"));
 
         } catch (SQLException e) {
