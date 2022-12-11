@@ -37,9 +37,9 @@ public class ContextHandler {
     public List<String> handle(Context context, UserData info, String message) {
         return switch (context.getParams(info.getChatId()).get("processName")) {
             case "testing" -> TEST_CONTEXT.handle(context, info);
-            case "start" -> TO_START.handle(context ,info);
-            case "translateword" -> TRANSLATE_WORD.handle(context,info);
-            case "getgroup" -> GET_GROUP.handle(context,info);
+            case "starting" -> TO_START.handle(context ,info);
+            case "translating" -> TRANSLATE_WORD.handle(context,info);
+            case "getGroup" -> GET_GROUP.handle(context,info);
             case null -> USUALLY_MESSAGE.handle(info, message);
             default -> throw new IllegalStateException("Unexpected value: " + context.getParams(info.getChatId()).get("processName"));
         };

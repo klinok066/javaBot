@@ -33,9 +33,9 @@ public class DBHandler {
 
 
     public boolean IsWordExist(String word){
-        WordsDBSource WordIsExist = new WordsDBSource();
-        Words words = new Words();
-        return WordIsExist.WordIsExist(words ,dbConnection);
+        Word words = new Word();
+        words.setWordValue(word);
+        return wordsDBSource.WordIsExist(words ,dbConnection);
     }
 
     /**

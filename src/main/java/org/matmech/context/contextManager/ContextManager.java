@@ -42,6 +42,9 @@ public class ContextManager { // убрать стоп операцию из п�
     private String getContext(String message) {
         return switch (message) {
             case "/test" -> "testing";
+            case "/translate" -> "translating";
+            case "/start" -> "start";
+            case "/get_group" -> "getGroup";
             default -> null;
         };
     }

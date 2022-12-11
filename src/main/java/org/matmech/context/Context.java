@@ -1,7 +1,7 @@
 package org.matmech.context;
 
 import org.matmech.db.bll.WordsDBSource;
-import org.matmech.db.models.Words;
+import org.matmech.db.models.Word;
 import org.matmech.db.repository.DBConnection;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 public class Context { // написать метод createContext(long chatId), и зарефакторить везде код под то, что он ничего не делает, если контекста нет для чата
     private final ArrayList<HashMap<String, String>> cache;
-    private final Words words = new Words();
+    private final Word words = new Word();
     DBConnection dbConnection;
     /**
      * Ищет кеш пользователя по chatId

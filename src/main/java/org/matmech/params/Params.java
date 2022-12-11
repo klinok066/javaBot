@@ -1,15 +1,11 @@
 package org.matmech.params;
 
-import org.jetbrains.annotations.NotNull;
 import org.matmech.context.Context;
-import org.matmech.context.contextHandler.handlers.TranslateWord.TranslateWord;
 import org.matmech.db.DBHandler;
-import org.matmech.db.models.Words;
-import org.matmech.db.repository.DBConnection;
 import org.matmech.params.testingValidation.TestingValidation;
-import org.matmech.db.bll.WordsDBSource;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Params {
     private final DBHandler db;
@@ -101,25 +97,71 @@ public class Params {
             context.addParams(chatId, PROCESS_NAME, "mode", message);
     }
 
-
-
-    private String TranslateValidation(final Context context, long chatId, String message){
+    /**
+     * Присваивает параметры переводу слова
+     * @param chatId - идентификатор чата с пользователем
+     * @param message - сообщение, которое отправил пользователь
+     */
+    private void setTranslateParams(final Context context, long chatId, String message) {
         HashMap<String, String> params = context.getParams(chatId);
+
+        final String WORD = params.get("word");
         final String PROCESS_NAME = params.get("processName");
-        if(!db.IsWordExist(message)){
+
+        if (WORD == null)
+            context.addParams(chatId, PROCESS_NAME, "word", message);
+    }
+
+    /**
+     * Присваивает параметры получения группы
+     * @param chatId - идентификатор чата с пользователем
+     * @param message - сообщение, которое отправил пользователь
+     */
+    private void setGetGroupParams(final Context context, long chatId, String message) {
+        HashMap<String, String> params = context.getParams(chatId);
+
+        final String WORD = params.get("word");
+        final String PROCESS_NAME = params.get("processName");
+
+        if (WORD == null)
+            context.addParams(chatId, PROCESS_NAME, "word", message);
+    }
+
+    private String translateValidation(final Context context, long chatId){
+        Map<String, String> params = context.getParams(chatId);
+
+        context.addParams(chatId, "translating", "settingParams", "true");
+
+        String word = params.get("word");
+
+        if (word == null)
+            return "Введите слово:";
+
+        if (!db.IsWordExist(word)) {
             return "Ой, кажется ты ввёл слово неправильно!";
         }
-        context.addParams(chatId, PROCESS_NAME , "word", message);
+
+        context.addParams(chatId, "translating", "settingParams", null);
+
         return null;
     }
 
-    private String getGroupValidation(final Context context, long chatId, String message){
+    private String getGroupValidation(final Context context, long chatId){
         HashMap<String, String> params = context.getParams(chatId);
-        final String PROCESS_NAME = params.get("processName");
-        if(!db.groupIsExist(message)){
-            return "Ошибка! Такой группы не существует!";
+
+        String word = params.get("word");
+
+        if (word == null)
+            return "Введите слово:";
+
+        context.addParams(chatId, "getGroup", "settingParams", "true");
+
+        if (!db.IsWordExist(word)) {
+            return "Ой, кажется ты ввёл слово неправильно!";
         }
-        context.addParams(chatId, PROCESS_NAME , "group", message);
+
+        context.addParams(chatId, "getGroup", "settingParams", null);
+
         return null;
     }
 
@@ -134,8 +176,8 @@ public class Params {
 
         switch (PROCESS_NAME) {
             case "testing" -> setTestParams(context, chatId, message);
-            case "translateWord" -> TranslateValidation(context,chatId,message);
-            case "getGroup" -> getGroupValidation(context, chatId, message);
+            case "translating" -> setTranslateParams(context, chatId, message);
+            case "getGroup" -> setGetGroupParams(context, chatId, message);
             default -> throw new IllegalArgumentException("Неправильное имя процесса");
         }
     }
@@ -163,6 +205,8 @@ public class Params {
 
         return switch (PROCESS_NAME) {
             case "testing" -> testParamsValidation(context, chatId);
+            case "translating" -> translateValidation(context, chatId);
+            case "getGroup" -> getGroupValidation(context, chatId);
             default -> throw new IllegalArgumentException("Нет такого процесса");
         };
     }
