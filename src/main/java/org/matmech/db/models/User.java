@@ -1,6 +1,9 @@
 package org.matmech.db.models;
 
-public class Users extends BaseModel{
+/**
+ * Объект пользователя, у которого поля хранят в себе значение атрибутов соответствующей записи в таблице Users
+ */
+public class User extends BaseModel{
     private String firstname;
     private String surname;
     private String tag;

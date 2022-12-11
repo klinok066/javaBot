@@ -1,12 +1,11 @@
 package org.matmech.db.bll;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.matmech.db.models.Words;
+import org.matmech.db.models.Word;
 import org.matmech.db.repository.DBConnection;
 
 /**
@@ -16,15 +15,21 @@ import org.matmech.db.repository.DBConnection;
  */
 public class WordsDBSource extends DBSource {
     /**
+     * @param dbConnection - подключение к базе данных
+     */
+    public WordsDBSource(DBConnection dbConnection) {
+        super(dbConnection);
+    }
+
+    /**
      * <p>Проверяет на существование какого-то слова</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param word - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
      * @return - возвращает существование слова в бд
      */
-    private boolean isExist(Words words, DBConnection dbConnection) {
+    private boolean isExist(Word word) {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("string", words.getWordValue()));
+            params.add(createParams("string", word.getWordValue()));
 
             String getWordsSQL = "select * from words where word_value=?";
 
@@ -39,23 +44,22 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Добавляет слово в базу данных</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения:
+     * @param word - объект с информацией о слове. Обязательные поля для заполнения:
      *                                                  <i>dictonaryId</i>
      *                                                  <i>groupId</i>
      *                                                  <i>wordValue</i>
      *                                                  <i>wordTranslate</i>
-     * @param dbConnection - репозиторий
      * @return - возвращает <i>true</i> при успешном выполнении метода и <i>false</i> при случае, когда слово уже существует
      */
-    public boolean wordAdd(Words words, DBConnection dbConnection) {
-        if (isExist(words, dbConnection))
+    public boolean wordAdd(Word word) {
+        if (isExist(word))
             return false;
 
         List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-        params.add(createParams("int", Integer.toString(words.getDictonaryId())));
-        params.add(createParams("int", Integer.toString(words.getGroupId())));
-        params.add(createParams("string", words.getWordValue()));
-        params.add(createParams("string", words.getWordTranslate()));
+        params.add(createParams("int", Integer.toString(word.getDictonaryId())));
+        params.add(createParams("int", Integer.toString(word.getGroupId())));
+        params.add(createParams("string", word.getWordValue()));
+        params.add(createParams("string", word.getWordTranslate()));
 
         String wordAddSQL = "insert into words(dictonary_id, group_id, word_value, word_translate) values(?, ?, ?, ?)";
         dbConnection.executeUpdateWithParams(wordAddSQL, params);
@@ -65,15 +69,14 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Достает слово из базы данных</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param word - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
      * @return - возвращает строчку с ошибкой или со значением поля translate (в красивом виде)
      */
-    public String translate(Words words, DBConnection dbConnection) {
+    public String translate(Word word) {
         try {
-            if (isExist(words, dbConnection)) {
+            if (isExist(word)) {
                 List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-                params.add(createParams("string", words.getWordValue()));
+                params.add(createParams("string", word.getWordValue()));
 
                 String translateValueSQL = "select word_translate from words where word_value=?";
 
@@ -92,14 +95,13 @@ public class WordsDBSource extends DBSource {
 
     /**
      * Возвращает dictonary_id слова из базы данных
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param word - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
      * @return - возвращает dictonary_id или -1 в случае не существования словаря
      */
-    public int getDictonaryId(Words words, DBConnection dbConnection) {
+    public int getDictonaryId(Word word) {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("string", words.getWordValue()));
+            params.add(createParams("string", word.getWordValue()));
 
             String getDictionaryIdSQL = "select * from words where word_value=?";
 
@@ -117,14 +119,13 @@ public class WordsDBSource extends DBSource {
 
     /**
      * Достает groupId с базы данных
-     * @param words - объект с информацией о слове. Обязательно нужно заполнить поле <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param word - объект с информацией о слове. Обязательно нужно заполнить поле <i>wordValue</i>
      * @return - возвращает group_id или -1 в случае не существования словаря
      */
-    public int getGroupId(Words words, DBConnection dbConnection) {
+    public int getGroupId(Word word) {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("string", words.getWordValue()));
+            params.add(createParams("string", word.getWordValue()));
 
             String getGroupIdSQL = "select * from words where word_value=?";
 
@@ -143,15 +144,14 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Меняет параметр word_translate</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>, <i>wordTranslate</i>
-     * @param dbConnection - репозиторий
+     * @param word - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>, <i>wordTranslate</i>
      * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public boolean editTranslation(Words words, DBConnection dbConnection) {
-        if (isExist(words, dbConnection)) {
+    public boolean editTranslation(Word word) {
+        if (isExist(word)) {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("string", words.getWordTranslate()));
-            params.add(createParams("string", words.getWordValue()));
+            params.add(createParams("string", word.getWordTranslate()));
+            params.add(createParams("string", word.getWordValue()));
 
             String translateValueSQL = "UPDATE words SET word_translate=? WHERE word_value=?";
 
@@ -166,15 +166,14 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Меняет параметр group_id</p>
-     * @param words Объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
-     * @param dbConnection Репозиторий
+     * @param word Объект с информацией о слове. Обязательные поля для заполнения: <i>groupId</i>, <i>wordValue</i>
      * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public boolean editGroupId(Words words, DBConnection dbConnection){
-        if (isExist(words, dbConnection)){
+    public boolean editGroupId(Word word){
+        if (isExist(word)){
             List<HashMap<String,String>> params = new ArrayList<HashMap<String,String>>();
-            params.add(createParams("int", String.valueOf(words.getGroupId())));
-            params.add(createParams("string", words.getWordValue()));
+            params.add(createParams("int", String.valueOf(word.getGroupId())));
+            params.add(createParams("string", word.getWordValue()));
 
             String groupIdValueSQL = "UPDATE words SET group_id=? WHERE word_value=?";
 
@@ -190,14 +189,13 @@ public class WordsDBSource extends DBSource {
 
     /**
      * <p>Удаляет слово из базы данных</p>
-     * @param words - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
-     * @param dbConnection - репозиторий
+     * @param word - объект с информацией о слове. Обязательные поля для заполнения: <i>wordValue</i>
      * @return - возвращает <i>true</i> при успехе и <i>false</i> при неудаче
      */
-    public boolean deleteWord(Words words, DBConnection dbConnection) {
-        if (isExist(words, dbConnection)) {
+    public boolean deleteWord(Word word) {
+        if (isExist(word)) {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("string", words.getWordValue()));
+            params.add(createParams("string", word.getWordValue()));
 
             String deleteWordSQL = "delete from words where word_value=?";
 
@@ -211,15 +209,14 @@ public class WordsDBSource extends DBSource {
 
     /**
      * Возвращает случайное слово для какого-то пользователя по группе
-     * @param words - модель Words. Обязательные поля: <i>dictonaryId</i> и <i>group_id</i>
-     * @param dbConnection - репозиторий
+     * @param word - модель Words. Обязательные поля: <i>dictonaryId</i> и <i>group_id</i>
      * @return - возвращает случайное слово
      */
-    public String getRandomWordByGroup(Words words, DBConnection dbConnection) {
+    public String getRandomWordByGroup(Word word) {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", String.valueOf(words.getDictonaryId())));
-            params.add(createParams("int", String.valueOf(words.getGroupId())));
+            params.add(createParams("int", String.valueOf(word.getDictonaryId())));
+            params.add(createParams("int", String.valueOf(word.getGroupId())));
 
             String getRandomWord = "select word_value from words where dictonary_id=? and group_id=? order by random() limit 1";
 
@@ -240,14 +237,13 @@ public class WordsDBSource extends DBSource {
 
     /**
      * Возвращает случайное слово и его перевод для какого-то пользователя по ВСЕМ группам
-     * @param words - модель Words. Обязательные поля: <i>dictonaryId</i>
-     * @param dbConnection - репозиторий
+     * @param word - модель Words. Обязательные поля: <i>dictonaryId</i>
      * @return - возвращает случайное слово
      */
-    public String getRandomWord(Words words, DBConnection dbConnection) {
+    public String getRandomWord(Word word) {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", String.valueOf(words.getDictonaryId())));
+            params.add(createParams("int", String.valueOf(word.getDictonaryId())));
 
             String getRandomWord = "select word_value from words where dictonary_id=? order by random() limit 1";
 
@@ -268,14 +264,13 @@ public class WordsDBSource extends DBSource {
 
     /**
      * Возвращает количество слов в словаре у пользователя
-     * @param words - модель Words. Обязательные поля: <i>dictonaryId</i>
-     * @param dbConnection - репозиторий
+     * @param word - модель Words. Обязательные поля: <i>dictonaryId</i>
      * @return - количество слов
      */
-    public int getCountWords(Words words, DBConnection dbConnection) {
+    public int getCountWords(Word word) {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", String.valueOf(words.getDictonaryId())));
+            params.add(createParams("int", String.valueOf(word.getDictonaryId())));
 
             String getRandomWord = "select * from words where dictonary_id=?";
 

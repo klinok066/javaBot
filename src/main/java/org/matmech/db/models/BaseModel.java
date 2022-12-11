@@ -1,5 +1,8 @@
 package org.matmech.db.models;
 
+/**
+ * Базовая модель, от которой наследуются остальные модели
+ */
 public class BaseModel {
     protected int id;
 

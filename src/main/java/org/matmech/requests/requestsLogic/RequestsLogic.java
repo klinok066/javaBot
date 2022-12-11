@@ -1,6 +1,6 @@
 package org.matmech.requests.requestsLogic;
 
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class RequestsLogic {
         return "Sorry, I'm don't understand you...";
     }
 
-    public String toStart(DataSaver data) {
+    public String toStart(UserData data) {
         return db.usersInsert(data.getFirstname(), data.getSurname(), data.getTag());
     }
 
@@ -43,7 +43,7 @@ public class RequestsLogic {
         return "So far, work is underway on this function, but in the near future it will be revived";
     }
 
-    public String wordAdd(List<String> params, DataSaver data) {
+    public String wordAdd(List<String> params, UserData data) {
         return db.wordAdd(params.get(0), params.get(1), params.get(2), data.getTag());
     }
 
@@ -63,7 +63,7 @@ public class RequestsLogic {
         return db.deleteWord(params.get(0));
     }
 
-    public String authentication(DataSaver info) {
+    public String authentication(UserData info) {
         if (!db.userIsExist(info.getTag()))
             return "Вы не зарегистрированы в системе! Чтобы зарегистрироваться в системе напишите /start";
 

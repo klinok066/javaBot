@@ -6,12 +6,11 @@ import com.vk.api.sdk.client.actors.GroupActor;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import com.vk.api.sdk.objects.messages.Conversation;
 import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.users.User;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
 import org.matmech.connector.Connector;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.matmech.requests.requestHandler.RequestHandler;
 
 import java.util.List;
@@ -53,14 +52,14 @@ public class VKBot implements Connector {
                                     String.valueOf(message.getFromId())
                             ).execute().get(0);
 
-                            DataSaver data = new DataSaver(
+                            UserData data = new UserData(
                                     user.getFirstName(),
                                     user.getLastName(),
                                     user.getFirstName() + user.getLastName() + user.getId(),
                                     message.getPeerId()
                             );
 
-                            List<String> messagesTexts = REQUEST_HANDLER.processCmd(message.getText(), data);
+                            List<String> messagesTexts = REQUEST_HANDLER.execute(message.getText(), data);
 
                             for (String messageTxt : messagesTexts) {
                                 vk.messages().send(actor).message(messageTxt)

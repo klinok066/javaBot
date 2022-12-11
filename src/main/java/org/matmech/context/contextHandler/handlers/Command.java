@@ -1,7 +1,7 @@
 package org.matmech.context.contextHandler.handlers;
 
 import org.matmech.context.Context;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface Command {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает список сообщений для пользователя
      */
-    List<String> handle(Context context, DataSaver info);
+    List<String> handle(Context context, UserData info);
 }

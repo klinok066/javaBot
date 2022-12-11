@@ -1,12 +1,12 @@
-package org.matmech.dataSaver;
+package org.matmech.userData;
 
-final public class DataSaver {
+final public class UserData {
     private final String firstname;
     private final String surname;
     private final String tag;
     private final long chatId;
 
-    public DataSaver(String firstname, String surname, String tag, long chatId) {
+    public UserData(String firstname, String surname, String tag, long chatId) {
         this.firstname = firstname;
         this.surname = surname;
         this.tag = tag;

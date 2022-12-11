@@ -1,7 +1,7 @@
 package org.matmech.context.contextHandler.handlers.testContext;
 
 import org.matmech.context.contextHandler.handlers.Command;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 import org.matmech.context.Context;
 
@@ -104,7 +104,7 @@ public class TestCommand implements Command {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает список сообщений пользователю
      */
-    public List<String> handle(Context context, DataSaver info) {
+    public List<String> handle(Context context, UserData info) {
         final long CHAT_ID = info.getChatId();
         final String TAG = info.getTag();
 

@@ -2,11 +2,10 @@ package org.matmech.context.contextManager;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.ContextHandler;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 import org.matmech.params.Params;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -59,7 +58,7 @@ public class ContextManager { // убрать стоп операцию из п�
      * @param info - информация о пользователе
      * @return возвращает список сообщений для пользователя
      */
-    public List<String> detectContext(String message, DataSaver info) {
+    public List<String> detectContext(String message, UserData info) {
         final long CHAT_ID = info.getChatId();
         final String CONTEXT = getContext(message);
 

@@ -1,8 +1,8 @@
 package org.matmech.db.bll;
 
-import org.matmech.db.models.Dictonary;
+import org.matmech.db.models.Dictionary;
 import org.matmech.db.repository.DBConnection;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,17 +14,24 @@ import java.util.List;
  * На вход подается модель, а на выходе будет возвращенно какое-то значение
  */
 public class DictonaryDBSource extends DBSource {
+    /**
+     * @param dbConnection - подключение к базе данных
+     */
+    public DictonaryDBSource(DBConnection dbConnection) {
+        super(dbConnection);
+    }
+
     /***
      * <p>Метод, который создает словарь какому-то пользователю</p>
-     * @param dictonary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
+     * @param dictionary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
      * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public boolean createDictonary(Dictonary dictonary, DBConnection dbConnection) {
-        if (dictonary.getUserId() == -1)
+    public boolean createDictonary(Dictionary dictionary) {
+        if (dictionary.getUserId() == -1)
             return false;
 
         List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-        params.add(createParams("int", Integer.toString(dictonary.getUserId())));
+        params.add(createParams("int", Integer.toString(dictionary.getUserId())));
 
         String createDictionarySQL = "insert into dictonary(user_id) values(?)";
         dbConnection.executeUpdateWithParams(createDictionarySQL, params);
@@ -34,13 +41,13 @@ public class DictonaryDBSource extends DBSource {
 
     /***
      * <p>Возвращает значение <i>dictonaryId</i> для какого-то конкретного пользователя</p>
-     * @param dictonary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
+     * @param dictionary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
      * @return - возвращает либо <i>dictonaryId</i>, либо -1 в случае если словаря не существует
      */
-    public int getDictonaryId(Dictonary dictonary, DBConnection dbConnection) throws SQLException {
+    public int getDictonaryId(Dictionary dictionary) throws SQLException {
         try {
             List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", Integer.toString(dictonary.getUserId())));
+            params.add(createParams("int", Integer.toString(dictionary.getUserId())));
 
             String getDictonaryIdSQL = "select id from dictonary where user_id=?";
             List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getDictonaryIdSQL, params);

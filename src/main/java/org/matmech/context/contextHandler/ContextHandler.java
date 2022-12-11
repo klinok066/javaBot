@@ -2,7 +2,7 @@ package org.matmech.context.contextHandler;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.usuallyMessage.UsuallyMessage;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 import org.matmech.context.contextHandler.handlers.testContext.TestCommand;
 
@@ -26,7 +26,7 @@ public class ContextHandler {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает соответствующее сообщение для пользователя
      */
-    public List<String> handle(Context context, DataSaver info, String message) {
+    public List<String> handle(Context context, UserData info, String message) {
         return switch (context.getParams(info.getChatId()).get("processName")) {
             case "testing" -> TEST_CONTEXT.handle(context, info);
             case null -> USUALLY_MESSAGE.handle(info, message);

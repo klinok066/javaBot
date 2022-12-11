@@ -1,10 +1,9 @@
 package org.matmech.connector.telegram.telegramHandler;
 
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -49,7 +48,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
                 SendMessage message = new SendMessage();
                 message.setChatId(LAST_MESSAGE.getChatId());
 
-                DataSaver data = new DataSaver(
+                UserData data = new UserData(
                         LAST_MESSAGE.getFrom().getFirstName(),
                         LAST_MESSAGE.getFrom().getLastName(),
                         LAST_MESSAGE.getFrom().getUserName(),
@@ -58,7 +57,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
                 String messageString = LAST_MESSAGE.getText();
 
-                List<String> answers = requestHandler.processCmd(messageString, data);
+                List<String> answers = requestHandler.execute(messageString, data);
 
                 for (String answer : answers) {
                     message.setText(answer);
