@@ -1,24 +1,36 @@
 package org.matmech;
 
-import connector.CmdLogic;
-import connector.Connector;
-import connector.TelegramBot;
-
+import org.matmech.connector.cmdBot.CmdBot;
+import org.matmech.connector.cmdLogic.CmdLogic;
+import org.matmech.connector.Connector;
+import org.matmech.connector.telegramBot.TelegramBot;
+import org.matmech.db.DBHandler;
+import org.matmech.requestHandler.RequestHandler;
 
 public class Main {
     public static void main(String[] args) {
         // environment variables
 
-        String TELEGRAM_BOT_USERNAME = System.getenv("TELEGRAM_BOT_USERNAME");
-        String TELEGRAM_BOT_TOKEN = System.getenv("TELEGRAM_BOT_TOKEN");
+        final String TELEGRAM_BOT_USERNAME = System.getenv("TELEGRAM_BOT_USERNAME");
+        final String TELEGRAM_BOT_TOKEN = System.getenv("TELEGRAM_BOT_TOKEN");
+        final String DB_URL = System.getenv("DB_URL");
+        final String DB_USERNAME = System.getenv("DB_USERNAME");
+        final String DB_PASSWORD = System.getenv("DB_PASSWORD");
+
+        // database
+
+        DBHandler db = new DBHandler(DB_URL, DB_USERNAME, DB_PASSWORD);
+
+        // request handler
+
+        RequestHandler requestHandler = new RequestHandler(db);
 
         // bots
 
-        Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN);
+        Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN, requestHandler);
         bot.start();
 
-        System.out.println("Hello, i'm bot");
-        CmdLogic cmd = new CmdLogic("User", "Unknown");
-        cmd.responseForCDM();
+        CmdBot cmdBot = new CmdBot(requestHandler);
+        cmdBot.start();
     }
 }
