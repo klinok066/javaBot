@@ -1,17 +1,17 @@
 package org.matmech.context.contextHandler.handlers.StartCommand;
 
 import org.matmech.context.Context;
-import org.matmech.context.contextHandler.handlers.Handler;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.context.contextHandler.handlers.Command;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 
-public class StartCommand implements Handler {
+import java.util.List;
+
+public class StartCommand implements Command {
     private DBHandler db;
     public StartCommand(DBHandler db){
         this.db = db;
     }
-
-
 
     /**
      * Главный метод, который запускает обработку контекста
@@ -21,7 +21,7 @@ public class StartCommand implements Handler {
      * @return - возвращает сообщение для пользователя соответствующее
      */
     @Override
-    public String handle(Context context, DataSaver info) {
-        return db.usersInsert(info.getFirstname(), info.getSurname(), info.getTag());
+    public List<String> handle(Context context, UserData info) {
+        return List.of(db.usersInsert(info.getFirstname(), info.getSurname(), info.getTag()));
     }
 }

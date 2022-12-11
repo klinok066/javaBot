@@ -1,14 +1,16 @@
 package org.matmech.context.contextHandler.handlers.TranslateWord;
 
 import org.matmech.context.Context;
-import org.matmech.context.contextHandler.handlers.Handler;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.context.contextHandler.handlers.Command;
+import org.matmech.context.contextHandler.handlers.Command;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
+import org.matmech.userData.UserData;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class TranslateWord implements Handler {
+public class TranslateWord implements Command {
     private DBHandler db;
 
     public TranslateWord(DBHandler db){
@@ -24,9 +26,12 @@ public class TranslateWord implements Handler {
      * @return - возвращает сообщение для пользователя соответствующее
      */
     @Override
-    public String handle(Context context, DataSaver info) {
+    public List<String> handle(Context context, UserData info) {
         final long CHAT_ID = info.getChatId();
         HashMap<String, String> params = context.getParams(CHAT_ID);
-        return db.translateWord(params.get("word"));
+
+        context.clear(info.getChatId());
+
+        return List.of(db.translateWord(params.get("word")));
     }
 }
