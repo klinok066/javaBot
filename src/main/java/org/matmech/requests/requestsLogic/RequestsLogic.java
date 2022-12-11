@@ -47,9 +47,7 @@ public class RequestsLogic {
         return db.wordAdd(params.get(0), params.get(1), params.get(2), data.getTag());
     }
 
-    public String translateWord(List<String> params) {
-        return db.translateWord(params.get(0));
-    }
+    public String translateWord(List<String> params) {return db.translateWord(params.get(0));}
 
     public String edit(List<String> params) {
         return db.edit(params.get(0), params.get(1), params.get(2));

@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.matmech.db.models.Word;
 import org.matmech.db.repository.DBConnection;
 
@@ -40,6 +39,10 @@ public class WordsDBSource extends DBSource {
             System.out.println("Не удалось проверить на существование слово\n" + e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean WordIsExist(Words words, DBConnection dbConnection){
+        return isExist(words, dbConnection);
     }
 
     /**
