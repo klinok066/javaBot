@@ -13,38 +13,15 @@ import java.util.HashMap;
 
 public class Params {
     private final DBHandler db;
-    private DBConnection dbConnection;
+    private final String STANDARD_COUNT_WORDS;
+    private final String STANDARD_MODE;
 
     /**
-     * Функция, которая проверяет является ли сообщение стоп-словом
-     * @param message - сообщение, которое отправил пользователь
-     * @return - возвращается <i>true</i> - если message стоп-слово, <i>false</i> - если message не является стоп-словом
-     */
-    private boolean isStopOperation(String message) {
-        return switch (message) {
-            case "/stop" -> true;
-            default -> false;
-        };
-    }
-
-    /**
-     * Возвращает стоп-сообщение под конкретный контекст
-     * @param processName - название контекста
-     * @return - стоп-сообщение в виде строки
-     */
-    private String stopOperationMessage(String processName) {
-        return switch (processName) {
-            case "testing" -> "Поздравляем с успешным прохождением теста!";
-            default -> throw new IllegalArgumentException("Неправильное имя процесса");
-        };
-    }
-
-    /**
-     * Функция, которая заполняет кеш контекста необходимыми параметрами
+     * Функция проводит проверку параметров на правильность
      * @param chatId - идентификатор чата с пользователем
      * @return - возвращает сообщение-валидации или null, если валидация прошла успешно
      */
-    private String testParams(final Context context, long chatId) {
+    private String testParamsValidation(final Context context, long chatId) {
         HashMap<String, String> params = context.getParams(chatId);
 
         String groups = params.get("group");
@@ -76,6 +53,18 @@ public class Params {
 
         if (modeValidation != null)
             return modeValidation;
+
+        // присваивание стандартных значений
+
+        if (countWords.equals("стандартное")) {
+            params.remove("countWords", countWords);
+            params.put("countWords", STANDARD_COUNT_WORDS);
+        }
+
+        if (mode.equals("стандартный")) {
+            params.remove("mode", countWords);
+            params.put("mode", STANDARD_MODE);
+        }
 
         params.putIfAbsent("currentQuestion", "0");
 
@@ -138,7 +127,7 @@ public class Params {
      * Присваивает параметры какому-то контексту
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
-     * @param context -
+     * @param context - контекст со всеми пользователями
      */
     private void setParams(final Context context, long chatId, String message) {
         final String PROCESS_NAME = context.getParams(chatId).get("processName");
@@ -153,14 +142,13 @@ public class Params {
 
     public Params(DBHandler db) {
         this.db = db;
+        STANDARD_COUNT_WORDS = "10";
+        STANDARD_MODE = "easy";
     }
 
     /**
      * Обработчик параметров. Перед тем, как написать функцию для обработки какого-то контекста, нужно:
-     * 1. Добавить для неё "стоп-операцию", если такая нужна
-     * 2. Добавить для этой "стоп-операции" сообщение, если такая нужна
-     * 3. В методе setParams написать новый кейс и соответствующий метод
-     * 4. Написать валидацию
+     * 1. В методе setParams написать новый кейс и соответствующий метод
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      * @return - возвращает сообщение-валидации или null, если заполнение параметров прошло успешно
@@ -168,18 +156,13 @@ public class Params {
     public String handler(final Context context, long chatId, String message) {
         final String PROCESS_NAME = context.getParams(chatId).get("processName");
 
-        if (isStopOperation(message)) {
-            context.clear(chatId);
-            return stopOperationMessage(PROCESS_NAME);
-        }
-
         context.addParams(chatId, PROCESS_NAME, "message", message);
 
         if (context.getParams(chatId).get("settingParams") != null)
             setParams(context, chatId, message);
 
         return switch (PROCESS_NAME) {
-            case "testing" -> testParams(context, chatId);
+            case "testing" -> testParamsValidation(context, chatId);
             default -> throw new IllegalArgumentException("Нет такого процесса");
         };
     }

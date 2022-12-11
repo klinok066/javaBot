@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DBConnection {
     private final String DB_URL;
@@ -13,13 +14,13 @@ public class DBConnection {
     private Statement statement;
     private PreparedStatement preparedStatement;
 
-    private List<HashMap<String, String>> getDataFromResponse(ResultSet result) throws SQLException {
+    private List<Map<String, String>> getDataFromResponse(ResultSet result) throws SQLException {
         try (result) {
-            List<HashMap<String, String>> data = new ArrayList<HashMap<String, String>>();
+            List<Map<String, String>> data = new ArrayList<Map<String, String>>();
 
             while (result.next()) {
                 int size = result.getMetaData().getColumnCount();
-                HashMap<String, String> item = new HashMap<String, String>();
+                Map<String, String> item = new HashMap<String, String>();
 
                 for (int i = 0; i < size; i++) {
                     String columnName = result.getMetaData().getColumnName(i + 1);
@@ -60,7 +61,7 @@ public class DBConnection {
     /***
      * Метод присваивает данные параметрам в PreparedStatement (внутренний метод)
      */
-    private void setDataToPS(PreparedStatement preparedStatement, HashMap<String, String> item, int index) throws SQLException {
+    private void setDataToPS(PreparedStatement preparedStatement, Map<String, String> item, int index) throws SQLException {
         String type = item.get("type");
         String value = item.get("value");
 
@@ -84,7 +85,7 @@ public class DBConnection {
     /***
      * Выполняет простой запрос без параметров в базу данных. Возвращает результат в ArrayList, где каждый элемент HashMap
      */
-    public List<HashMap<String, String>> executeQuery(String sql) throws SQLException {
+    public List<Map<String, String>> executeQuery(String sql) throws SQLException {
         try {
             connect();
             statement = connection.createStatement();
@@ -124,7 +125,7 @@ public class DBConnection {
      *  type: тип параметра
      *  value: сам параметр
      */
-    public List<HashMap<String, String>> executeQueryWithParams(String sql, List<HashMap<String, String>> params) throws SQLException {
+    public List<Map<String, String>> executeQueryWithParams(String sql, List<Map<String, String>> params) throws SQLException {
         try {
             connect();
 
@@ -152,7 +153,7 @@ public class DBConnection {
      *  type: тип параметра
      *  value: сам параметр
      */
-    public void executeUpdateWithParams(String sql, List<HashMap<String, String>> params) {
+    public void executeUpdateWithParams(String sql, List<Map<String, String>> params) {
         try {
             connect();
             preparedStatement = connection.prepareStatement(sql);

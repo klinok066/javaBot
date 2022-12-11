@@ -15,7 +15,7 @@ import java.util.HashMap;
  *      <i>processName</i> - имя процесса, который в данный момент использует контекст. Если никто не использует,
  *          то стоит null
  */
-public class Context {
+public class Context { // написать метод createContext(long chatId), и зарефакторить везде код под то, что он ничего не делает, если контекста нет для чата
     private final ArrayList<HashMap<String, String>> cache;
     private final Words words = new Words();
     DBConnection dbConnection;
@@ -52,6 +52,7 @@ public class Context {
 
             item.put("chatId", String.valueOf(chatId));
             item.put("processName", processName);
+            item.put("stopFlag", null);
             item.put(itemName, itemValue);
 
             cache.add(item);
@@ -103,6 +104,7 @@ public class Context {
             item.clear();
             item.put("chatId", chatIdValue);
             item.put("processName", null);
+            item.put("stopFlag", null);
         }
     }
 
@@ -121,6 +123,7 @@ public class Context {
 
             item.put("chatId", String.valueOf(chatId));
             item.put("processName", processName);
+            item.put("stopFlag", null);
 
             cache.add(item);
         }

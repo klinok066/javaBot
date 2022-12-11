@@ -13,8 +13,6 @@ public class TestingValidation {
     private String countWords = null;
     private String mode = null;
     private final String DEBUG_MODE_ANSWER;
-    private final String STANDARD_COUNT_WORDS;
-    private final String STANDARD_MODE;
 
     public TestingValidation(String groups, String countWords, String mode) {
         if (groups != null)
@@ -27,8 +25,6 @@ public class TestingValidation {
             this.mode = mode.toLowerCase();
 
         DEBUG_MODE_ANSWER = "Вы ввели не существующий режим!\n";
-        STANDARD_COUNT_WORDS = "10";
-        STANDARD_MODE = "easy";
     }
 
     /**
@@ -63,17 +59,14 @@ public class TestingValidation {
                     "Если хотите провести тестирование по всем группу, то напишите `По всем`\n" +
                     "Если хотите стандартное количество слов (10), то напишите `Стандартное`";
 
-        if (countWords.equals("стандартное"))
-            countWords = STANDARD_COUNT_WORDS;
-
-        if (!countWords.equals("по всем")) {
+        if (!countWords.equals("по всем") && !countWords.equals("стандартное")) {
             try {
                 Integer testForCorrectNumber = Integer.valueOf(countWords);
             } catch (NumberFormatException e) {
                 params.remove("countWords");
                 params.put("countWords", null);
 
-                return "Вы ввели не число! Повторите ввод:";
+                return "Вы ввели недопустимое значение! Повторите ввод:";
             }
         }
 
@@ -100,9 +93,6 @@ public class TestingValidation {
                 params.put("mode", null);
                 return DEBUG_MODE_ANSWER;
         }
-
-        if (mode.equals("стандартный"))
-            mode = STANDARD_MODE;
 
         return null;
     }

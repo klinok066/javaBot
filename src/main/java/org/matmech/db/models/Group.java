@@ -1,6 +1,9 @@
 package org.matmech.db.models;
 
-public class Groups extends BaseModel {
+/**
+ * Объект группы, у которого поля хранят в себе значение атрибутов соответствующей записи в таблице Groups
+ */
+public class Group extends BaseModel {
     private String title;
     private int dictonaryId;
 

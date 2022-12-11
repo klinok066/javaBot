@@ -1,6 +1,9 @@
 package org.matmech.db.models;
 
-public class Words extends BaseModel {
+/**
+ * Объект слова, у которого поля хранят в себе значение атрибутов соответствующей записи в таблице Words
+ */
+public class Word extends BaseModel {
     private int dictonaryId;
     private int groupId;
     private String wordValue;

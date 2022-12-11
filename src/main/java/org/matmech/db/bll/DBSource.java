@@ -1,5 +1,7 @@
 package org.matmech.db.bll;
 
+import org.matmech.db.repository.DBConnection;
+
 import java.util.HashMap;
 
 /**
@@ -7,6 +9,15 @@ import java.util.HashMap;
  * которые от него наследуются
  */
 abstract public class DBSource {
+    protected DBConnection dbConnection;
+
+    /**
+     * @param dbConnection - подключение к базе данных
+     */
+    public DBSource(DBConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
+
     /**
      * Создает HashMap объект с параметром
      * @param type - тип параметра
