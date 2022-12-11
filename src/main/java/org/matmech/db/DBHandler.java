@@ -31,6 +31,13 @@ public class DBHandler {
         wordsDBSource = new WordsDBSource(dbConnection);
     }
 
+
+    public boolean IsWordExist(String word){
+        WordsDBSource WordIsExist = new WordsDBSource();
+        Words words = new Words();
+        return WordIsExist.WordIsExist(words ,dbConnection);
+    }
+
     /**
      * Подключение к базе данных
      * @param DB_URL - url адрес базы данных

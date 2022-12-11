@@ -43,6 +43,10 @@ public class WordsDBSource extends DBSource {
         }
     }
 
+    public boolean WordIsExist(Word words, DBConnection dbConnection){
+        return isExist(words);
+    }
+
     /**
      * <p>Добавляет слово в базу данных</p>
      * @param word - объект с информацией о слове. Обязательные поля для заполнения:
