@@ -1,6 +1,7 @@
 package testServiceClasses;
 
 import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.matmech.db.bll.DictonaryDBSource;
 import org.matmech.db.models.Dictionary;
@@ -16,7 +17,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class TestDictionaryDBSource extends TestCase {
+public class TestDictionaryDBSource {
     private final DBConnection dbConnection = Mockito.mock(DBConnection.class);
     private final DictonaryDBSource dictonaryDBSource = new DictonaryDBSource(dbConnection);
 
@@ -28,7 +29,7 @@ public class TestDictionaryDBSource extends TestCase {
         Dictionary dictionary = new Dictionary();
         dictionary.setUserId(12);
 
-        assertTrue(dictonaryDBSource.createDictonary(dictionary));
+        Assert.assertTrue(dictonaryDBSource.createDictonary(dictionary));
     }
 
     /**
@@ -39,7 +40,7 @@ public class TestDictionaryDBSource extends TestCase {
         Dictionary dictionary = new Dictionary();
         dictionary.setUserId(-1);
 
-        assertFalse(dictonaryDBSource.createDictonary(dictionary));
+        Assert.assertFalse(dictonaryDBSource.createDictonary(dictionary));
     }
 
     /**
@@ -59,7 +60,7 @@ public class TestDictionaryDBSource extends TestCase {
 
         when(dbConnection.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
 
-        assertEquals(10, dictonaryDBSource.getDictonaryId(dictionary));
+        Assert.assertEquals(10, dictonaryDBSource.getDictonaryId(dictionary));
     }
 
     /**
@@ -74,6 +75,6 @@ public class TestDictionaryDBSource extends TestCase {
 
         when(dbConnection.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
 
-        assertEquals(-1, dictonaryDBSource.getDictonaryId(dictionary));
+        Assert.assertEquals(-1, dictonaryDBSource.getDictonaryId(dictionary));
     }
 }

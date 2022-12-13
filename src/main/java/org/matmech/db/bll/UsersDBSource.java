@@ -106,7 +106,6 @@ public class UsersDBSource extends DBSource {
 
             for (Map<String, String> item : response)
                 System.out.println(item.get("id") + item.get("firstname") + item.get("surname") + item.get("tag"));
-
         } catch (SQLException e) {
             System.out.println("Не удалось получить всех пользователей\n" + e.getMessage());
             throw new RuntimeException(e);

@@ -1,6 +1,7 @@
 package testServiceClasses;
 
 import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.matmech.db.bll.GroupsDBSource;
 import org.matmech.db.models.Group;
@@ -16,7 +17,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class TestGroupDBSource extends TestCase {
+public class TestGroupDBSource {
     private final DBConnection dbConnectionMock = Mockito.mock(DBConnection.class);
     private final GroupsDBSource groupsDBSource = new GroupsDBSource(dbConnectionMock);
 
@@ -37,7 +38,7 @@ public class TestGroupDBSource extends TestCase {
         group.setTitle("глаголы");
         group.setDictonaryId(123);
 
-        assertFalse(groupsDBSource.createGroup(group));
+        Assert.assertFalse(groupsDBSource.createGroup(group));
     }
 
     /**
@@ -55,7 +56,7 @@ public class TestGroupDBSource extends TestCase {
             group.setTitle("глаголы");
             group.setDictonaryId(123);
 
-            assertTrue(groupsDBSource.createGroup(group));
+            Assert.assertTrue(groupsDBSource.createGroup(group));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -81,7 +82,7 @@ public class TestGroupDBSource extends TestCase {
             group.setTitle("глаголы");
             group.setDictonaryId(123);
 
-            assertEquals(3, groupsDBSource.getGroupId(group));
+            Assert.assertEquals(3, groupsDBSource.getGroupId(group));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -102,7 +103,7 @@ public class TestGroupDBSource extends TestCase {
             group.setTitle("глаголы");
             group.setDictonaryId(123);
 
-            assertEquals(-1, groupsDBSource.getGroupId(group));
+            Assert.assertEquals(-1, groupsDBSource.getGroupId(group));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +128,7 @@ public class TestGroupDBSource extends TestCase {
         group.setId(3);
         group.setDictonaryId(123);
 
-        assertEquals("глаголы", groupsDBSource.getGroupTitle(group));
+        Assert.assertEquals("глаголы", groupsDBSource.getGroupTitle(group));
     }
 
     /**
@@ -144,6 +145,6 @@ public class TestGroupDBSource extends TestCase {
         group.setId(3);
         group.setDictonaryId(123);
 
-        assertNull(groupsDBSource.getGroupTitle(group));
+        Assert.assertNull(groupsDBSource.getGroupTitle(group));
     }
 }

@@ -31,7 +31,7 @@ public class TestUserDBSource extends TestCase {
         userResponse.put("tag", "userTag");
         response.add(userResponse);
 
-        when(dbConnection.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
+        when(dbConnection.executeQueryWithParams(any(String.class), any(List.class))).thenReturn(response);
 
         User user = new User();
         user.setTag("iffomko");
