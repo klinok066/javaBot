@@ -186,7 +186,150 @@ public class Params {
             case "testing" -> setTestParams(context, chatId, message);
             case "translating" -> setTranslateParams(context, chatId, message);
             case "getGroup" -> setGetGroupParams(context, chatId, message);
+            case "wordAdd" -> setWordAddParams(context, chatId, message);
+            case "edit" -> setEditParams(context, chatId, message);
+            case "deleteWord" -> setDeleteWordParams(context, chatId, message);
         }
+    }
+
+    /**
+     * Присваивает параметры добавления слова
+     * @param chatId - идентификатор чата с пользователем
+     * @param message - сообщение, которое отправил пользователь
+     */
+    private void setWordAddParams(Context context, long chatId, String message) {
+        HashMap<String, String> params = context.getParams(chatId);
+
+        final String WORD = params.get("word");
+        final String TRANSLATE = params.get("translate");
+        final String GROUP = params.get("group");
+        final String PROCESS_NAME = params.get("processName");
+
+        if (WORD == null){
+            context.addParams(chatId, PROCESS_NAME, "word", message);
+            return;
+        }
+
+        if (GROUP == null){
+            context.addParams(chatId, PROCESS_NAME, "group", message);
+            return;
+        }
+
+        if (TRANSLATE == null)
+            context.addParams(chatId, PROCESS_NAME, "translate", message);
+    }
+
+    private String wordAddValidation(Context context, Long chatId){
+        Map<String, String> params = context.getParams(chatId);
+
+        final String PROCESS_NAME = params.get("processName");
+        final String WORD = params.get("word");
+        final String GROUP = params.get("group");
+        final String TRANSLATE = params.get("translate");
+
+        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+
+        if (WORD == null)
+            return "Введи слово, которое хочешь добавить:";
+
+        if (GROUP == null)
+            return "Введи группу слова, которое хочешь добавить:";
+
+        if (TRANSLATE == null)
+            return "Введи перевод слова, которое хочешь добавить:";
+
+        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+
+        return null;
+    }
+
+    private void setEditParams(Context context, long chatId, String message) {
+        HashMap<String, String> params = context.getParams(chatId);
+
+        final String WORD = params.get("word");
+        final String WORD_PARAM = params.get("wordParam");
+        final String PARAM_VALUE = params.get("paramValue");
+        final String PROCESS_NAME = params.get("processName");
+
+        if (WORD == null){
+            context.addParams(chatId, PROCESS_NAME, "word", message);
+            return;
+        }
+
+        if (WORD_PARAM == null){
+            context.addParams(chatId, PROCESS_NAME, "wordParam", message);
+            return;
+        }
+
+        if (PARAM_VALUE == null)
+            context.addParams(chatId, PROCESS_NAME, "paramValue", message);
+    }
+
+
+    private String editValidation(Context context, long chatId) {
+        HashMap<String, String> params = context.getParams(chatId);
+
+        final String PROCESS_NAME = params.get("processName");
+        final String WORD = params.get("word");
+        final String WORD_PARAM = params.get("wordParam");
+        final String PARAM_VALUE = params.get("paramValue");
+
+        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+
+        if (WORD == null)
+            return "Введи слово, которое хочешь изменить:";
+
+        if (WORD_PARAM == null)
+            return "Введи параметр слова, которое хочешь изменить:";
+
+        switch (WORD_PARAM){
+            case "group", "translation" -> {}
+            default -> {
+                params.remove("wordParam");
+                params.put("wordParam", null);
+                return "Ой, кажется ты ввёл параметр неправильно, либо этот параметр не подлежит изменению! Повтори ввод!";
+            }
+        }
+
+        if (PARAM_VALUE == null)
+            return "Введи значение данного параметра:";
+
+        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+
+        return null;
+    }
+
+    private String deleteWordValidation(Context context, long chatId) {
+
+        HashMap<String, String> params = context.getParams(chatId);
+
+        final String PROCESS_NAME = params.get("processName");
+        final String WORD = params.get("word");
+
+        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+
+        if (WORD == null)
+            return "Введи слово, которое ты хочешь удалить:";
+
+        if (!db.IsWordExist(WORD)) {
+            params.remove("word");
+            params.put("word", null);
+            return "Ой, кажется ты ввёл слово неправильно! Повтори ввод!";
+        }
+
+        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+
+        return null;
+    }
+
+    private void setDeleteWordParams(Context context, long chatId, String message) {
+        HashMap<String, String> params = context.getParams(chatId);
+
+        final String WORD = params.get("word");
+        final String PROCESS_NAME = params.get("processName");
+
+        if (WORD == null)
+            context.addParams(chatId, PROCESS_NAME, "word", message);
     }
 
     public Params(DBHandler db) {
@@ -214,6 +357,9 @@ public class Params {
             case "testing" -> testParamsValidation(context, chatId);
             case "translating" -> translateValidation(context, chatId);
             case "getGroup" -> getGroupValidation(context, chatId);
+            case "wordAdd" -> wordAddValidation(context, chatId);
+            case "edit" -> editValidation(context, chatId);
+            case "deleteWord" -> deleteWordValidation(context, chatId);
             default -> null;
         };
     }
