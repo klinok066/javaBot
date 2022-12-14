@@ -43,7 +43,7 @@ public class ContextManager { // убрать стоп операцию из п�
         return switch (message) {
             case "/test" -> "testing";
             case "/translate" -> "translating";
-            case "/start" -> "start";
+            case "/start" -> "starting";
             case "/get_group" -> "getGroup";
             default -> null;
         };

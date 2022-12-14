@@ -9,6 +9,7 @@ import org.matmech.userData.UserData;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TranslateWord implements Command {
     private DBHandler db;
@@ -27,11 +28,12 @@ public class TranslateWord implements Command {
      */
     @Override
     public List<String> handle(Context context, UserData info) {
-        final long CHAT_ID = info.getChatId();
-        HashMap<String, String> params = context.getParams(CHAT_ID);
-
-        context.clear(info.getChatId());
-
-        return List.of(db.translateWord(params.get("word")));
+        try {
+            final long CHAT_ID = info.getChatId();
+            Map<String, String> params = context.getParams(CHAT_ID);
+            return List.of(db.translateWord(params.get("word")));
+        } finally {
+            context.clear(info.getChatId());
+        }
     }
 }

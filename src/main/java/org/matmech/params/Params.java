@@ -20,6 +20,8 @@ public class Params {
     private String testParamsValidation(final Context context, long chatId) {
         HashMap<String, String> params = context.getParams(chatId);
 
+        final String PROCESS_NAME = params.get("processName");
+
         String groups = params.get("group");
         String countWords = params.get("countWords");
         String mode = params.get("mode");
@@ -32,7 +34,7 @@ public class Params {
         String countWordsValidation = testingValidation.validationCountWords(params);
         String modeValidation = testingValidation.validationMode(params);
 
-        context.addParams(chatId, "testing", "settingParams", "true"); // обязательная строка,
+        context.addParams(chatId, PROCESS_NAME, "settingParams", "true"); // обязательная строка,
         // которая определяет контекст присваивания параметров
 
         // Валидация группы слова
@@ -64,7 +66,7 @@ public class Params {
 
         params.putIfAbsent("currentQuestion", "0");
 
-        context.addParams(chatId, "testing", "settingParams", null); // обязательная строка,
+        context.addParams(chatId, PROCESS_NAME, "settingParams", null); // обязательная строка,
         // которая говорит нам, что параметры перестали обрабатываться
 
         return null;
@@ -130,18 +132,21 @@ public class Params {
     private String translateValidation(final Context context, long chatId){
         Map<String, String> params = context.getParams(chatId);
 
-        context.addParams(chatId, "translating", "settingParams", "true");
+        final String PROCESS_NAME = params.get("processName");
+        final String WORD = params.get("word");
 
-        String word = params.get("word");
+        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
 
-        if (word == null)
-            return "Введите слово:";
+        if (WORD == null)
+            return "Введи слово, которое хочешь перевести:";
 
-        if (!db.IsWordExist(word)) {
-            return "Ой, кажется ты ввёл слово неправильно!";
+        if (!db.IsWordExist(WORD)) {
+            params.remove("word");
+            params.put("word", null);
+            return "Ой, кажется ты ввёл слово неправильно! Повтори ввод!";
         }
 
-        context.addParams(chatId, "translating", "settingParams", null);
+        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }
@@ -149,18 +154,21 @@ public class Params {
     private String getGroupValidation(final Context context, long chatId){
         HashMap<String, String> params = context.getParams(chatId);
 
-        String word = params.get("word");
+        final String PROCESS_NAME = params.get("processName");
+        final String WORD = params.get("word");
 
-        if (word == null)
-            return "Введите слово:";
+        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
 
-        context.addParams(chatId, "getGroup", "settingParams", "true");
+        if (WORD == null)
+            return "Введи слово, у которого хочешь получить группу:";
 
-        if (!db.IsWordExist(word)) {
-            return "Ой, кажется ты ввёл слово неправильно!";
+        if (!db.IsWordExist(WORD)) {
+            params.remove("word");
+            params.put("word", null);
+            return "Ой, кажется ты ввёл слово неправильно! Повтори ввод!";
         }
 
-        context.addParams(chatId, "getGroup", "settingParams", null);
+        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }

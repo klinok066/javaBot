@@ -26,9 +26,12 @@ public class GetGroup implements Command {
      */
     @Override
     public List<String> handle(Context context, UserData info) {
-        final long CHAT_ID = info.getChatId();
-        Map<String, String> params = context.getParams(CHAT_ID);
-        context.clear(info.getChatId());
-        return List.of(db.getGroup(params.get("word")));
+        try {
+            final long CHAT_ID = info.getChatId();
+            Map<String, String> params = context.getParams(CHAT_ID);
+            return List.of(db.getGroup(params.get("word")));
+        } finally {
+            context.clear(info.getChatId());
+        }
     }
 }
