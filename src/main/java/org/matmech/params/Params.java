@@ -186,7 +186,6 @@ public class Params {
             case "testing" -> setTestParams(context, chatId, message);
             case "translating" -> setTranslateParams(context, chatId, message);
             case "getGroup" -> setGetGroupParams(context, chatId, message);
-            default -> throw new IllegalArgumentException("Неправильное имя процесса");
         }
     }
 
@@ -215,7 +214,7 @@ public class Params {
             case "testing" -> testParamsValidation(context, chatId);
             case "translating" -> translateValidation(context, chatId);
             case "getGroup" -> getGroupValidation(context, chatId);
-            default -> throw new IllegalArgumentException("Нет такого процесса");
+            default -> null;
         };
     }
 }

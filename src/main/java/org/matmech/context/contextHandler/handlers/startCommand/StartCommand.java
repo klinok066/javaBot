@@ -1,21 +1,17 @@
-package org.matmech.context.contextHandler.handlers.GetGroup;
+package org.matmech.context.contextHandler.handlers.startCommand;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class GetGroup implements Command {
-    private List<String> params;
+public class StartCommand implements Command {
     private DBHandler db;
-
-    public GetGroup(DBHandler db){
+    public StartCommand(DBHandler db){
         this.db = db;
-    };
+    }
 
     /**
      * Главный метод, который запускает обработку контекста
@@ -27,9 +23,7 @@ public class GetGroup implements Command {
     @Override
     public List<String> handle(Context context, UserData info) {
         try {
-            final long CHAT_ID = info.getChatId();
-            Map<String, String> params = context.getParams(CHAT_ID);
-            return List.of(db.getGroup(params.get("word")));
+            return List.of(db.usersInsert(info.getFirstname(), info.getSurname(), info.getTag()));
         } finally {
             context.clear(info.getChatId());
         }

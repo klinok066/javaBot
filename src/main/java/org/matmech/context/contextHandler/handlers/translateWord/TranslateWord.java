@@ -1,13 +1,10 @@
-package org.matmech.context.contextHandler.handlers.TranslateWord;
+package org.matmech.context.contextHandler.handlers.translateWord;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
-import org.matmech.context.contextHandler.handlers.Command;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
-import org.matmech.userData.UserData;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

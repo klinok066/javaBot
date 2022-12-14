@@ -1,9 +1,9 @@
 package org.matmech.context.contextHandler;
 
 import org.matmech.context.Context;
-import org.matmech.context.contextHandler.handlers.GetGroup.GetGroup;
-import org.matmech.context.contextHandler.handlers.StartCommand.StartCommand;
-import org.matmech.context.contextHandler.handlers.TranslateWord.TranslateWord;
+import org.matmech.context.contextHandler.handlers.getGroup.GetGroup;
+import org.matmech.context.contextHandler.handlers.startCommand.StartCommand;
+import org.matmech.context.contextHandler.handlers.translateWord.TranslateWord;
 import org.matmech.context.contextHandler.handlers.usuallyMessage.UsuallyMessage;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
