@@ -157,6 +157,114 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
+    @Test
+    public void testExecuteForTranslateValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        handler.execute("/translate", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(false);
+
+        List<String> result = handler.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+
+    @Test
+    public void testExecuteForGetGroupValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        handler.execute("/get_group", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(false);
+
+        List<String> result = handler.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+
+//    @Test
+//    public void testExecuteForWordAddWORDValidation(){
+//        when(db.userIsExist(any())).thenReturn(true);
+//
+//        context.clear(user.getChatId());
+//
+//
+//        handler.execute("/word_add", user);
+//        when(db.IsWordExist(any(String.class))).thenReturn(false);
+//
+//        handler.execute("тест_слово", user);
+//
+//
+//        List<String> result =;
+//        List<String> expectedResult = new ArrayList<String>();
+//        expectedResult.add(
+//                "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+//        );
+//
+//        for (int i = 0; i < result.size(); i++)
+//            Assert.assertEquals(expectedResult.get(0), result.get(0));
+//    }
+
+    @Test
+    public void testExecuteForEditValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        handler.execute("/edit", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(false);
+
+        handler.execute("тест_слово", user);
+
+        List<String> result = handler.execute("неправильный_метод", user);;
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Ой, кажется ты ввёл параметр неправильно, либо этот параметр не подлежит изменению! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+
+    }
+
+    @Test
+    public void testExecuteForDeleteWordValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        handler.execute("/delete_word", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(false);
+
+        List<String> result = handler.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+
+
+
 //    /**
 //     * Unit-тест метода execute: проверяет запуск команды и то, что программа скажет, чтобы повторили попытку ввода
 //     */
