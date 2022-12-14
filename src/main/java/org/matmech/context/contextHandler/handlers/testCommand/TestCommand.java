@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.testContext;
+package org.matmech.context.contextHandler.handlers.testCommand;
 
 import org.matmech.context.contextHandler.handlers.Command;
 import org.matmech.userData.UserData;

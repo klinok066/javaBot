@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 
-public class WordAdd implements Command {
+public class WordAddCommand implements Command {
     private DBHandler db;
-    public WordAdd(DBHandler db){
+    public WordAddCommand(DBHandler db){
         this.db = db;
     }
 

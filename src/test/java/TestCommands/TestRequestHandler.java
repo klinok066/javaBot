@@ -22,7 +22,7 @@ public class TestRequestHandler {
     private RequestHandler handler = new RequestHandler(db, context);
 
     /**
-     * Unit-тест метода execute: проверяет запуск команды и то, что программа запросит группу для тестирования
+     * Unit-тест метода execute: проверяет запуск команды /test и то, что программа запросит группу для тестирования
      */
     @Test
     public void testGetGroupForTesting() {
@@ -41,7 +41,8 @@ public class TestRequestHandler {
     }
 
     /**
-     * Unit-тест метода execute: проверяет запуск команды и то, что программа скажет, чтобы повторили попытку ввода
+     * Unit-тест метода execute: проверяет запуск команды /test и то, что программа скажет,
+     * чтобы повторили попытку ввода
      */
     @Test
     public void testNotExistGroupForTesting() {
@@ -63,7 +64,8 @@ public class TestRequestHandler {
     }
 
     /**
-     * Unit-тест метода execute: проверяет запуск команды и то, что программа запросит количество слов
+     * Unit-тест метода execute: проверяет запуск команды /test и то,
+     * что программа запросит количество слов
      */
     @Test
     public void testExecuteForTestingGetCountWord() {
@@ -87,7 +89,8 @@ public class TestRequestHandler {
     }
 
     /**
-     * Unit-тест метода execute: проверяет запуск команды и то, что программа скажет, чтобы повторили попытку ввода
+     * Unit-тест метода execute: проверяет запуск команды /test и то,
+     * что программа скажет, чтобы повторили попытку ввода
      */
     @Test
     public void testExecuteForTestingValidateCountWord() {
@@ -110,7 +113,8 @@ public class TestRequestHandler {
     }
 
     /**
-     * Unit-тест метода execute: проверяет запуск команды и то, что программа запросит режим тестирования
+     * Unit-тест метода execute: проверяет запуск команды /test и то,
+     * что программа запросит режим тестирования
      */
     @Test
     public void testExecuteForTestingGetMode() {
@@ -134,7 +138,8 @@ public class TestRequestHandler {
     }
 
     /**
-     * Unit-тест метода execute: проверяет запуск команды и то, что программа скажет, чтобы повторили попытку ввода
+     * Unit-тест метода execute: проверяет запуск команды /test и то,
+     * что программа скажет, чтобы повторили попытку ввода
      */
     @Test
     public void testExecuteForTestingValidateMode() {
@@ -157,6 +162,10 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /translate и то,
+     * что программа скажет, чтобы повторили попытку ввода
+     */
     @Test
     public void testExecuteForTranslateValidation(){
         when(db.userIsExist(any())).thenReturn(true);
@@ -177,6 +186,10 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /get_group и то,
+     * что программа скажет, чтобы повторили попытку ввода
+     */
     @Test
     public void testExecuteForGetGroupValidation(){
         when(db.userIsExist(any())).thenReturn(true);
@@ -197,35 +210,15 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
-//    @Test
-//    public void testExecuteForWordAddWORDValidation(){
-//        when(db.userIsExist(any())).thenReturn(true);
-//
-//        context.clear(user.getChatId());
-//
-//
-//        handler.execute("/word_add", user);
-//        when(db.IsWordExist(any(String.class))).thenReturn(false);
-//
-//        handler.execute("тест_слово", user);
-//
-//
-//        List<String> result =;
-//        List<String> expectedResult = new ArrayList<String>();
-//        expectedResult.add(
-//                "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
-//        );
-//
-//        for (int i = 0; i < result.size(); i++)
-//            Assert.assertEquals(expectedResult.get(0), result.get(0));
-//    }
-
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /edit и то,
+     * что программа скажет, чтобы повторили попытку ввода
+     */
     @Test
     public void testExecuteForEditValidation(){
         when(db.userIsExist(any())).thenReturn(true);
 
         context.clear(user.getChatId());
-
 
         handler.execute("/edit", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
@@ -240,9 +233,12 @@ public class TestRequestHandler {
 
         for (int i = 0; i < result.size(); i++)
             Assert.assertEquals(expectedResult.get(0), result.get(0));
-
     }
 
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /delete_word и то,
+     * что программа скажет, чтобы повторили попытку ввода
+     */
     @Test
     public void testExecuteForDeleteWordValidation(){
         when(db.userIsExist(any())).thenReturn(true);
@@ -262,31 +258,4 @@ public class TestRequestHandler {
         for (int i = 0; i < result.size(); i++)
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
-
-
-
-//    /**
-//     * Unit-тест метода execute: проверяет запуск команды и то, что программа скажет, чтобы повторили попытку ввода
-//     */
-//    @Test
-//    public void testExecuteForTestingValidateMode() {
-//        when(db.userIsExist(any())).thenReturn(true);
-//
-//        context.clear(user.getChatId());
-//
-//        handler.execute("/test", user);
-//        when(db.groupIsExist(any(String.class))).thenReturn(true);
-//        handler.execute("глаголы", user);
-//        handler.execute("10", user);
-//        when()
-//        List<String> result = handler.execute("easy", user);
-//
-//        List<String> expectedResult = new ArrayList<String>();
-//        expectedResult.add(
-//                "Вы ввели не существующий режим!\n"
-//        );
-//
-//        for (int i = 0; i < result.size(); i++)
-//            assertEquals(expectedResult.get(0), result.get(0));
-//    }
 }

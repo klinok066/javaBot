@@ -15,6 +15,7 @@ public class ContextManager { // убрать стоп операцию из п�
     final private Context context;
     final private Params paramsHandler;
     final private ContextHandler contextHandler;
+    private DBHandler db;
 
     /**
      * Метод проверяет, является ли сообщение командой
@@ -48,12 +49,14 @@ public class ContextManager { // убрать стоп операцию из п�
             case "/word_add" -> "wordAdd";
             case "/edit" -> "edit";
             case "/delete_word" -> "deleteWord";
+            case "/help" -> "helping";
             default -> null;
         };
     }
 
     public ContextManager(Context context, DBHandler dbHandler) {
         this.context = context;
+        db = dbHandler;
         paramsHandler = new Params(dbHandler);
         contextHandler = new ContextHandler(dbHandler);
     }
@@ -64,7 +67,10 @@ public class ContextManager { // убрать стоп операцию из п�
      * @param info - информация о пользователе
      * @return возвращает список сообщений для пользователя
      */
-    public List<String> detectContext(String message, UserData info) {
+    public List<String> execute(String message, UserData info) {
+        if (!db.userIsExist(info.getTag()))
+            return List.of("Вы не зарегистрированы в системе! Чтобы зарегистрироваться в системе напишите /start");
+
         final long CHAT_ID = info.getChatId();
         final String CONTEXT = getContext(message);
 

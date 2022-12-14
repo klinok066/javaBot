@@ -1,12 +1,12 @@
 package org.matmech;
 
-import org.matmech.connector.vk.vkBot.VKBot;
+import org.matmech.connector.vk.VKBot;
 import org.matmech.context.Context;
 import org.matmech.connector.cmd.cmdBot.CmdBot;
 import org.matmech.connector.Connector;
 import org.matmech.connector.telegram.telegramBot.TelegramBot;
+import org.matmech.context.contextManager.ContextManager;
 import org.matmech.db.DBHandler;
-import org.matmech.requests.requestHandler.RequestHandler;
 
 public class Main {
     final static String TELEGRAM_BOT_USERNAME = System.getenv("TELEGRAM_BOT_USERNAME");
@@ -24,21 +24,21 @@ public class Main {
 
         // cache
 
-        Context cache = new Context();
+        Context context = new Context();
 
         // request handler
 
-        RequestHandler requestHandler = new RequestHandler(db, cache);
+        ContextManager contextManager = new ContextManager(context, db);
 
         // bots
 
-        Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN, requestHandler);
+        Connector bot = new TelegramBot(TELEGRAM_BOT_USERNAME, TELEGRAM_BOT_TOKEN, contextManager);
         bot.start();
 
-        VKBot vkBot = new VKBot(VK_BOT_GROUP_ID, VK_BOT_ACCESS_TOKEN, requestHandler);
+        VKBot vkBot = new VKBot(VK_BOT_GROUP_ID, VK_BOT_ACCESS_TOKEN, contextManager);
         vkBot.start();
 
-        CmdBot cmdBot = new CmdBot(requestHandler);
+        CmdBot cmdBot = new CmdBot(contextManager);
         cmdBot.start();
     }
 }

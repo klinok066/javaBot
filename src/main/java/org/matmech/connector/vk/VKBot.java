@@ -1,4 +1,4 @@
-package org.matmech.connector.vk.vkBot;
+package org.matmech.connector.vk;
 
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
@@ -10,21 +10,20 @@ import com.vk.api.sdk.objects.messages.Message;
 import com.vk.api.sdk.objects.users.User;
 import com.vk.api.sdk.queries.messages.MessagesGetLongPollHistoryQuery;
 import org.matmech.connector.Connector;
+import org.matmech.context.contextManager.ContextManager;
 import org.matmech.userData.UserData;
-import org.matmech.requests.requestHandler.RequestHandler;
-
 import java.util.List;
 import java.util.Random;
 
 public class VKBot implements Connector {
-    private final int GROUP_ID;
-    private final String ACCESS_TOKEN;
-    private final RequestHandler REQUEST_HANDLER;
+    private final int groupId;
+    private final String accessToken;
+    private ContextManager contextManager;
 
-    public VKBot(int groupId, String accessToken, RequestHandler requestHandler) {
-        GROUP_ID = groupId;
-        ACCESS_TOKEN = accessToken;
-        REQUEST_HANDLER = requestHandler;
+    public VKBot(int groupId, String accessToken, ContextManager contextManager) {
+        this.groupId = groupId;
+        this.accessToken = accessToken;
+        this.contextManager = contextManager;
     }
 
     /**
@@ -36,7 +35,7 @@ public class VKBot implements Connector {
             TransportClient transportClient = new HttpTransportClient();
             VkApiClient vk = new VkApiClient(transportClient);
             Random random = new Random();
-            GroupActor actor = new GroupActor(GROUP_ID, ACCESS_TOKEN);
+            GroupActor actor = new GroupActor(groupId, accessToken);
             Integer ts = vk.messages().getLongPollServer(actor).execute().getTs();
 
             while (true) {
@@ -59,7 +58,7 @@ public class VKBot implements Connector {
                                     message.getPeerId()
                             );
 
-                            List<String> messagesTexts = REQUEST_HANDLER.execute(message.getText(), data);
+                            List<String> messagesTexts = contextManager.execute(message.getText(), data);
 
                             for (String messageTxt : messagesTexts) {
                                 vk.messages().send(actor).message(messageTxt)

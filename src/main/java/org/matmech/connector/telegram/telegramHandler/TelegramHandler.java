@@ -1,13 +1,12 @@
 package org.matmech.connector.telegram.telegramHandler;
 
+import org.matmech.context.contextManager.ContextManager;
 import org.matmech.userData.UserData;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import org.matmech.requests.requestHandler.RequestHandler;
 
 import java.util.List;
 
@@ -17,12 +16,12 @@ import java.util.List;
 public class TelegramHandler extends TelegramLongPollingBot {
     private final String botUsername;
     private final String botToken;
-    private final RequestHandler requestHandler;
+    private final ContextManager contextManager;
 
-    public TelegramHandler(String botUsername, String botToken, RequestHandler requestHandler) {
+    public TelegramHandler(String botUsername, String botToken, ContextManager contextManager) {
         this.botUsername = botUsername;
         this.botToken = botToken;
-        this.requestHandler = requestHandler;
+        this.contextManager = contextManager;
     }
 
     @Override
@@ -57,7 +56,7 @@ public class TelegramHandler extends TelegramLongPollingBot {
 
                 String messageString = LAST_MESSAGE.getText();
 
-                List<String> answers = requestHandler.execute(messageString, data);
+                List<String> answers = contextManager.execute(messageString, data);
 
                 for (String answer : answers) {
                     message.setText(answer);

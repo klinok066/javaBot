@@ -8,11 +8,11 @@ import org.matmech.db.DBHandler;
 import java.util.List;
 import java.util.Map;
 
-public class GetGroup implements Command {
+public class GetGroupCommand implements Command {
     private List<String> params;
     private DBHandler db;
 
-    public GetGroup(DBHandler db){
+    public GetGroupCommand(DBHandler db){
         this.db = db;
     };
 

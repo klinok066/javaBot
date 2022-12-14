@@ -1,7 +1,7 @@
 package org.matmech.connector.cmd.cmdLogic;
 
+import org.matmech.context.contextManager.ContextManager;
 import org.matmech.userData.UserData;
-import org.matmech.requests.requestHandler.RequestHandler;
 import java.util.Scanner;
 
 /**
@@ -9,18 +9,18 @@ import java.util.Scanner;
  */
 public class CmdLogic {
     private final Scanner input;
-    private final RequestHandler requestHandler;
+    private final ContextManager contextManager;
     private final String firstName;
     private final String lastName;
     private final String tag;
     private final int chatId;
 
-    public CmdLogic(String firstName, String lastName, String tag, int chatId, RequestHandler requestHandler) {
+    public CmdLogic(String firstName, String lastName, String tag, int chatId, ContextManager contextManager) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.tag = tag;
         this.chatId = chatId;
-        this.requestHandler = requestHandler;
+        this.contextManager = contextManager;
         this.input = new Scanner(System.in);
     }
 
@@ -33,7 +33,7 @@ public class CmdLogic {
             StringBuilder answer = new StringBuilder("");
             UserData data = new UserData(firstName, lastName, tag, chatId);
 
-            answer.append(requestHandler.execute(messageFromCMD, data));
+            answer.append(contextManager.execute(messageFromCMD, data));
 
             System.out.println(answer);
         }

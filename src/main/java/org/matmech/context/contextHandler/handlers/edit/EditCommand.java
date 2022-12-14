@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.startCommand;
+package org.matmech.context.contextHandler.handlers.edit;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
@@ -6,10 +6,11 @@ import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 
 import java.util.List;
+import java.util.Map;
 
-public class StartCommand implements Command {
+public class EditCommand implements Command {
     private DBHandler db;
-    public StartCommand(DBHandler db){
+    public EditCommand(DBHandler db){
         this.db = db;
     }
 
@@ -23,9 +24,12 @@ public class StartCommand implements Command {
     @Override
     public List<String> handle(Context context, UserData info) {
         try {
-            return List.of(db.usersInsert(info.getFirstname(), info.getSurname(), info.getTag()));
+            final long CHAT_ID = info.getChatId();
+            Map<String, String> params = context.getParams(CHAT_ID);
+            return List.of(db.edit(params.get("word"), params.get("wordParam"), params.get("paramValue")));
         } finally {
             context.clear(info.getChatId());
         }
+
     }
 }

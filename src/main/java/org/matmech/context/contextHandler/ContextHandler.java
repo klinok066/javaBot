@@ -1,40 +1,43 @@
 package org.matmech.context.contextHandler;
 
 import org.matmech.context.Context;
-import org.matmech.context.contextHandler.handlers.deleteWord.DeleteWord;
-import org.matmech.context.contextHandler.handlers.edit.Edit;
-import org.matmech.context.contextHandler.handlers.getGroup.GetGroup;
-import org.matmech.context.contextHandler.handlers.startCommand.StartCommand;
-import org.matmech.context.contextHandler.handlers.translateWord.TranslateWord;
+import org.matmech.context.contextHandler.handlers.deleteWord.DeleteWordCommand;
+import org.matmech.context.contextHandler.handlers.edit.EditCommand;
+import org.matmech.context.contextHandler.handlers.getGroup.GetGroupCommand;
+import org.matmech.context.contextHandler.handlers.helpCommand.HelpCommand;
+import org.matmech.context.contextHandler.handlers.startCommand.StartCommandCommand;
+import org.matmech.context.contextHandler.handlers.translateWord.TranslateWordCommand;
 import org.matmech.context.contextHandler.handlers.usuallyMessage.UsuallyMessage;
-import org.matmech.context.contextHandler.handlers.wordAdd.WordAdd;
+import org.matmech.context.contextHandler.handlers.wordAdd.WordAddCommand;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
-import org.matmech.context.contextHandler.handlers.testContext.TestCommand;
+import org.matmech.context.contextHandler.handlers.testCommand.TestCommand;
 import java.util.List;
 
 /**
  * В этом классе исполняется основной код контекстов после получения и валидации всех параметров
  */
 public class ContextHandler {
-    final private TestCommand TEST_CONTEXT;
+    final private TestCommand TEST_COMMAND;
     final private UsuallyMessage USUALLY_MESSAGE;
-    final private StartCommand TO_START;
-    final private TranslateWord TRANSLATE_WORD;
-    final private GetGroup GET_GROUP;
-    final private WordAdd WORD_ADD;
-    final private Edit EDIT;
-    final private DeleteWord DELETE_WORD;
+    final private StartCommandCommand TO_START_COMMAND;
+    final private TranslateWordCommand TRANSLATE_WORD_COMMAND;
+    final private GetGroupCommand GET_GROUP_COMMAND;
+    final private WordAddCommand WORD_ADD_COMMAND;
+    final private EditCommand EDIT_COMMAND;
+    final private DeleteWordCommand DELETE_WORD_COMMAND;
+    final private HelpCommand HELP_COMMAND;
 
     public ContextHandler(DBHandler db) {
-        TEST_CONTEXT = new TestCommand(db);
+        TEST_COMMAND = new TestCommand(db);
         USUALLY_MESSAGE = new UsuallyMessage();
-        TO_START = new StartCommand(db);
-        TRANSLATE_WORD = new TranslateWord(db);
-        GET_GROUP = new GetGroup(db);
-        WORD_ADD = new WordAdd(db);
-        EDIT = new Edit(db);
-        DELETE_WORD = new DeleteWord(db);
+        TO_START_COMMAND = new StartCommandCommand(db);
+        TRANSLATE_WORD_COMMAND = new TranslateWordCommand(db);
+        GET_GROUP_COMMAND = new GetGroupCommand(db);
+        WORD_ADD_COMMAND = new WordAddCommand(db);
+        EDIT_COMMAND = new EditCommand(db);
+        DELETE_WORD_COMMAND = new DeleteWordCommand(db);
+        HELP_COMMAND = new HelpCommand();
     }
 
     /**
@@ -45,13 +48,14 @@ public class ContextHandler {
      */
     public List<String> handle(Context context, UserData info, String message) {
         return switch (context.getParams(info.getChatId()).get("processName")) {
-            case "testing" -> TEST_CONTEXT.handle(context, info);
-            case "starting" -> TO_START.handle(context ,info);
-            case "translating" -> TRANSLATE_WORD.handle(context,info);
-            case "getGroup" -> GET_GROUP.handle(context,info);
-            case "wordAdd" -> WORD_ADD.handle(context, info);
-            case "edit" -> EDIT.handle(context, info);
-            case "deleteWord" -> DELETE_WORD.handle(context, info);
+            case "testing" -> TEST_COMMAND.handle(context, info);
+            case "starting" -> TO_START_COMMAND.handle(context ,info);
+            case "translating" -> TRANSLATE_WORD_COMMAND.handle(context,info);
+            case "getGroup" -> GET_GROUP_COMMAND.handle(context,info);
+            case "wordAdd" -> WORD_ADD_COMMAND.handle(context, info);
+            case "edit" -> EDIT_COMMAND.handle(context, info);
+            case "deleteWord" -> DELETE_WORD_COMMAND.handle(context, info);
+            case "helping" -> HELP_COMMAND.handle(context, info);
             case null -> USUALLY_MESSAGE.handle(info, message);
             default -> throw new IllegalStateException("Unexpected value: " + context.getParams(info.getChatId()).get("processName"));
         };
