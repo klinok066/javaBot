@@ -28,7 +28,7 @@ public class WordAdd implements Command {
             final long CHAT_ID = info.getChatId();
             final String TAG = info.getTag();
             Map<String, String> params = context.getParams(CHAT_ID);
-            return List.of(db.wordAdd(params.get("word"), params.get("group"), params.get("translate"),TAG));
+            return List.of(db.wordAdd(params.get("word"), params.get("translate"),params.get("group"),TAG));
         } finally {
             context.clear(info.getChatId());
         }
