@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.StartCommand;
+package org.matmech.context.contextHandler.handlers.translateWord;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
@@ -7,11 +7,13 @@ import org.matmech.db.DBHandler;
 
 import java.util.List;
 
-public class StartCommand implements Command {
+public class TranslateWord implements Command {
     private DBHandler db;
-    public StartCommand(DBHandler db){
+
+    public TranslateWord(DBHandler db){
         this.db = db;
-    }
+
+    };
 
     /**
      * Главный метод, который запускает обработку контекста
@@ -22,6 +24,11 @@ public class StartCommand implements Command {
      */
     @Override
     public List<String> handle(Context context, UserData info) {
-        return List.of(db.usersInsert(info.getFirstname(), info.getSurname(), info.getTag()));
+        final long CHAT_ID = info.getChatId();
+        HashMap<String, String> params = context.getParams(CHAT_ID);
+
+        context.clear(info.getChatId());
+
+        return List.of(db.translateWord(params.get("word")));
     }
 }

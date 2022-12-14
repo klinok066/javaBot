@@ -1,21 +1,19 @@
-package org.matmech.context.contextHandler.handlers.TranslateWord;
+package org.matmech.context.contextHandler.handlers.getGroup;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
-import org.matmech.context.contextHandler.handlers.Command;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
-import org.matmech.userData.UserData;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class TranslateWord implements Command {
+public class GetGroup implements Command {
+    private List<String> params;
     private DBHandler db;
 
-    public TranslateWord(DBHandler db){
+    public GetGroup(DBHandler db){
         this.db = db;
-
     };
 
     /**
@@ -28,10 +26,8 @@ public class TranslateWord implements Command {
     @Override
     public List<String> handle(Context context, UserData info) {
         final long CHAT_ID = info.getChatId();
-        HashMap<String, String> params = context.getParams(CHAT_ID);
-
+        Map<String, String> params = context.getParams(CHAT_ID);
         context.clear(info.getChatId());
-
-        return List.of(db.translateWord(params.get("word")));
+        return List.of(db.getGroup(params.get("word")));
     }
 }
