@@ -47,7 +47,7 @@ public class ContextManager { // убрать стоп операцию из п�
             case "/get_group" -> "getGroup";
             case "/word_add" -> "wordAdd";
             case "/edit" -> "edit";
-            case "/delete_word" -> "wordDelete";
+            case "/delete_word" -> "deleteWord";
             default -> null;
         };
     }
