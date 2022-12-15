@@ -15,6 +15,9 @@ import org.matmech.userData.UserData;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Бот для платформы VK
+ */
 public class VKBot implements Connector {
     private final int groupId;
     private final String accessToken;
@@ -27,7 +30,7 @@ public class VKBot implements Connector {
     }
 
     /**
-     *
+     * Запускает бота
      */
     @Override
     public void start() {

@@ -5,7 +5,7 @@ import org.matmech.context.contextHandler.handlers.deleteWord.DeleteWordCommand;
 import org.matmech.context.contextHandler.handlers.edit.EditCommand;
 import org.matmech.context.contextHandler.handlers.getGroup.GetGroupCommand;
 import org.matmech.context.contextHandler.handlers.helpCommand.HelpCommand;
-import org.matmech.context.contextHandler.handlers.startCommand.StartCommandCommand;
+import org.matmech.context.contextHandler.handlers.startCommand.StartCommand;
 import org.matmech.context.contextHandler.handlers.translateWord.TranslateWordCommand;
 import org.matmech.context.contextHandler.handlers.usuallyMessage.UsuallyMessage;
 import org.matmech.context.contextHandler.handlers.wordAdd.WordAddCommand;
@@ -15,12 +15,12 @@ import org.matmech.context.contextHandler.handlers.testCommand.TestCommand;
 import java.util.List;
 
 /**
- * В этом классе исполняется основной код контекстов после получения и валидации всех параметров
+ * В этом классе исполняется команды после получения и валидации всех параметров
  */
 public class ContextHandler {
     final private TestCommand TEST_COMMAND;
     final private UsuallyMessage USUALLY_MESSAGE;
-    final private StartCommandCommand TO_START_COMMAND;
+    final private StartCommand TO_START_COMMAND;
     final private TranslateWordCommand TRANSLATE_WORD_COMMAND;
     final private GetGroupCommand GET_GROUP_COMMAND;
     final private WordAddCommand WORD_ADD_COMMAND;
@@ -31,7 +31,7 @@ public class ContextHandler {
     public ContextHandler(DBHandler db) {
         TEST_COMMAND = new TestCommand(db);
         USUALLY_MESSAGE = new UsuallyMessage();
-        TO_START_COMMAND = new StartCommandCommand(db);
+        TO_START_COMMAND = new StartCommand(db);
         TRANSLATE_WORD_COMMAND = new TranslateWordCommand(db);
         GET_GROUP_COMMAND = new GetGroupCommand(db);
         WORD_ADD_COMMAND = new WordAddCommand(db);
@@ -41,7 +41,7 @@ public class ContextHandler {
     }
 
     /**
-     * Вызывает нужную функцию, которая обрабатывает соответствующий контекст
+     * Вызывает нужную функцию, которая обрабатывает соответствующий контекст/команду
      * @param context - информация о всех контекстов для всех пользователей
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает соответствующее сообщение для пользователя
@@ -49,9 +49,9 @@ public class ContextHandler {
     public List<String> handle(Context context, UserData info, String message) {
         return switch (context.getParams(info.getChatId()).get("processName")) {
             case "testing" -> TEST_COMMAND.handle(context, info);
-            case "starting" -> TO_START_COMMAND.handle(context ,info);
-            case "translating" -> TRANSLATE_WORD_COMMAND.handle(context,info);
-            case "getGroup" -> GET_GROUP_COMMAND.handle(context,info);
+            case "starting" -> TO_START_COMMAND.handle(context, info);
+            case "translating" -> TRANSLATE_WORD_COMMAND.handle(context, info);
+            case "getGroup" -> GET_GROUP_COMMAND.handle(context, info);
             case "wordAdd" -> WORD_ADD_COMMAND.handle(context, info);
             case "edit" -> EDIT_COMMAND.handle(context, info);
             case "deleteWord" -> DELETE_WORD_COMMAND.handle(context, info);

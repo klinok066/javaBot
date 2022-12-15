@@ -7,15 +7,19 @@ import org.matmech.params.testingValidation.TestingValidation;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс, который отвечает за получение и обработку входящих параметров
+ */
 public class Params {
     private final DBHandler db;
     private final String STANDARD_COUNT_WORDS;
     private final String STANDARD_MODE;
 
     /**
-     * Функция проводит проверку параметров на правильность
+     * Обрабатывает полученные параметры для команды /test
+     * @param context - контекст для всех пользователей
      * @param chatId - идентификатор чата с пользователем
-     * @return - возвращает сообщение-валидации или null, если валидация прошла успешно
+     * @return - возвращает текст ошибки для пользователя или null при успехе
      */
     private String testParamsValidation(final Context context, long chatId) {
         HashMap<String, String> params = context.getParams(chatId);
@@ -73,7 +77,7 @@ public class Params {
     }
 
     /**
-     * Присваивает параметры тестам
+     * Присваивает параметры для контекста команды /test
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      */
@@ -100,7 +104,7 @@ public class Params {
     }
 
     /**
-     * Присваивает параметры переводу слова
+     * Присваивает параметры для контекста команды /transalte
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      */
@@ -115,7 +119,7 @@ public class Params {
     }
 
     /**
-     * Присваивает параметры получения группы
+     * Присваивает параметры для контекста команды /get_group
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      */
@@ -129,6 +133,12 @@ public class Params {
             context.addParams(chatId, PROCESS_NAME, "word", message);
     }
 
+    /**
+     * Обрабатывает полученные параметры для команды /translate
+     * @param context - контекст для всех пользователей
+     * @param chatId - идентификатор чата с пользователем
+     * @return - возвращает текст ошибки для пользователя или null при успехе
+     */
     private String translateValidation(final Context context, long chatId){
         Map<String, String> params = context.getParams(chatId);
 
@@ -151,6 +161,12 @@ public class Params {
         return null;
     }
 
+    /**
+     * Обрабатывает полученные параметры для команды /get_group
+     * @param context - контекст для всех пользователей
+     * @param chatId - идентификатор чата с пользователем
+     * @return - возвращает текст ошибки для пользователя или null при успехе
+     */
     private String getGroupValidation(final Context context, long chatId){
         HashMap<String, String> params = context.getParams(chatId);
 
@@ -193,7 +209,7 @@ public class Params {
     }
 
     /**
-     * Присваивает параметры добавления слова
+     * Присваивает параметры для контекста команды /word_add
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      */
@@ -219,6 +235,12 @@ public class Params {
             context.addParams(chatId, PROCESS_NAME, "translate", message);
     }
 
+    /**
+     * Обрабатывает полученные параметры для команды /word_add
+     * @param context - контекст для всех пользователей
+     * @param chatId - идентификатор чата с пользователем
+     * @return - возвращает текст ошибки для пользователя или null при успехе
+     */
     private String wordAddValidation(Context context, Long chatId){
         Map<String, String> params = context.getParams(chatId);
 
@@ -243,6 +265,11 @@ public class Params {
         return null;
     }
 
+    /**
+     * Присваивает параметры для контекста команды /edit
+     * @param chatId - идентификатор чата с пользователем
+     * @param message - сообщение, которое отправил пользователь
+     */
     private void setEditParams(Context context, long chatId, String message) {
         HashMap<String, String> params = context.getParams(chatId);
 
@@ -265,7 +292,12 @@ public class Params {
             context.addParams(chatId, PROCESS_NAME, "paramValue", message);
     }
 
-
+    /**
+     * Обрабатывает полученные параметры для команды /edit
+     * @param context - контекст для всех пользователей
+     * @param chatId - идентификатор чата с пользователем
+     * @return - возвращает текст ошибки для пользователя или null при успехе
+     */
     private String editValidation(Context context, long chatId) {
         HashMap<String, String> params = context.getParams(chatId);
 
@@ -299,6 +331,12 @@ public class Params {
         return null;
     }
 
+    /**
+     * Обрабатывает полученные параметры для команды /delete_word
+     * @param context - контекст для всех пользователей
+     * @param chatId - идентификатор чата с пользователем
+     * @return - возвращает текст ошибки для пользователя или null при успехе
+     */
     private String deleteWordValidation(Context context, long chatId) {
 
         HashMap<String, String> params = context.getParams(chatId);
@@ -322,6 +360,11 @@ public class Params {
         return null;
     }
 
+    /**
+     * Присваивает параметры для контекста команды /delete_word
+     * @param chatId - идентификатор чата с пользователем
+     * @param message - сообщение, которое отправил пользователь
+     */
     private void setDeleteWordParams(Context context, long chatId, String message) {
         HashMap<String, String> params = context.getParams(chatId);
 

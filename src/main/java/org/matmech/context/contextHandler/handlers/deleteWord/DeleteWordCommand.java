@@ -8,6 +8,9 @@ import org.matmech.db.DBHandler;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Команда /delete_word
+ */
 public class DeleteWordCommand implements Command {
     private DBHandler db;
     public DeleteWordCommand(DBHandler db){
@@ -15,7 +18,7 @@ public class DeleteWordCommand implements Command {
     }
 
     /**
-     * Главный метод, который запускает обработку контекста
+     * Главный метод, который запускает обработку команда
      *
      * @param context - информация о всех контекстов для всех пользователей
      * @param info    - объект DataSaver с информацией о пользователе

@@ -8,6 +8,9 @@ import org.matmech.db.DBHandler;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Команда /translate
+ */
 public class TranslateWordCommand implements Command {
     private DBHandler db;
 
@@ -17,7 +20,7 @@ public class TranslateWordCommand implements Command {
     };
 
     /**
-     * Главный метод, который запускает обработку контекста
+     * Главный метод, который запускает обработку команды
      *
      * @param context - информация о всех контекстов для всех пользователей
      * @param info    - объект DataSaver с информацией о пользователе

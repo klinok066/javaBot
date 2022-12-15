@@ -7,14 +7,17 @@ import org.matmech.db.DBHandler;
 
 import java.util.List;
 
-public class StartCommandCommand implements Command {
+/**
+ * Команда /start
+ */
+public class StartCommand implements Command {
     private DBHandler db;
-    public StartCommandCommand(DBHandler db){
+    public StartCommand(DBHandler db){
         this.db = db;
     }
 
     /**
-     * Главный метод, который запускает обработку контекста
+     * Главный метод, который запускает обработку команды
      *
      * @param context - информация о всех контекстов для всех пользователей
      * @param info    - объект DataSaver с информацией о пользователе

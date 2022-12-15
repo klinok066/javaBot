@@ -8,7 +8,7 @@ import org.matmech.context.Context;
 import java.util.*;
 
 /**
- * Этот класс отвечает за функционал контекста тестирования
+ * Команда /test
  */
 public class TestCommand implements Command {
     private HashMap<String, ArrayList<String>> cachedWords;

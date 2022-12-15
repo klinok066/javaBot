@@ -46,9 +46,9 @@ public class CmdBot implements Connector {
     }
 
     /**
-     * Этот метод запускает консольного бота
+     * Запускает бота
      */
     public void start() {
-        bot.responseForCDM();
+        bot.handle();
     }
 }

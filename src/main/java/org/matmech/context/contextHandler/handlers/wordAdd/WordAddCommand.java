@@ -8,7 +8,9 @@ import org.matmech.db.DBHandler;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Команда /word_add
+ */
 public class WordAddCommand implements Command {
     private DBHandler db;
     public WordAddCommand(DBHandler db){
@@ -16,7 +18,7 @@ public class WordAddCommand implements Command {
     }
 
     /**
-     * Главный метод, который запускает обработку контекста
+     * Главный метод, который запускает обработку команды
      *
      * @param context - информация о всех контекстов для всех пользователей
      * @param info    - объект DataSaver с информацией о пользователе

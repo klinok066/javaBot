@@ -18,7 +18,7 @@ public class TelegramBot implements Connector {
     }
 
     /**
-     * Этот метод запускает телеграмм-бота
+     * Запускает бота
      */
     public void start() {
         {

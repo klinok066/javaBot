@@ -6,6 +6,9 @@ import org.matmech.userData.UserData;
 
 import java.util.List;
 
+/**
+ * Команда /help
+ */
 public class HelpCommand implements Command {
     final private String helpText =
             "Список команд:\n" +

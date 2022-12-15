@@ -8,8 +8,10 @@ import org.matmech.db.DBHandler;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Команда /get_group
+ */
 public class GetGroupCommand implements Command {
-    private List<String> params;
     private DBHandler db;
 
     public GetGroupCommand(DBHandler db){
@@ -17,7 +19,7 @@ public class GetGroupCommand implements Command {
     };
 
     /**
-     * Главный метод, который запускает обработку контекста
+     * Главный метод, который запускает обработку команды
      *
      * @param context - информация о всех контекстов для всех пользователей
      * @param info    - объект DataSaver с информацией о пользователе

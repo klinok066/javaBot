@@ -1,5 +1,8 @@
 package org.matmech.userData;
 
+/**
+ * Объект, который хранит в себе данные о пользователе
+ */
 final public class UserData {
     private final String firstname;
     private final String surname;

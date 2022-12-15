@@ -9,7 +9,7 @@ import org.matmech.params.Params;
 import java.util.List;
 
 /**
- * Класс, который обрабатывает контекст. Контекст = команда
+ * Класс, который обрабатывает контекст команды
  */
 public class ContextManager { // убрать стоп операцию из параметров и добавить её суда (сделать через контекст для каждого пользователя)
     final private Context context;
