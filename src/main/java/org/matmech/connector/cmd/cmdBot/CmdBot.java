@@ -2,7 +2,7 @@ package org.matmech.connector.cmd.cmdBot;
 
 import org.matmech.connector.Connector;
 import org.matmech.connector.cmd.cmdLogic.CmdLogic;
-import org.matmech.requestHandler.RequestHandler;
+import org.matmech.context.contextManager.ContextManager;
 
 import java.util.Scanner;
 
@@ -15,7 +15,7 @@ public class CmdBot implements Connector {
     private String tag;
     private int chatId;
     private final Scanner input;
-    private final RequestHandler requestHandler;
+    private final ContextManager contextManager;
 
     private CmdLogic bot;
 
@@ -36,13 +36,13 @@ public class CmdBot implements Connector {
         System.out.println("Вы были успешно авторизированы! Для того, чтобы начать работать с ботом, напишите /start");
     }
 
-    public CmdBot(RequestHandler requestHandler) {
-        this.requestHandler = requestHandler;
+    public CmdBot(ContextManager contextManager) {
+        this.contextManager = contextManager;
         this.input = new Scanner(System.in);
 
         initUser();
 
-        bot = new CmdLogic(firstName, lastName, tag, chatId, requestHandler);
+        bot = new CmdLogic(firstName, lastName, tag, chatId, contextManager);
     }
 
     /**

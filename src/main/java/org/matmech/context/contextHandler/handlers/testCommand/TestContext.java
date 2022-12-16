@@ -1,7 +1,7 @@
 package org.matmech.context.contextHandler.handlers.testContext;
 
 import org.matmech.context.contextHandler.handlers.Handler;
-import org.matmech.dataSaver.DataSaver;
+import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 import org.matmech.context.Context;
 
@@ -58,7 +58,7 @@ public class TestContext implements Handler {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает сообщение пользователю (Вопрос или Завершающее тестирование)
      */
-    public String handle(Context context, DataSaver info) {
+    public String handle(Context context, UserData info) {
         final long CHAT_ID = info.getChatId();
         final String TAG = info.getTag();
 
