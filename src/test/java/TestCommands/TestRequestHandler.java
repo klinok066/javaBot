@@ -1,10 +1,9 @@
 package TestCommands;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import org.matmech.context.Context;
-import org.matmech.requests.requestHandler.RequestHandler;
+import org.matmech.context.contextManager.ContextManager;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 import org.mockito.Mockito;
@@ -19,7 +18,7 @@ public class TestRequestHandler {
     private final UserData user = new UserData("User", "Unknown", "Unknown", 12243);
     private final DBHandler db = Mockito.mock(DBHandler.class);
     private final Context context = new Context();
-    private RequestHandler handler = new RequestHandler(db, context);
+    private ContextManager contextManager = new ContextManager(context, db);
 
     /**
      * Unit-тест метода execute: проверяет запуск команды /test и то, что программа запросит группу для тестирования
@@ -28,7 +27,7 @@ public class TestRequestHandler {
     public void testGetGroupForTesting() {
         when(db.userIsExist(any())).thenReturn(true);
 
-        List<String> result = handler.execute("/test", user);
+        List<String> result = contextManager.execute("/test", user);
 
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
@@ -50,11 +49,11 @@ public class TestRequestHandler {
 
         context.clear(user.getChatId());
 
-        handler.execute("/test", user);
+        contextManager.execute("/test", user);
 
         when(db.groupIsExist(any(String.class))).thenReturn(false);
 
-        List<String> result = handler.execute("глаголы", user);
+        List<String> result = contextManager.execute("глаголы", user);
 
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add("Такой группы не существует. Пожалуйста, введите существующую группу!");
@@ -73,9 +72,9 @@ public class TestRequestHandler {
 
         context.clear(user.getChatId());
 
-        handler.execute("/test", user);
+        contextManager.execute("/test", user);
         when(db.groupIsExist(any(String.class))).thenReturn(true);
-        List<String> result = handler.execute("глаголы", user);
+        List<String> result = contextManager.execute("глаголы", user);
 
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
@@ -98,10 +97,10 @@ public class TestRequestHandler {
 
         context.clear(user.getChatId());
 
-        handler.execute("/test", user);
+        contextManager.execute("/test", user);
         when(db.groupIsExist(any(String.class))).thenReturn(true);
-        handler.execute("глаголы", user);
-        List<String> result = handler.execute("10лол", user);
+        contextManager.execute("глаголы", user);
+        List<String> result = contextManager.execute("10лол", user);
 
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
@@ -122,10 +121,10 @@ public class TestRequestHandler {
 
         context.clear(user.getChatId());
 
-        handler.execute("/test", user);
+        contextManager.execute("/test", user);
         when(db.groupIsExist(any(String.class))).thenReturn(true);
-        handler.execute("глаголы", user);
-        List<String> result = handler.execute("10", user);
+        contextManager.execute("глаголы", user);
+        List<String> result = contextManager.execute("10", user);
 
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
@@ -147,11 +146,11 @@ public class TestRequestHandler {
 
         context.clear(user.getChatId());
 
-        handler.execute("/test", user);
+        contextManager.execute("/test", user);
         when(db.groupIsExist(any(String.class))).thenReturn(true);
-        handler.execute("глаголы", user);
-        handler.execute("10", user);
-        List<String> result = handler.execute("10", user);
+        contextManager.execute("глаголы", user);
+        contextManager.execute("10", user);
+        List<String> result = contextManager.execute("10", user);
 
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
@@ -173,10 +172,10 @@ public class TestRequestHandler {
         context.clear(user.getChatId());
 
 
-        handler.execute("/translate", user);
+        contextManager.execute("/translate", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
 
-        List<String> result = handler.execute("тест_слово", user);
+        List<String> result = contextManager.execute("тест_слово", user);
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
@@ -197,10 +196,10 @@ public class TestRequestHandler {
         context.clear(user.getChatId());
 
 
-        handler.execute("/get_group", user);
+        contextManager.execute("/get_group", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
 
-        List<String> result = handler.execute("тест_слово", user);
+        List<String> result = contextManager.execute("тест_слово", user);
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
@@ -220,12 +219,12 @@ public class TestRequestHandler {
 
         context.clear(user.getChatId());
 
-        handler.execute("/edit", user);
+        contextManager.execute("/edit", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
 
-        handler.execute("тест_слово", user);
+        contextManager.execute("тест_слово", user);
 
-        List<String> result = handler.execute("неправильный_метод", user);;
+        List<String> result = contextManager.execute("неправильный_метод", user);;
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл параметр неправильно, либо этот параметр не подлежит изменению! Повтори ввод!"
@@ -246,10 +245,10 @@ public class TestRequestHandler {
         context.clear(user.getChatId());
 
 
-        handler.execute("/delete_word", user);
+        contextManager.execute("/delete_word", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
 
-        List<String> result = handler.execute("тест_слово", user);
+        List<String> result = contextManager.execute("тест_слово", user);
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
