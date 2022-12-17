@@ -121,9 +121,15 @@ public class TestCommand implements Command {
                         !COUNT_WORDS.equals("по всем") &&
                         Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)
                 ) ||
-                params.get("message").equals("/stop")) {
+                params.get("message").equals("/stop")
+        )
+        {
             final int countTrueAnswers = Integer.parseInt(params.get("countTrueAnswers"));
 
+            Date date = new Date();
+
+            db.addStat(info.getTag(), date, countTrueAnswers);
+            
             StringBuilder textOfEndTest = new StringBuilder();
             textOfEndTest.append("Тест завершен!\n");
             textOfEndTest.append("Ты ответили правильно на ");

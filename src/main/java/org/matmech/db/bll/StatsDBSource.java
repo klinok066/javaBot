@@ -29,7 +29,7 @@ public class StatsDBSource extends DBSource {
     public void addStat(Stat stat) {
         List<Map<String, String>> params = new ArrayList<Map<String, String>>();
         params.add(createParams("int", stat.getUserId().toString()));
-        params.add(createParams("string", stat.getCompleteDate()));
+        params.add(createParams("date", stat.getCompleteDate()));
         params.add(createParams("int", stat.getResult().toString()));
 
         String addStatSQL = "insert into stats(user_id, complete_date, result) values(?, ?, ?)";
@@ -39,7 +39,7 @@ public class StatsDBSource extends DBSource {
 
     /**
      * Получение статистики для пользователя
-     * @param stat - объект Stat: достаточно заполнить только поле
+     * @param stat - объект Stat: достаточно заполнить только поле userId
      * @return - возвращает всю статистику по пользователю
      */
     public List<Stat> getAllStat(Stat stat) {

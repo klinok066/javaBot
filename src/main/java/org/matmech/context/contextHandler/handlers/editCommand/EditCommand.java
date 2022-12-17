@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.edit;
+package org.matmech.context.contextHandler.handlers.editCommand;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;

@@ -67,8 +67,9 @@ public class DBConnection {
 
         switch (type.toLowerCase()) {
             case "int" -> preparedStatement.setInt(index + 1, Integer.parseInt(value));
-            case "string" -> preparedStatement.setString(index + 1, value);
+            case "string" -> preparedStatement.setString(index + 1, value.toLowerCase());
             case "boolean" -> preparedStatement.setBoolean(index + 1, Boolean.getBoolean(value));
+            case "date" -> preparedStatement.setDate(index + 1, Date.valueOf(value));
             default -> {
                 System.out.println("Неправильный тип данных");
                 throw new IllegalStateException("Unexpected value: " + type);
@@ -124,6 +125,8 @@ public class DBConnection {
      * HashMap состоит из двух полей:
      *  type: тип параметра
      *  value: сам параметр
+     *
+     * Доступные типы: int, string, date, boolean
      */
     public List<Map<String, String>> executeQueryWithParams(String sql, List<Map<String, String>> params) throws SQLException {
         try {
@@ -152,6 +155,8 @@ public class DBConnection {
      * HashMap состоит из двух полей:
      *  type: тип параметра
      *  value: сам параметр
+     *
+     * Доступные типы: int, string, date, boolean
      */
     public void executeUpdateWithParams(String sql, List<Map<String, String>> params) {
         try {

@@ -2,7 +2,7 @@ package org.matmech.context.contextHandler;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.deleteWord.DeleteWordCommand;
-import org.matmech.context.contextHandler.handlers.edit.EditCommand;
+import org.matmech.context.contextHandler.handlers.editCommand.EditCommand;
 import org.matmech.context.contextHandler.handlers.getGroup.GetGroupCommand;
 import org.matmech.context.contextHandler.handlers.helpCommand.HelpCommand;
 import org.matmech.context.contextHandler.handlers.startCommand.StartCommand;

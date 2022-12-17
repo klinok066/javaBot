@@ -1,15 +1,10 @@
 package org.matmech.db;
 
 import java.sql.*;
+import java.util.List;
 
-import org.matmech.db.bll.GroupsDBSource;
-import org.matmech.db.bll.UsersDBSource;
-import org.matmech.db.bll.DictonaryDBSource;
-import org.matmech.db.bll.WordsDBSource;
-import org.matmech.db.models.Group;
-import org.matmech.db.models.User;
-import org.matmech.db.models.Dictionary;
-import org.matmech.db.models.Word;
+import org.matmech.db.bll.*;
+import org.matmech.db.models.*;
 import org.matmech.db.repository.DBConnection;
 
 /**
@@ -22,6 +17,7 @@ public class DBHandler {
     private final GroupsDBSource groupsDBSource;
     private final DictonaryDBSource dictonaryDBSource;
     private final WordsDBSource wordsDBSource;
+    private final StatsDBSource statsDBSource;
 
     public DBHandler(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
         dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
@@ -29,6 +25,7 @@ public class DBHandler {
         groupsDBSource = new GroupsDBSource(dbConnection);
         dictonaryDBSource = new DictonaryDBSource(dbConnection);
         wordsDBSource = new WordsDBSource(dbConnection);
+        statsDBSource = new StatsDBSource(dbConnection);
     }
 
 
@@ -347,8 +344,9 @@ public class DBHandler {
             return wordsDBSource.getRandomWordByGroup(word);
         } catch (SQLException e) {
             System.out.println("Не удалось получить слово!\n" + e.getMessage());
-            throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     public int getCountsWordsOfUser(String tag) {
@@ -368,7 +366,55 @@ public class DBHandler {
 
             return wordsDBSource.getCountWords(word);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
+        return 0;
+    }
+
+    /**
+     * Добавляет статистику для пользователя
+     * @param tag - тег пользователя
+     * @param date - дата тестирования
+     * @param result - результат
+     */
+    public void addStat(String tag, java.util.Date date, int result) {
+        try {
+            User user = new User();
+            user.setTag(tag);
+
+            int userId = usersDBSource.getUserIdByTag(user);
+
+            Stat stat = new Stat();
+            stat.setUserId(userId);
+            stat.setCompleteDate(date);
+            stat.setResult(result);
+
+            statsDBSource.addStat(stat);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Возвращает статистику для конкретного пользователя
+     * @param tag - тег пользователя
+     * @return - список объектов Stat, или null, в случае ошибки
+     */
+    public List<Stat> getStats(String tag) {
+        try {
+            User user = new User();
+            user.setTag(tag);
+
+            int userId = usersDBSource.getUserIdByTag(user);
+
+            Stat stat = new Stat();
+            stat.setUserId(userId);
+
+            return statsDBSource.getAllStat(stat);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
 }
