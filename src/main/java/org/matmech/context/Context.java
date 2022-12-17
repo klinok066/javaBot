@@ -6,6 +6,8 @@ import org.matmech.db.repository.DBConnection;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Этот класс отвечает за контекст всех пользователей, которые пользуются этим приложением.
@@ -16,17 +18,16 @@ import java.util.HashMap;
  *          то стоит null
  */
 public class Context { // написать метод createContext(long chatId), и зарефакторить везде код под то, что он ничего не делает, если контекста нет для чата
-    private final ArrayList<HashMap<String, String>> cache;
-    private final Word words = new Word();
-    DBConnection dbConnection;
+    private final List<Map<String, String>> cache;
+
     /**
      * Ищет кеш пользователя по chatId
      * @param chatId - идентификатор чата с пользователем
      * @return - возвращает коллекцию HashMap, где ключ и значение - строки, с кешем пользователя или null,
      *           если кеш не найден
      */
-    private HashMap<String, String> searchItem(long chatId) {
-        for (HashMap<String, String> item : cache)
+    private Map<String, String> searchItem(long chatId) {
+        for (Map<String, String> item : cache)
             if (Long.parseLong(item.get("chatId")) == chatId)
                 return item;
 
@@ -34,7 +35,7 @@ public class Context { // написать метод createContext(long chatId)
     }
 
     public Context() {
-        cache = new ArrayList<HashMap<String, String>>();
+        cache = new ArrayList<Map<String, String>>();
     }
 
     /**
@@ -45,7 +46,7 @@ public class Context { // написать метод createContext(long chatId)
      * @param itemValue - значение параметра, который мы хотим добавить в кеш
      */
     public boolean addParams(long chatId, String processName, String itemName, String itemValue) {
-        HashMap<String, String> item = searchItem(chatId);
+        Map<String, String> item = searchItem(chatId);
 
         if (item == null) {
             item = new HashMap<String, String>();
@@ -73,7 +74,7 @@ public class Context { // написать метод createContext(long chatId)
      * @param chatId - идентификатор чата с пользователем
      * @return - возвращает HashMap со всеми параметрами пользователя в кеше
      */
-    public HashMap<String, String> getParams(long chatId) {
+    public Map<String, String> getParams(long chatId) {
         return searchItem(chatId);
     }
 
@@ -83,7 +84,7 @@ public class Context { // написать метод createContext(long chatId)
      * @return - возвращает <i>true</i> - если занят, и <i>false</i> - если свободен
      */
     public boolean isBusy(long chatId) {
-        HashMap<String, String> item = searchItem(chatId);
+        Map<String, String> item = searchItem(chatId);
 
         if (item == null)
             return false;
@@ -97,7 +98,7 @@ public class Context { // написать метод createContext(long chatId)
      * @param chatId - идентификатор чата с пользователем
      */
     public void clear(long chatId) {
-        HashMap<String, String> item = searchItem(chatId);
+        Map<String, String> item = searchItem(chatId);
 
         if (item != null) {
             String chatIdValue = item.get("chatId");
@@ -116,7 +117,7 @@ public class Context { // написать метод createContext(long chatId)
      * @param processName - имя процесса, которое хотите присвоить
      */
     public void setProcessName(long chatId, String processName) {
-        HashMap<String, String> item = searchItem(chatId);
+        Map<String, String> item = searchItem(chatId);
 
         if (item == null) {
             item = new HashMap<String, String>();
