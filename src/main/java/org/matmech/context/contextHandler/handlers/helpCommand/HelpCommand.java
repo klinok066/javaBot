@@ -28,6 +28,10 @@ public class HelpCommand implements Command {
      */
     @Override
     public List<String> handle(Context context, UserData info) {
-        return List.of(helpText);
+        try {
+            return List.of(helpText);
+        } finally {
+            context.clear(info.getChatId());
+        }
     }
 }

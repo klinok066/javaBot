@@ -190,25 +190,6 @@ public class Params {
     }
 
     /**
-     * Присваивает параметры какому-то контексту
-     * @param chatId - идентификатор чата с пользователем
-     * @param message - сообщение, которое отправил пользователь
-     * @param context - контекст со всеми пользователями
-     */
-    private void setParams(final Context context, long chatId, String message) {
-        final String PROCESS_NAME = context.getParams(chatId).get("processName");
-
-        switch (PROCESS_NAME) {
-            case "testing" -> setTestParams(context, chatId, message);
-            case "translating" -> setTranslateParams(context, chatId, message);
-            case "getGroup" -> setGetGroupParams(context, chatId, message);
-            case "wordAdd" -> setWordAddParams(context, chatId, message);
-            case "edit" -> setEditParams(context, chatId, message);
-            case "deleteWord" -> setDeleteWordParams(context, chatId, message);
-        }
-    }
-
-    /**
      * Присваивает параметры для контекста команды /word_add
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
@@ -382,8 +363,7 @@ public class Params {
     }
 
     /**
-     * Обработчик параметров. Перед тем, как написать функцию для обработки какого-то контекста, нужно:
-     * 1. В методе setParams написать новый кейс и соответствующий метод
+     * Обработчик параметров
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
      * @return - возвращает сообщение-валидации или null, если заполнение параметров прошло успешно
@@ -393,16 +373,43 @@ public class Params {
 
         context.addParams(chatId, PROCESS_NAME, "message", message);
 
-        if (context.getParams(chatId).get("settingParams") != null)
-            setParams(context, chatId, message);
-
         return switch (PROCESS_NAME) {
-            case "testing" -> testParamsValidation(context, chatId);
-            case "translating" -> translateValidation(context, chatId);
-            case "getGroup" -> getGroupValidation(context, chatId);
-            case "wordAdd" -> wordAddValidation(context, chatId);
-            case "edit" -> editValidation(context, chatId);
-            case "deleteWord" -> deleteWordValidation(context, chatId);
+            case "testing" -> {
+                if (context.getParams(chatId).get("settingParams") != null)
+                    setTestParams(context, chatId, message);
+
+                yield testParamsValidation(context, chatId);
+            }
+            case "translating" -> {
+                if (context.getParams(chatId).get("settingParams") != null)
+                    setTranslateParams(context, chatId, message);
+
+                yield translateValidation(context, chatId);
+            }
+            case "getGroup" -> {
+                if (context.getParams(chatId).get("settingParams") != null)
+                    setGetGroupParams(context, chatId, message);
+
+                yield getGroupValidation(context, chatId);
+            }
+            case "wordAdd" -> {
+                if (context.getParams(chatId).get("settingParams") != null)
+                    setWordAddParams(context, chatId, message);
+
+                yield wordAddValidation(context, chatId);
+            }
+            case "edit" -> {
+                if (context.getParams(chatId).get("settingParams") != null)
+                    setEditParams(context, chatId, message);
+
+                yield editValidation(context, chatId);
+            }
+            case "deleteWord" -> {
+                if (context.getParams(chatId).get("settingParams") != null)
+                    setDeleteWordParams(context, chatId, message);
+
+                yield deleteWordValidation(context, chatId);
+            }
             default -> null;
         };
     }

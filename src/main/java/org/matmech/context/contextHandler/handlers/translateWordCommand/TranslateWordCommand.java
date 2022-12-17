@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.translateWord;
+package org.matmech.context.contextHandler.handlers.translateWordCommand;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
