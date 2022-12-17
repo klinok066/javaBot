@@ -1,9 +1,5 @@
 package org.matmech.context;
 
-import org.matmech.db.bll.WordsDBSource;
-import org.matmech.db.models.Word;
-import org.matmech.db.repository.DBConnection;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
