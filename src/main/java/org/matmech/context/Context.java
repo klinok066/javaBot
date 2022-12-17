@@ -17,7 +17,10 @@ import java.util.Map;
  *      <i>processName</i> - имя процесса, который в данный момент использует контекст. Если никто не использует,
  *          то стоит null
  */
-public class Context { // написать метод createContext(long chatId), и зарефакторить везде код под то, что он ничего не делает, если контекста нет для чата
+public class Context {
+
+    //TODO: написать метод createContext(long chatId), и зарефакторить везде код под то, что он ничего не делает, если контекста нет для чата
+
     private final List<Map<String, String>> cache;
 
     /**
@@ -45,7 +48,7 @@ public class Context { // написать метод createContext(long chatId)
      * @param itemName - имя параметра, который мы хотим добавить в кеш
      * @param itemValue - значение параметра, который мы хотим добавить в кеш
      */
-    public boolean addParams(long chatId, String processName, String itemName, String itemValue) {
+    public boolean addParam(long chatId, String processName, String itemName, String itemValue) {
         Map<String, String> item = searchItem(chatId);
 
         if (item == null) {
