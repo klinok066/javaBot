@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.wordAdd;
+package org.matmech.context.contextHandler.handlers.wordAddCommand;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;

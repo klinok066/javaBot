@@ -190,25 +190,6 @@ public class Params {
     }
 
     /**
-     * Присваивает параметры какому-то контексту
-     * @param chatId - идентификатор чата с пользователем
-     * @param message - сообщение, которое отправил пользователь
-     * @param context - контекст со всеми пользователями
-     */
-    private void setParams(final Context context, long chatId, String message) {
-        final String PROCESS_NAME = context.getParams(chatId).get("processName");
-
-        switch (PROCESS_NAME) {
-            case "testing" -> setTestParams(context, chatId, message);
-            case "translating" -> setTranslateParams(context, chatId, message);
-            case "getGroup" -> setGetGroupParams(context, chatId, message);
-            case "wordAdd" -> setWordAddParams(context, chatId, message);
-            case "edit" -> setEditParams(context, chatId, message);
-            case "deleteWord" -> setDeleteWordParams(context, chatId, message);
-        }
-    }
-
-    /**
      * Присваивает параметры для контекста команды /word_add
      * @param chatId - идентификатор чата с пользователем
      * @param message - сообщение, которое отправил пользователь
@@ -393,8 +374,16 @@ public class Params {
 
         context.addParams(chatId, PROCESS_NAME, "message", message);
 
-        if (context.getParams(chatId).get("settingParams") != null)
-            setParams(context, chatId, message);
+        if (context.getParams(chatId).get("settingParams") != null) {
+            switch (PROCESS_NAME) {
+                case "testing" -> setTestParams(context, chatId, message);
+                case "translating" -> setTranslateParams(context, chatId, message);
+                case "getGroup" -> setGetGroupParams(context, chatId, message);
+                case "wordAdd" -> setWordAddParams(context, chatId, message);
+                case "edit" -> setEditParams(context, chatId, message);
+                case "deleteWord" -> setDeleteWordParams(context, chatId, message);
+            }
+        }
 
         return switch (PROCESS_NAME) {
             case "testing" -> testParamsValidation(context, chatId);
