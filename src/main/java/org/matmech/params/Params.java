@@ -3,8 +3,6 @@ package org.matmech.params;
 import org.matmech.context.Context;
 import org.matmech.db.DBHandler;
 import org.matmech.params.testingValidation.TestingValidation;
-
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,7 +20,7 @@ public class Params {
      * @return - возвращает текст ошибки для пользователя или null при успехе
      */
     private String testParamsValidation(final Context context, long chatId) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String PROCESS_NAME = params.get("processName");
 
@@ -38,7 +36,7 @@ public class Params {
         String countWordsValidation = testingValidation.validationCountWords(params);
         String modeValidation = testingValidation.validationMode(params);
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", "true"); // обязательная строка,
+        context.addParam(chatId, PROCESS_NAME, "settingParams", "true"); // обязательная строка,
         // которая определяет контекст присваивания параметров
 
         // Валидация группы слова
@@ -70,7 +68,7 @@ public class Params {
 
         params.putIfAbsent("currentQuestion", "0");
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", null); // обязательная строка,
+        context.addParam(chatId, PROCESS_NAME, "settingParams", null); // обязательная строка,
         // которая говорит нам, что параметры перестали обрабатываться
 
         return null;
@@ -82,7 +80,7 @@ public class Params {
      * @param message - сообщение, которое отправил пользователь
      */
     private void setTestParams(final Context context, long chatId, String message) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String GROUP = params.get("group");
         final String COUNT_WORDS = params.get("countWords");
@@ -90,17 +88,17 @@ public class Params {
         final String PROCESS_NAME = params.get("processName");
 
         if (GROUP == null) {
-            context.addParams(chatId, PROCESS_NAME, "group", message);
+            context.addParam(chatId, PROCESS_NAME, "group", message);
             return;
         }
 
         if (COUNT_WORDS == null) {
-            context.addParams(chatId, PROCESS_NAME, "countWords", message);
+            context.addParam(chatId, PROCESS_NAME, "countWords", message);
             return;
         }
 
         if (MODE == null)
-            context.addParams(chatId, PROCESS_NAME, "mode", message);
+            context.addParam(chatId, PROCESS_NAME, "mode", message);
     }
 
     /**
@@ -109,13 +107,13 @@ public class Params {
      * @param message - сообщение, которое отправил пользователь
      */
     private void setTranslateParams(final Context context, long chatId, String message) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String WORD = params.get("word");
         final String PROCESS_NAME = params.get("processName");
 
         if (WORD == null)
-            context.addParams(chatId, PROCESS_NAME, "word", message);
+            context.addParam(chatId, PROCESS_NAME, "word", message);
     }
 
     /**
@@ -124,13 +122,13 @@ public class Params {
      * @param message - сообщение, которое отправил пользователь
      */
     private void setGetGroupParams(final Context context, long chatId, String message) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String WORD = params.get("word");
         final String PROCESS_NAME = params.get("processName");
 
         if (WORD == null)
-            context.addParams(chatId, PROCESS_NAME, "word", message);
+            context.addParam(chatId, PROCESS_NAME, "word", message);
     }
 
     /**
@@ -145,7 +143,7 @@ public class Params {
         final String PROCESS_NAME = params.get("processName");
         final String WORD = params.get("word");
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+        context.addParam(chatId, PROCESS_NAME, "settingParams", "true");
 
         if (WORD == null)
             return "Введи слово, которое хочешь перевести:";
@@ -156,7 +154,7 @@ public class Params {
             return "Ой, кажется ты ввёл слово неправильно! Повтори ввод!";
         }
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+        context.addParam(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }
@@ -168,12 +166,12 @@ public class Params {
      * @return - возвращает текст ошибки для пользователя или null при успехе
      */
     private String getGroupValidation(final Context context, long chatId){
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String PROCESS_NAME = params.get("processName");
         final String WORD = params.get("word");
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+        context.addParam(chatId, PROCESS_NAME, "settingParams", "true");
 
         if (WORD == null)
             return "Введи слово, у которого хочешь получить группу:";
@@ -184,7 +182,7 @@ public class Params {
             return "Ой, кажется ты ввёл слово неправильно! Повтори ввод!";
         }
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+        context.addParam(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }
@@ -195,7 +193,7 @@ public class Params {
      * @param message - сообщение, которое отправил пользователь
      */
     private void setWordAddParams(Context context, long chatId, String message) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String WORD = params.get("word");
         final String TRANSLATE = params.get("translate");
@@ -203,17 +201,17 @@ public class Params {
         final String PROCESS_NAME = params.get("processName");
 
         if (WORD == null){
-            context.addParams(chatId, PROCESS_NAME, "word", message);
+            context.addParam(chatId, PROCESS_NAME, "word", message);
             return;
         }
 
         if (GROUP == null){
-            context.addParams(chatId, PROCESS_NAME, "group", message);
+            context.addParam(chatId, PROCESS_NAME, "group", message);
             return;
         }
 
         if (TRANSLATE == null)
-            context.addParams(chatId, PROCESS_NAME, "translate", message);
+            context.addParam(chatId, PROCESS_NAME, "translate", message);
     }
 
     /**
@@ -230,7 +228,7 @@ public class Params {
         final String GROUP = params.get("group");
         final String TRANSLATE = params.get("translate");
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+        context.addParam(chatId, PROCESS_NAME, "settingParams", "true");
 
         if (WORD == null)
             return "Введи слово, которое хочешь добавить:";
@@ -241,7 +239,7 @@ public class Params {
         if (TRANSLATE == null)
             return "Введи перевод слова, которое хочешь добавить:";
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+        context.addParam(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }
@@ -252,7 +250,7 @@ public class Params {
      * @param message - сообщение, которое отправил пользователь
      */
     private void setEditParams(Context context, long chatId, String message) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String WORD = params.get("word");
         final String WORD_PARAM = params.get("wordParam");
@@ -260,17 +258,17 @@ public class Params {
         final String PROCESS_NAME = params.get("processName");
 
         if (WORD == null){
-            context.addParams(chatId, PROCESS_NAME, "word", message);
+            context.addParam(chatId, PROCESS_NAME, "word", message);
             return;
         }
 
         if (WORD_PARAM == null){
-            context.addParams(chatId, PROCESS_NAME, "wordParam", message);
+            context.addParam(chatId, PROCESS_NAME, "wordParam", message);
             return;
         }
 
         if (PARAM_VALUE == null)
-            context.addParams(chatId, PROCESS_NAME, "paramValue", message);
+            context.addParam(chatId, PROCESS_NAME, "paramValue", message);
     }
 
     /**
@@ -280,14 +278,14 @@ public class Params {
      * @return - возвращает текст ошибки для пользователя или null при успехе
      */
     private String editValidation(Context context, long chatId) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String PROCESS_NAME = params.get("processName");
         final String WORD = params.get("word");
         final String WORD_PARAM = params.get("wordParam");
         final String PARAM_VALUE = params.get("paramValue");
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+        context.addParam(chatId, PROCESS_NAME, "settingParams", "true");
 
         if (WORD == null)
             return "Введи слово, которое хочешь изменить:";
@@ -307,7 +305,7 @@ public class Params {
         if (PARAM_VALUE == null)
             return "Введи значение данного параметра:";
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+        context.addParam(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }
@@ -319,13 +317,12 @@ public class Params {
      * @return - возвращает текст ошибки для пользователя или null при успехе
      */
     private String deleteWordValidation(Context context, long chatId) {
-
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String PROCESS_NAME = params.get("processName");
         final String WORD = params.get("word");
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", "true");
+        context.addParam(chatId, PROCESS_NAME, "settingParams", "true");
 
         if (WORD == null)
             return "Введи слово, которое ты хочешь удалить:";
@@ -336,7 +333,7 @@ public class Params {
             return "Ой, кажется ты ввёл слово неправильно! Повтори ввод!";
         }
 
-        context.addParams(chatId, PROCESS_NAME, "settingParams", null);
+        context.addParam(chatId, PROCESS_NAME, "settingParams", null);
 
         return null;
     }
@@ -347,13 +344,13 @@ public class Params {
      * @param message - сообщение, которое отправил пользователь
      */
     private void setDeleteWordParams(Context context, long chatId, String message) {
-        HashMap<String, String> params = context.getParams(chatId);
+        Map<String, String> params = context.getParams(chatId);
 
         final String WORD = params.get("word");
         final String PROCESS_NAME = params.get("processName");
 
         if (WORD == null)
-            context.addParams(chatId, PROCESS_NAME, "word", message);
+            context.addParam(chatId, PROCESS_NAME, "word", message);
     }
 
     public Params(DBHandler db) {
@@ -371,7 +368,7 @@ public class Params {
     public String handler(final Context context, long chatId, String message) {
         final String PROCESS_NAME = context.getParams(chatId).get("processName");
 
-        context.addParams(chatId, PROCESS_NAME, "message", message);
+        context.addParam(chatId, PROCESS_NAME, "message", message);
 
         return switch (PROCESS_NAME) {
             case "testing" -> {

@@ -3,6 +3,7 @@ package org.matmech.params.testingValidation;
 import org.matmech.db.DBHandler;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -33,7 +34,7 @@ public class TestingValidation {
      * @param db - база данных (DBHandler)
      * @return - возвращает сообщение пользователю об ошибке или null, если все верно
      */
-    public String validationGroup(final HashMap<String, String> params, final DBHandler db) {
+    public String validationGroup(final Map<String, String> params, final DBHandler db) {
         if (groups == null)
             return "Пожалуйста, введите группу слов, по которым вы хотите произвести тестирование\n" +
                     "Если хотите провести тестирование по всем группу, то напишите `Все`";
@@ -53,7 +54,7 @@ public class TestingValidation {
      * @param params - все параметры контекста "тестирования"
      * @return - возвращает сообщение пользователю об ошибке или null, если все верно
      */
-    public String validationCountWords(final HashMap<String, String> params) {
+    public String validationCountWords(final Map<String, String> params) {
         if (countWords == null)
             return "Пожалуйста, введите количество слов в тесте\n" +
                     "Если хотите провести тестирование по всем группу, то напишите `По всем`\n" +
@@ -78,7 +79,7 @@ public class TestingValidation {
      * @param params - все параметры контекста "тестирования"
      * @return - возвращает сообщение пользователю об ошибке или null, если все верно
      */
-    public String validationMode(final HashMap<String, String> params) {
+    public String validationMode(final Map<String, String> params) {
         if (mode == null)
             return "Введите режим тестирование: `Easy` - легкий, `Difficult` - сложный\n" +
                     "Если хотите стандартный режим (Easy), то введите `Стандартный`";
