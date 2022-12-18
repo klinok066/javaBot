@@ -1,107 +1,84 @@
-# Bot for learning English words (flash cards with English words)
+# Бот для изучения английских слов
 
-**Task:** создать Restful API  для бота и навыка Алисы по изучению английского
+**Задача 1**
 
-**API functionality:**
+Сделать для бота новую команду `/word_add` с тремя параметрами: `<слово> <перевод> <группа>`.  Параметр слово получает слово на английском, которое надо добавить, параметр обязательный. Параметры перевод получает слово перевод на русском, параметр обязательный. Параметр группа определяет группу для слова, обязательный параметр
 
-1. Add new words to the database (English only)
-2. Ability to practice learned words (all at once or in groups)
-3. Word repetition reminder
+Также сделать команду `/translate <слово>` - показать перевод слова из базы данных
 
-## Adding new words
+Написать реализацию команды `/remove <слово>`, которая удаляет команду из словаря. Если слово было в словаре, то возвращает сообщение слово было удалено из словаря, а если нет, то возвращает слово не было удалено из словаря, так как его там не было
 
-To add a word:
+Сделать команду `/edit <слово> <какой параметр поменять> <значение>` - меняет значение у параметра слова из базы данных. Поменять можно только группу и перевод. Название параметра нужно указывать на английском языке, соответственно, перевод -  translation, группа - group. Значение параметра должно соответствовать всем требованиям, которые были приведены выше. Если слова нет в словаре, то вернет редактирование не удалось выполнить, так как слова нет в словаре - прежде чем поменять что-то в нем, добавьте его в словарь, а если редактирование выполнилось успешно, то возвращает вы успешно изменили <название параметра>
 
-1. Specify a specific group to which it will be added (required parameter)
-2. Set word translation (required parameter): you can specify the translation of the word yourself or use automatic translation
-3. Word to be added
+Сделать команду `/get_group <слово`> - которое возвращает группу слова
 
-## Practicing learned words
+Примеры:
+`/word_add start начать глаголы` - добавляет слово в базу данных
+`/translate start` -  возвращает начать
+`/translate начать` - возвращает start
+`/edit start translation старт` - изменяет значения слова и возвращает вы изменили перевод слова
+`/remove start` - возвращает сообщение слово было удалено из вашего словаря
+`/get_group start` - вернет Ошибку! Слова нет в словаре!
 
-Training should be: for all learned, for some part, for the entire group of words or for part of the learned words
+В чем интерес:
+1. Научимся работать с базой данных PostreSQL
 
-### For all learned words
+**3 задача**
 
-`/test_all <mode>` - start testing for all words from the database
+Нужно сделать:
+    1. Сделать рефакторинг архитектуры RequestHandler, чтобы он запрашивал значения параметров постепенно
+    2. Переписать под новый код старые команды: `/word_add`, `/translate`, `/edit`, `/remove` и `/get_group`
+    3. Подключить бота к платформе VK
+    4. Сделать тестирование
 
-There is a **hard** and **easy** mode
+Команды для тестов:
+`/test Параметры: <группа>, <количество слов>, <режим>` - тест по словам из базы данных. Параметры группа, количество слов - не обязательны. После ввода команды /test, бот сам запрашивает эти данные
+Если значение параметра группа будет слово Все, то тестирование будет по всем группам
+Если значение параметра количество слов будет слово По всем, то тестирование будет длиться бесконечно, пока не встретится команда /stop
+Если значение параметра количество слов будет слово Стандартное, то тест будет по 10 словам
+Тест запускается в easy или difficult режиме. Режим бот сам запрашивает у пользователя. Если пользователь ввел вместо easy, difficult - Стандартный, то режим будет установлен по-умолчанию. По-умолчанию установлен easy режим
 
-**Hard mode** - you need to write the bot itself the translation of the word
+Примеры:
+`/test`
 
-**Easy mode** - you need to choose 1 of 4 translations
+==> Введите группу, по которой хотите произвести тестирование. Если хотите тестирование по всем словам, то напишите Все:
+==> Глаголы
+==> Введите количество слов. Если произвести тестирование по всем словам, то напишите По всем. Если хотите стандартное количество слов, то 
+        напишите Стандартное
+==> 1
+==> Введите сложность теста (easy или difficult). Если хотите стандартную сложность, то напишите Стандартный:
+==> Easy
 
-**The default is light mode**, i.e. if you do not specify which mode, the server will automatically select light
+может вывести:
+Укажите перевод слова start:
+ 1. Начать
+ 2. Закончить
+ 3. Делать
+ 4. Работать
 
-The learned words are checked until the user writes `/stop_test`.
+**4 задача**
 
-### For some part of the words
+Сделать сбор статистики по тестированию. Статистику можно получить на текущий момент за: день, неделю, месяц, год
+        Статистика дня начинается с 00:00 текущего числа
+        Статистика недели начинается с 00:00 текущего понедельника
+        Статистика месяца начинается с 00:00 1 дня текущего месяца
+        Статистика года начинается с 00:00 1 января текущего года
+        Получить статистику можно по команде: `/statistic`. При вводе этой команды появляется сообщение: Для получения статистики выберите какую именно хотите получить статистику. И там 4 кнопки с надписями: За день, За неделю, За месяц, За год
 
-`/test <number of words> <mode>` - start testing on some part of the words from the entire database
+       Также должна быть рассылка статистики по окончании дня, недели, месяца, года.
 
-The user in this mode writes the number of words to check, the default value is 10
+       Статистика должна содержать в себе сначала: рейтинг пользователя в тестах, а затем первые 5 людей из рейтинга, а в конце небольшая мотивашка
 
-Mode selection is the same as in the previous section
+Пример
 
-### For all words from the group
-
-`/test_in_group_all <group> <mode>` - start testing for all words from the group
-
-Here is the same mode selection as in the first section.
-
-To stop testing, you need to write the command `/stop_test`
-
-### According to some words from the group
-
-`/test_in_group <group> <amount> <mode>` - start testing on a certain number of words from the group
-
-The mode selection is the same as the first section
-
-## Word repetition reminder
-
-Once a day, a notification should have been made in the bot, which sounds like this: *Oh, what time is it right now? That's right, it's time to learn English!*
-
-## List of commands:
-
-`/start` - start the bot
-
-`/group_list` - list of all groups
-
-`/group_create <name>` - create a group
-
-`/word_list` - list of all paginated words
-
-`/word_add <word> <translation> <group>` - adding a word. You can specify the translation yourself, but if you write `_translate`, then the translation will be automatic through the Yandex API, the group parameter is optional, all the rest are required
-
-`/word_to <word> <group>` - redefining the group of an existing word
-
-`/test_all <mode>` - start testing for all words from the database
-
-`/test <number of words> <mode>` - start testing on some part of the words from the entire database
-
-`/test_in_group_all <group> <mode>` - start testing for all words from the group
-
-`/test_in_group <group> <amount> <mode>` - start testing on a certain number of words from the group
-
-`/stop_test` - end testing (for `/test_all` and for `test_in_group_all`)
-
-## Architecture:
-
-    -----------------------  --------------------------
-    | Alice command block |  | Telegram command block |
-    -----------------------  --------------------------
-                     ↑↓          ↑↓
-        -------------------------------------------
-        |            Request handler              |
-        -------------------------------------------
-                            ↑↓
-                    -------------------
-                    |       API       |
-                    -------------------
-                            ↑↓   
-                    -------------------
-                    |     Database    |
-                    -------------------
-                    
-## Steps:
-
-### Step 1
+- `/statistic`
+- Для получения статистики выберите какую именно хотите получить статистику. Кнопки *За день*, *За неделю*, *За год*
+- Выбирает за день
+- Статистика за день:
+   Вы находитесь 187 в рейтинге всех пользователей: ответили правильно на 57 из 80 вопросов за 160
+   1 место <Имя> <Фамилия> ответил на 100 из 100 вопросов за 321 секунду
+   2 место <Имя> <Фамилия> ответил на 160 из 160 вопросов за 400 секунд
+   3 место <Имя> <Фамилия> ответил на 79 из 80 вопросов за 259 секунд
+   4 место <Имя> <Фамилия> ответил на 88 из 90 вопросов за 281 секунду
+   5 место <Имя> <Фамилия> ответил на 59 из 62 вопроса за 223 секунды
+   Вы почти догнали 186 пользователя в рейтинге! Вам не хватило всего ответа на 1 вопрос!
