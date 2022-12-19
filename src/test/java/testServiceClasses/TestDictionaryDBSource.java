@@ -26,10 +26,7 @@ public class TestDictionaryDBSource {
      */
     @Test
     public void testCreateDictonary() {
-        Dictionary dictionary = new Dictionary();
-        dictionary.setUserId(12);
-
-        Assert.assertTrue(dictonaryDBSource.createDictonary(dictionary));
+        Assert.assertTrue(dictonaryDBSource.createDictonary(12));
     }
 
     /**
@@ -37,10 +34,7 @@ public class TestDictionaryDBSource {
      */
     @Test
     public void testNotCreateDictonary() {
-        Dictionary dictionary = new Dictionary();
-        dictionary.setUserId(-1);
-
-        Assert.assertFalse(dictonaryDBSource.createDictonary(dictionary));
+        Assert.assertFalse(dictonaryDBSource.createDictonary(-1));
     }
 
     /**
@@ -55,12 +49,9 @@ public class TestDictionaryDBSource {
 
         response.add(dictonaryResponse);
 
-        Dictionary dictionary = new Dictionary();
-        dictionary.setUserId(10);
-
         when(dbConnection.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
 
-        Assert.assertEquals(10, dictonaryDBSource.getDictonaryId(dictionary));
+        Assert.assertEquals(10, dictonaryDBSource.getDictonaryId(10));
     }
 
     /**
@@ -70,11 +61,8 @@ public class TestDictionaryDBSource {
     public void testNotGetDictonaryId() throws SQLException {
         List<Map<String, String>> response = new ArrayList<Map<String, String>>();
 
-        Dictionary dictionary = new Dictionary();
-        dictionary.setUserId(10);
-
         when(dbConnection.executeQueryWithParams(any(String.class), any(ArrayList.class))).thenReturn(response);
 
-        Assert.assertEquals(-1, dictonaryDBSource.getDictonaryId(dictionary));
+        Assert.assertEquals(-1, dictonaryDBSource.getDictonaryId(10));
     }
 }
