@@ -220,14 +220,37 @@ public class TestRequestHandler {
         context.clear(user.getChatId());
 
         contextManager.execute("/edit", user);
-        when(db.IsWordExist(any(String.class))).thenReturn(false);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
 
         contextManager.execute("тест_слово", user);
 
-        List<String> result = contextManager.execute("неправильный_метод", user);;
+        List<String> result = contextManager.execute("неправильный_метод", user);
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл параметр неправильно, либо этот параметр не подлежит изменению! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+
+    @Test
+    public void rightTestExecuteForEditValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+        contextManager.execute("/edit", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
+
+        contextManager.execute("тест_слово", user);
+        contextManager.execute("translation", user);
+
+        when(db.edit(any(),any(),any())).thenReturn("Вы успешно изменили translation");
+        List<String> result = contextManager.execute("test", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Вы успешно изменили translation"
         );
 
         for (int i = 0; i < result.size(); i++)
@@ -252,6 +275,26 @@ public class TestRequestHandler {
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+    @Test
+    public void rightTestExecuteForDeleteWordValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        contextManager.execute("/delete_word", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
+        when(db.deleteWord(any())).thenReturn("Слово было удалено из базы данных!");
+
+        List<String> result = contextManager.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Слово было удалено из базы данных!"
         );
 
         for (int i = 0; i < result.size(); i++)
