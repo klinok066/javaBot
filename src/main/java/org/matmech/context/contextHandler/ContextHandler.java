@@ -13,6 +13,7 @@ import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 import org.matmech.context.contextHandler.handlers.testCommand.TestCommand;
 import java.util.List;
+import java.util.Map;
 
 /**
  * В этом классе исполняется команды после получения и валидации всех параметров
@@ -47,15 +48,16 @@ public class ContextHandler {
      * @return - возвращает соответствующее сообщение для пользователя
      */
     public List<String> handle(Context context, UserData info, String message) {
+        Map<String,String> params = context.getParams(info.getChatId());
         return switch (context.getParams(info.getChatId()).get("processName")) {
-            case "testing" -> TEST_COMMAND.handle(context, info);
-            case "starting" -> TO_START_COMMAND.handle(context, info);
-            case "translating" -> TRANSLATE_WORD_COMMAND.handle(context, info);
-            case "getGroup" -> GET_GROUP_COMMAND.handle(context, info);
-            case "wordAdd" -> WORD_ADD_COMMAND.handle(context, info);
-            case "edit" -> EDIT_COMMAND.handle(context, info);
-            case "deleteWord" -> DELETE_WORD_COMMAND.handle(context, info);
-            case "helping" -> HELP_COMMAND.handle(context, info);
+            case "testing" -> TEST_COMMAND.handle(context, info, params);
+            case "starting" -> TO_START_COMMAND.handle(context, info, params);
+            case "translating" -> TRANSLATE_WORD_COMMAND.handle(context, info, params);
+            case "getGroup" -> GET_GROUP_COMMAND.handle(context, info, params);
+            case "wordAdd" -> WORD_ADD_COMMAND.handle(context, info, params);
+            case "edit" -> EDIT_COMMAND.handle(context, info, params);
+            case "deleteWord" -> DELETE_WORD_COMMAND.handle(context, info, params);
+            case "helping" -> HELP_COMMAND.handle(context, info, params);
             case null -> USUALLY_MESSAGE.handle(info, message);
             default -> throw new IllegalStateException("Unexpected value: " + context.getParams(info.getChatId()).get("processName"));
         };
