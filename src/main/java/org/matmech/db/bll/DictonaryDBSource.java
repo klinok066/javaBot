@@ -24,15 +24,15 @@ public class DictonaryDBSource extends DBSource {
 
     /***
      * <p>Метод, который создает словарь какому-то пользователю</p>
-     * @param dictionary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
+     * @param userId - идентификатор пользователя
      * @return - возвращает <i>true</i> в случае успеха или <i>false</i> в случае неудачи
      */
-    public boolean createDictonary(Dictionary dictionary) {
-        if (dictionary.getUserId() == -1)
+    public boolean createDictonary(int userId) {
+        if (userId == -1)
             return false;
 
         List<Map<String, String>> params = new ArrayList<Map<String, String>>();
-        params.add(createParams("int", Integer.toString(dictionary.getUserId())));
+        params.add(createParams("int", Integer.toString(userId)));
 
         String createDictionarySQL = "insert into dictonary(user_id) values(?)";
         dbConnection.executeUpdateWithParams(createDictionarySQL, params);
@@ -42,13 +42,13 @@ public class DictonaryDBSource extends DBSource {
 
     /***
      * <p>Возвращает значение <i>dictonaryId</i> для какого-то конкретного пользователя</p>
-     * @param dictionary - объект с информацией о словаре. Обязательные поля: <i>userId</i>
+     * @param userId - идентификатор пользователя
      * @return - возвращает либо <i>dictonaryId</i>, либо -1 в случае если словаря не существует
      */
-    public int getDictonaryId(Dictionary dictionary) throws SQLException {
+    public int getDictonaryId(int userId) throws SQLException {
         try {
             List<Map<String, String>> params = new ArrayList<Map<String, String>>();
-            params.add(createParams("int", Integer.toString(dictionary.getUserId())));
+            params.add(createParams("int", Integer.toString(userId)));
 
             String getDictonaryIdSQL = "select id from dictonary where user_id=?";
             List<Map<String, String>> response = dbConnection.executeQueryWithParams(getDictonaryIdSQL, params);
