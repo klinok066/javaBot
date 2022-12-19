@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.edit;
+package org.matmech.context.contextHandler.handlers.editCommand;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
@@ -13,7 +13,8 @@ import java.util.Map;
  */
 public class EditCommand implements Command {
     private DBHandler db;
-    public EditCommand(DBHandler db){
+
+    public EditCommand(DBHandler db) {
         this.db = db;
     }
 

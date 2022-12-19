@@ -14,10 +14,10 @@ import java.util.Map;
 public class TranslateWordCommand implements Command {
     private DBHandler db;
 
-    public TranslateWordCommand(DBHandler db){
+    public TranslateWordCommand(DBHandler db) {
         this.db = db;
 
-    };
+    }
 
     /**
      * Главный метод, который запускает обработку команды

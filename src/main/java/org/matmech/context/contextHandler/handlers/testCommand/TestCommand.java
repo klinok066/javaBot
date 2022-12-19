@@ -16,7 +16,8 @@ public class TestCommand implements Command {
 
     /**
      * Формирует готовый вопрос для теста
-     * @param tag - тег пользователя
+     *
+     * @param tag   - тег пользователя
      * @param group - группа, по которому производится тестирование
      * @return - возвращает Map с готовым вопросом и словом, которое загадали в вопросе
      */
@@ -43,9 +44,10 @@ public class TestCommand implements Command {
 
     /**
      * Формулирует ответы на вопрос
-     * @param tag - тег пользователя
+     *
+     * @param tag   - тег пользователя
      * @param group - группа слов
-     * @param mode - режим тестирования
+     * @param mode  - режим тестирования
      * @return - готовый текст, содержащий ответы на вопрос
      */
     private String getAnswers(String tag, String group, String mode, String trueWord) {
@@ -59,14 +61,14 @@ public class TestCommand implements Command {
         words.add(word);
 
         for (int i = 0; i < 2; i++) {
-            while(words.contains(word) || word.equals(trueWord))
+            while (words.contains(word) || word.equals(trueWord))
                 word = db.getRandomWord(tag, group);
 
             words.add(word);
         }
 
         StringBuilder answers = new StringBuilder();
-        int trueAnswerIndex = (int)(Math.random() * COUNT_ANSWERS);
+        int trueAnswerIndex = (int) (Math.random() * COUNT_ANSWERS);
         int wordIndex = 0;
 
         for (int i = 0; i < COUNT_ANSWERS; i++) {
@@ -87,6 +89,7 @@ public class TestCommand implements Command {
 
     /**
      * Очищает кеш-вопросов
+     *
      * @param tag - тег пользователя
      */
     private void clearTestQuestions(String tag) {
@@ -100,8 +103,9 @@ public class TestCommand implements Command {
 
     /**
      * Запускает тест
+     *
      * @param context - информация о всех контекстов для всех пользователей
-     * @param info - объект DataSaver с информацией о пользователе
+     * @param info    - объект DataSaver с информацией о пользователе
      * @return - возвращает список сообщений пользователю
      */
     public List<String> handle(Context context, UserData info) {
@@ -119,9 +123,9 @@ public class TestCommand implements Command {
         if (
                 (
                         !COUNT_WORDS.equals("по всем") &&
-                        Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)
+                                Integer.parseInt(params.get("currentQuestion")) > Integer.parseInt(COUNT_WORDS)
                 ) ||
-                params.get("message").equals("/stop")) {
+                        params.get("message").equals("/stop")) {
             final int countTrueAnswers = Integer.parseInt(params.get("countTrueAnswers"));
 
             StringBuilder textOfEndTest = new StringBuilder();
@@ -131,7 +135,7 @@ public class TestCommand implements Command {
 
             if (
                     countTrueAnswers % 10 >= 1 &&
-                    countTrueAnswers % 10 <= 4
+                            countTrueAnswers % 10 <= 4
             )
                 textOfEndTest.append(" вопроса!");
             else

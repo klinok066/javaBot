@@ -1,4 +1,4 @@
-package org.matmech.context.contextHandler.handlers.getGroup;
+package org.matmech.context.contextHandler.handlers.deleteWordCommand;
 
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Команда /get_group
+ * Команда /delete_word
  */
-public class GetGroupCommand implements Command {
+public class DeleteWordCommand implements Command {
     private DBHandler db;
 
-    public GetGroupCommand(DBHandler db){
+    public DeleteWordCommand(DBHandler db) {
         this.db = db;
-    };
+    }
 
     /**
-     * Главный метод, который запускает обработку команды
+     * Главный метод, который запускает обработку команда
      *
      * @param context - информация о всех контекстов для всех пользователей
      * @param info    - объект DataSaver с информацией о пользователе
@@ -30,7 +30,7 @@ public class GetGroupCommand implements Command {
         try {
             final long CHAT_ID = info.getChatId();
             Map<String, String> params = context.getParams(CHAT_ID);
-            return List.of(db.getGroup(params.get("word")));
+            return List.of(db.deleteWord(params.get("word")));
         } finally {
             context.clear(info.getChatId());
         }

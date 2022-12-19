@@ -12,7 +12,8 @@ import java.util.List;
  */
 public class StartCommand implements Command {
     private DBHandler db;
-    public StartCommand(DBHandler db){
+
+    public StartCommand(DBHandler db) {
         this.db = db;
     }
 
