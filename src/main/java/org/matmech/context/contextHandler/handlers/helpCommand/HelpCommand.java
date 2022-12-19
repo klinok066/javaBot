@@ -5,6 +5,7 @@ import org.matmech.context.contextHandler.handlers.Command;
 import org.matmech.userData.UserData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Команда /help
@@ -27,7 +28,7 @@ public class HelpCommand implements Command {
      * @return - возвращает список сообщений для пользователя
      */
     @Override
-    public List<String> handle(Context context, UserData info) {
+    public List<String> handle(Context context, UserData info, Map<String, String> params) {
         try {
             return List.of(helpText);
         } finally {

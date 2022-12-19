@@ -27,10 +27,8 @@ public class TranslateWordCommand implements Command {
      * @return - возвращает сообщение для пользователя соответствующее
      */
     @Override
-    public List<String> handle(Context context, UserData info) {
+    public List<String> handle(Context context, UserData info, Map<String, String> params) {
         try {
-            final long CHAT_ID = info.getChatId();
-            Map<String, String> params = context.getParams(CHAT_ID);
             return List.of(db.translateWord(params.get("word")));
         } finally {
             context.clear(info.getChatId());

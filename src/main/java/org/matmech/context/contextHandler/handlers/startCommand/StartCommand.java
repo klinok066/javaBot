@@ -1,11 +1,13 @@
 package org.matmech.context.contextHandler.handlers.startCommand;
 
+import org.matmech.Main;
 import org.matmech.context.Context;
 import org.matmech.context.contextHandler.handlers.Command;
 import org.matmech.userData.UserData;
 import org.matmech.db.DBHandler;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Команда /start
@@ -25,7 +27,7 @@ public class StartCommand implements Command {
      * @return - возвращает сообщение для пользователя соответствующее
      */
     @Override
-    public List<String> handle(Context context, UserData info) {
+    public List<String> handle(Context context, UserData info, Map<String, String> params) {
         try {
             return List.of(db.usersInsert(info.getFirstname(), info.getSurname(), info.getTag()));
         } finally {

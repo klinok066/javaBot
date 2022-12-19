@@ -68,8 +68,7 @@ public class DBHandler {
 
             if (answer) {
                 // создание словаря для пользователя
-                dictionary.setUserId(usersDBSource.getUserIdByTag(user));
-                dictonaryDBSource.createDictonary(dictionary);
+                dictonaryDBSource.createDictonary(usersDBSource.getUserIdByTag(user));
 
                 return "Привет, добро пожаловать в нашего бота для изучения английского языка!\n"
                         + "Список всех команд можете посмотреть с помощью /help";
@@ -116,9 +115,12 @@ public class DBHandler {
 
             user.setTag(tag);
 
-            dictionary.setUserId(usersDBSource.getUserIdByTag(user));
+            int userId = usersDBSource.getUserIdByTag(user);
 
-            int dictonaryId = dictonaryDBSource.getDictonaryId(dictionary);
+            if (userId == -1)
+                return "Вы не зарегистрированы! Для регистрации напишите /start";
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(userId);
 
             if (dictonaryId == -1)
                 return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
@@ -324,10 +326,10 @@ public class DBHandler {
 
             int userId = usersDBSource.getUserIdByTag(user);
 
-            Dictionary dictionary = new Dictionary();
-            dictionary.setUserId(userId);
+            if (userId == -1)
+                return "Вы не зарегистрированы! Для регистрации напишите /start";
 
-            int dictonaryId = dictonaryDBSource.getDictonaryId(dictionary);
+            int dictonaryId = dictonaryDBSource.getDictonaryId(userId);
 
             Group groups = new Group();
             groups.setTitle(group);
@@ -358,10 +360,7 @@ public class DBHandler {
 
             int userId = usersDBSource.getUserIdByTag(user);
 
-            Dictionary dictionary = new Dictionary();
-            dictionary.setUserId(userId);
-
-            int dictonaryId = dictonaryDBSource.getDictonaryId(dictionary);
+            int dictonaryId = dictonaryDBSource.getDictonaryId(userId);
 
             Word word = new Word();
             word.setDictonaryId(dictonaryId);

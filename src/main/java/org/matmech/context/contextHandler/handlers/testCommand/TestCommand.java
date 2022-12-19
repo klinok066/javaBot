@@ -108,11 +108,9 @@ public class TestCommand implements Command {
      * @param info    - объект DataSaver с информацией о пользователе
      * @return - возвращает список сообщений пользователю
      */
-    public List<String> handle(Context context, UserData info) {
+    public List<String> handle(Context context, UserData info, Map<String, String> params) {
         final long CHAT_ID = info.getChatId();
         final String TAG = info.getTag();
-
-        Map<String, String> params = context.getParams(CHAT_ID);
 
         final String GROUP = params.get("group").toLowerCase();
         final String COUNT_WORDS = params.get("countWords").toLowerCase();

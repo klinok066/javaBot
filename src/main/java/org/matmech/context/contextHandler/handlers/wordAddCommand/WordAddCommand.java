@@ -26,11 +26,9 @@ public class WordAddCommand implements Command {
      * @return - возвращает сообщение для пользователя соответствующее
      */
     @Override
-    public List<String> handle(Context context, UserData info) {
+    public List<String> handle(Context context, UserData info, Map<String, String> params) {
         try {
-            final long CHAT_ID = info.getChatId();
             final String TAG = info.getTag();
-            Map<String, String> params = context.getParams(CHAT_ID);
             return List.of(db.wordAdd(params.get("word"), params.get("translate"), params.get("group"), TAG));
         } finally {
             context.clear(info.getChatId());

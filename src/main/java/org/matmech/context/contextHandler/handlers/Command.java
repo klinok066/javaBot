@@ -4,6 +4,7 @@ import org.matmech.context.Context;
 import org.matmech.userData.UserData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Описывает структуру обработчиков основного функционала команд
@@ -15,5 +16,5 @@ public interface Command {
      * @param info - объект DataSaver с информацией о пользователе
      * @return - возвращает список сообщений для пользователя
      */
-    List<String> handle(Context context, UserData info);
+    List<String> handle(Context context, UserData info, Map<String, String> params);
 }
