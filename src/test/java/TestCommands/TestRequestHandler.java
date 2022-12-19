@@ -349,4 +349,20 @@ public class TestRequestHandler {
         for (int i = 0; i < result.size(); i++)
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
+
+    @Test
+    public void authFailed(){
+        when(db.userIsExist(any())).thenReturn(false);
+
+        context.clear(user.getChatId());
+
+        List<String> result = contextManager.execute("/delete_word", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Слово было удалено из базы данных!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
 }
