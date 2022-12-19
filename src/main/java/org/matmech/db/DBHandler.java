@@ -39,16 +39,6 @@ public class DBHandler {
     }
 
     /**
-     * Подключение к базе данных
-     * @param DB_URL - url адрес базы данных
-     * @param DB_USERNAME - пользователь в базед данных
-     * @param DB_PASSWORD - пароль пользователя
-     */
-    public void setDbConnection(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
-        dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-    }
-
-    /**
      * <p>Добавляет нового пользователя в базу данных</p>
      *
      * @param firstname - имя человека
