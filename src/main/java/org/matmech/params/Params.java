@@ -338,6 +338,9 @@ public class Params {
         return null;
     }
 
+    //private String getStatsValidation(Context context, long chatId){}
+
+
     /**
      * Присваивает параметры для контекста команды /delete_word
      * @param chatId - идентификатор чата с пользователем
@@ -352,6 +355,28 @@ public class Params {
         if (WORD == null)
             context.addParam(chatId, PROCESS_NAME, "word", message);
     }
+
+
+
+//    private String getStatsValidation(Context context, long chatId){
+//        Map<String, String> params = context.getParams(chatId);
+//
+//        final String PROCESS_NAME = params.get("processName");
+//        final String WORD = params.get("word");
+//
+//        context.addParam(chatId, PROCESS_NAME, "settingParams", "true");
+//
+//        if (WORD == null){
+//            return "Введи, пожалуйста, срок: за день, за неделю, за месяц или за год";
+//        }
+//    }
+//    private void setGetStatsParams(Context context, long chatId, String message){
+//        Map<String, String> params = context.getParams(chatId);
+//
+//
+//        final String WORD = params.get("word");
+//        final String PROCESS_NAME = params.get("processName");
+//    }
 
     public Params(DBHandler db) {
         this.db = db;
@@ -407,6 +432,13 @@ public class Params {
 
                 yield deleteWordValidation(context, chatId);
             }
+//            case "getStats" -> {
+//                if (context.getParams(chatId).get("settingParams") != null){
+//                    setGetStatsParams(context, chatId, message);
+//                }
+//                yield getStatsValidation(context, chatId);
+//
+//            }
             default -> null;
         };
     }
