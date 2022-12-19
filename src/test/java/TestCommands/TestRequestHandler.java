@@ -32,7 +32,7 @@ public class TestRequestHandler {
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Пожалуйста, введите группу слов, по которым вы хотите произвести тестирование\n" +
-                        "Если хотите провести тестирование по всем группу, то напишите `Все`"
+                "Если хотите провести тестирование по всем группу, то напишите `Все`"
         );
 
         for (int i = 0; i < result.size(); i++)
@@ -79,8 +79,8 @@ public class TestRequestHandler {
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Пожалуйста, введите количество слов в тесте\n" +
-                        "Если хотите провести тестирование по всем группу, то напишите `По всем`\n" +
-                        "Если хотите стандартное количество слов (10), то напишите `Стандартное`"
+                "Если хотите провести тестирование по всем группу, то напишите `По всем`\n" +
+                "Если хотите стандартное количество слов (10), то напишите `Стандартное`"
         );
 
         for (int i = 0; i < result.size(); i++)
@@ -129,7 +129,7 @@ public class TestRequestHandler {
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Введите режим тестирование: `Easy` - легкий, `Difficult` - сложный\n" +
-                        "Если хотите стандартный режим (Easy), то введите `Стандартный`"
+                "Если хотите стандартный режим (Easy), то введите `Стандартный`"
         );
 
         for (int i = 0; i < result.size(); i++)
@@ -166,10 +166,11 @@ public class TestRequestHandler {
      * что программа скажет, чтобы повторили попытку ввода
      */
     @Test
-    public void testExecuteForTranslateValidation() {
+    public void testExecuteForTranslateValidation(){
         when(db.userIsExist(any())).thenReturn(true);
 
         context.clear(user.getChatId());
+
 
         contextManager.execute("/translate", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
@@ -189,10 +190,11 @@ public class TestRequestHandler {
      * что программа скажет, чтобы повторили попытку ввода
      */
     @Test
-    public void testExecuteForGetGroupValidation() {
+    public void testExecuteForGetGroupValidation(){
         when(db.userIsExist(any())).thenReturn(true);
 
         context.clear(user.getChatId());
+
 
         contextManager.execute("/get_group", user);
         when(db.IsWordExist(any(String.class))).thenReturn(false);
@@ -212,21 +214,43 @@ public class TestRequestHandler {
      * что программа скажет, чтобы повторили попытку ввода
      */
     @Test
-    public void testExecuteForEditValidation() {
+    public void testExecuteForEditValidation(){
         when(db.userIsExist(any())).thenReturn(true);
 
         context.clear(user.getChatId());
 
         contextManager.execute("/edit", user);
-        when(db.IsWordExist(any(String.class))).thenReturn(false);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
 
         contextManager.execute("тест_слово", user);
 
         List<String> result = contextManager.execute("неправильный_метод", user);
-        ;
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл параметр неправильно, либо этот параметр не подлежит изменению! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+
+    @Test
+    public void rightTestExecuteForEditValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+        contextManager.execute("/edit", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
+
+        contextManager.execute("тест_слово", user);
+        contextManager.execute("translation", user);
+
+        when(db.edit(any(),any(),any())).thenReturn("Вы успешно изменили translation");
+        List<String> result = contextManager.execute("test", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Вы успешно изменили translation"
         );
 
         for (int i = 0; i < result.size(); i++)
@@ -238,7 +262,7 @@ public class TestRequestHandler {
      * что программа скажет, чтобы повторили попытку ввода
      */
     @Test
-    public void testExecuteForDeleteWordValidation() {
+    public void testExecuteForDeleteWordValidation(){
         when(db.userIsExist(any())).thenReturn(true);
 
         context.clear(user.getChatId());
@@ -251,6 +275,26 @@ public class TestRequestHandler {
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+    @Test
+    public void rightTestExecuteForDeleteWordValidation(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        contextManager.execute("/delete_word", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
+        when(db.deleteWord(any())).thenReturn("Слово было удалено из базы данных!");
+
+        List<String> result = contextManager.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Слово было удалено из базы данных!"
         );
 
         for (int i = 0; i < result.size(); i++)
