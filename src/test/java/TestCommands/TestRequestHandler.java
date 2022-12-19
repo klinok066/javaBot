@@ -160,6 +160,30 @@ public class TestRequestHandler {
         for (int i = 0; i < result.size(); i++)
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /translate и то,
+     * что будет если всё введено верно
+     */
+    @Test
+    public void testExecuteForTranslateValidationAllRight(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        contextManager.execute("/translate", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
+        when(db.translateWord(any())).thenReturn("Перевод слова тест_слово: тест_слово");
+
+        List<String> result = contextManager.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Перевод слова тест_слово: тест_слово"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
 
     /**
      * Unit-тест метода execute: проверяет запуск команды /translate и то,
@@ -203,6 +227,31 @@ public class TestRequestHandler {
         List<String> expectedResult = new ArrayList<String>();
         expectedResult.add(
                 "Ой, кажется ты ввёл слово неправильно! Повтори ввод!"
+        );
+
+        for (int i = 0; i < result.size(); i++)
+            Assert.assertEquals(expectedResult.get(0), result.get(0));
+    }
+
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /get_group и то,
+     * что программа скажет, чтобы повторили попытку ввода
+     */
+    @Test
+    public void testExecuteForGetGroupValidationAllRight(){
+        when(db.userIsExist(any())).thenReturn(true);
+
+        context.clear(user.getChatId());
+
+
+        contextManager.execute("/get_group", user);
+        when(db.IsWordExist(any(String.class))).thenReturn(true);
+        when(db.getGroup(any(String.class))).thenReturn("Группа у слова тест_слово: тест_группа");
+
+        List<String> result = contextManager.execute("тест_слово", user);
+        List<String> expectedResult = new ArrayList<String>();
+        expectedResult.add(
+                "Группа у слова тест_слово: тест_группа"
         );
 
         for (int i = 0; i < result.size(); i++)
