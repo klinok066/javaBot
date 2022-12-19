@@ -185,6 +185,11 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
+
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /translate и то,
+     * что будет если всё введено верно
+     */
     @Test
     public void testExecuteForTranslateValidationAllRight(){
         when(db.userIsExist(any())).thenReturn(true);
@@ -232,6 +237,11 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
+
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /get_group и то,
+     * что будет, если всё верно введено
+     */
     @Test
     public void testExecuteForGetGroupValidationAllRight(){
         when(db.userIsExist(any())).thenReturn(true);
