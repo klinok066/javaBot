@@ -283,6 +283,10 @@ public class TestRequestHandler {
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
 
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /edit и то,
+     * что программа скажет, при правильном выполнение
+     */
     @Test
     public void rightTestExecuteForEditValidation(){
         when(db.userIsExist(any())).thenReturn(true);
@@ -329,6 +333,10 @@ public class TestRequestHandler {
         for (int i = 0; i < result.size(); i++)
             Assert.assertEquals(expectedResult.get(0), result.get(0));
     }
+    /**
+     * Unit-тест метода execute: проверяет запуск команды /delete_word и то,
+     * что программа скажет, при правильном выполнении
+     */
     @Test
     public void rightTestExecuteForDeleteWordValidation(){
         when(db.userIsExist(any())).thenReturn(true);
