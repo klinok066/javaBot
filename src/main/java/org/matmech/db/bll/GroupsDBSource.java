@@ -1,12 +1,13 @@
 package org.matmech.db.bll;
 
-import org.matmech.db.models.Groups;
+import org.matmech.db.models.Group;
 import org.matmech.db.repository.DBConnection;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Класс-сервис, который работает с базой данных, а конкретно работает с таблицей <b>Groups</b>
@@ -15,18 +16,24 @@ import java.util.List;
  */
 public class GroupsDBSource extends DBSource {
     /**
+     * @param dbConnection - подключение к базе данных
+     */
+    public GroupsDBSource(DBConnection dbConnection) {
+        super(dbConnection);
+    }
+
+    /**
      * Проверка на существование группы по названию
-     * @param groups - объект с информацией о группе. Обязательно должен быть заполнен параметр <i>title</i>
-     * @param dbConnection - репозиторий
+     * @param group - объект с информацией о группе. Обязательно должен быть заполнен параметр <i>title</i>
      * @return - возвращает результат работы метода. <i>True</i> - если успешно, <i>False</i> - если не успешно
      */
-    private boolean isExist(Groups groups, DBConnection dbConnection) throws SQLException {
+    private boolean isExist(Group group) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("string", groups.getTitle()));
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
+            params.add(createParams("string", group.getTitle()));
 
             String groupsSQL = "select * from groups where title=?";
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(groupsSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(groupsSQL, params);
 
             return response.size() != 0;
         } catch (SQLException e) {
@@ -36,17 +43,16 @@ public class GroupsDBSource extends DBSource {
 
     /**
      * Создает группу для какого-то пользователя
-     * @param groups - объект с информацией о группы. Обязательно должны быть заполнены поля
+     * @param group - объект с информацией о группы. Обязательно должны быть заполнены поля
      *                 <i>dictonaryId</i> и <i>title</i>
-     * @param dbConnection - репозиторий
      * @return - возвращает либо <i>true</i> при успешно выполнении функции, либо <i>false</i> при неудаче
      */
-    public boolean createGroup(Groups groups, DBConnection dbConnection) {
+    public boolean createGroup(Group group) {
         try {
-            if (!isExist(groups, dbConnection)) {
-                ArrayList<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-                params.add(createParams("string", groups.getTitle()));
-                params.add(createParams("int", Integer.toString(groups.getDictonaryId())));
+            if (!isExist(group)) {
+                List<Map<String, String>> params = new ArrayList<Map<String, String>>();
+                params.add(createParams("string", group.getTitle()));
+                params.add(createParams("int", Integer.toString(group.getDictonaryId())));
 
                 String groupAddSQL = "insert into groups(title, dictonary_id) values(?, ?)";
                 dbConnection.executeUpdateWithParams(groupAddSQL, params);
@@ -64,20 +70,19 @@ public class GroupsDBSource extends DBSource {
 
     /**
      * Возвращает groupId по id словаря и названию группы
-     * @param groups - объект с информацией о группе (должны быть заполнены значения <i>dictonaryId</i> и <i>title</i>)
-     * @param dbConnection - репозиторий
+     * @param group - объект с информацией о группе (должны быть заполнены значения <i>dictonaryId</i> и <i>title</i>)
      * @return - возвращает либо значение group_id, либо -1 в случае если группа не нашлась
      */
-    public int getGroupId(Groups groups, DBConnection dbConnection) throws SQLException {
+    public int getGroupId(Group group) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", String.valueOf(groups.getDictonaryId())));
-            params.add(createParams("string", groups.getTitle()));
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
+            params.add(createParams("int", String.valueOf(group.getDictonaryId())));
+            params.add(createParams("string", group.getTitle()));
 
             String getGroupIdSQL = "select * from groups where dictonary_id=? and title=?";
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getGroupIdSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return Integer.parseInt(item.get("id"));
         } catch (SQLException e) {
             System.out.println("Не удалось получить id группы\n" + e.getMessage());
@@ -89,19 +94,18 @@ public class GroupsDBSource extends DBSource {
 
     /**
      * Возвращает название группы по groupId
-     * @param groups - объект с информацией о группах. Обязательные поля: <i>id</i>
-     * @param dbConnection - репозиторий
+     * @param group - объект с информацией о группах. Обязательные поля: <i>id</i>
      * @return - возвращает значение поля title в виде строчки, либо null при неудаче
      */
-    public String getGroupTitle(Groups groups, DBConnection dbConnection) throws SQLException {
+    public String getGroupTitle(Group group) throws SQLException {
         try {
-            List<HashMap<String, String>> params = new ArrayList<HashMap<String, String>>();
-            params.add(createParams("int", Integer.toString(groups.getId())));
+            List<Map<String, String>> params = new ArrayList<Map<String, String>>();
+            params.add(createParams("int", Integer.toString(group.getId())));
 
             String getGroupTitleSQL = "select title from groups where id=?";
-            List<HashMap<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
+            List<Map<String, String>> response = dbConnection.executeQueryWithParams(getGroupTitleSQL, params);
 
-            for (HashMap<String, String> item : response)
+            for (Map<String, String> item : response)
                 return item.get("title");
         } catch (SQLException e) {
             System.out.println("Не удалось получить заголовок группы\n" + e.getMessage());
@@ -109,5 +113,19 @@ public class GroupsDBSource extends DBSource {
         }
 
         return null;
+    }
+
+    /**
+     * Проверяет существование группы по названию
+     * @param group - объект с информацией о группе. Обязательные параметры: <i>title</i>
+     * @return - возвращает <i>true</i>, если группа существует, и <i>false</i>, если группа не существует
+     */
+    public boolean groupIsExist(Group group) {
+        try {
+            return isExist(group);
+        } catch (SQLException e) {
+            System.out.println("Не удалось проверить существование группы\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }

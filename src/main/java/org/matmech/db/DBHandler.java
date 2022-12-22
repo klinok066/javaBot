@@ -6,15 +6,15 @@ import org.matmech.db.bll.GroupsDBSource;
 import org.matmech.db.bll.UsersDBSource;
 import org.matmech.db.bll.DictonaryDBSource;
 import org.matmech.db.bll.WordsDBSource;
-import org.matmech.db.models.Users;
-import org.matmech.db.models.Groups;
-import org.matmech.db.models.Dictonary;
-import org.matmech.db.models.Words;
+import org.matmech.db.models.Group;
+import org.matmech.db.models.User;
+import org.matmech.db.models.Dictionary;
+import org.matmech.db.models.Word;
 import org.matmech.db.repository.DBConnection;
 
 /**
- * Этот общий класс для работы с базой данных. Каждый публичный его метод изменяет одну из таблиц в БД и возвращает
- * соответствующее сообщение <b>для пользователя</b> о работе метода в виде строчки
+ * Класс <b>DBHandler</b> реализует обертку над классами сервисами. Каждый метод работает с методами
+ * классов-сервисов и возвращает готовое сообщение пользователю в текстовом виде или просто значение метода
  */
 public class DBHandler {
     private DBConnection dbConnection = null;
@@ -25,10 +25,17 @@ public class DBHandler {
 
     public DBHandler(String DB_URL, String DB_USERNAME, String DB_PASSWORD) {
         dbConnection = new DBConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-        usersDBSource = new UsersDBSource();
-        groupsDBSource = new GroupsDBSource();
-        dictonaryDBSource = new DictonaryDBSource();
-        wordsDBSource = new WordsDBSource();
+        usersDBSource = new UsersDBSource(dbConnection);
+        groupsDBSource = new GroupsDBSource(dbConnection);
+        dictonaryDBSource = new DictonaryDBSource(dbConnection);
+        wordsDBSource = new WordsDBSource(dbConnection);
+    }
+
+
+    public boolean IsWordExist(String word){
+        Word words = new Word();
+        words.setWordValue(word);
+        return wordsDBSource.WordIsExist(words ,dbConnection);
     }
 
     /**
@@ -40,19 +47,18 @@ public class DBHandler {
      */
     public String usersInsert(String firstname, String surname, String tag) {
         try {
-            Users user = new Users();
-            Dictonary dictonary = new Dictonary();
+            User user = new User();
+            Dictionary dictionary = new Dictionary();
 
             user.setFirstname(firstname);
             user.setSurname(surname);
             user.setTag(tag);
 
-            boolean answer = usersDBSource.regUser(user, dbConnection);
+            boolean answer = usersDBSource.regUser(user);
 
             if (answer) {
                 // создание словаря для пользователя
-                dictonary.setUserId(usersDBSource.getUserIdByTag(user, dbConnection));
-                dictonaryDBSource.createDictonary(dictonary, dbConnection);
+                dictonaryDBSource.createDictonary(usersDBSource.getUserIdByTag(user));
 
                 return "Привет, добро пожаловать в нашего бота для изучения английского языка!\n"
                         + "Список всех команд можете посмотреть с помощью /help";
@@ -71,7 +77,7 @@ public class DBHandler {
      */
     public void getAllUsers() {
         try {
-            usersDBSource.getAllUsers(dbConnection);
+            usersDBSource.getAllUsers();
         } catch (SQLException e) {
             System.out.println("Не удалось получить пользователей");
             System.out.println(e.getMessage());
@@ -89,34 +95,37 @@ public class DBHandler {
      */
     public String wordAdd(String wordValue, String wordTranslate, String group, String tag) {
         try {
-            Words words = new Words();
-            Users users = new Users();
-            Dictonary dictonary = new Dictonary();
-            Groups groups = new Groups();
+            Word word = new Word();
+            User user = new User();
+            Dictionary dictionary = new Dictionary();
+            Group groups = new Group();
 
-            words.setWordTranslate(wordTranslate);
-            words.setWordValue(wordValue);
+            word.setWordTranslate(wordTranslate);
+            word.setWordValue(wordValue);
 
-            users.setTag(tag);
+            user.setTag(tag);
 
-            dictonary.setUserId(usersDBSource.getUserIdByTag(users, dbConnection));
+            int userId = usersDBSource.getUserIdByTag(user);
 
-            int dictonaryId = dictonaryDBSource.getDictonaryId(dictonary, dbConnection);
+            if (userId == -1)
+                return "Вы не зарегистрированы! Для регистрации напишите /start";
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(userId);
 
             if (dictonaryId == -1)
                 return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
                         "Для регистрации напишите /start";
 
-            words.setDictonaryId(dictonaryId);
+            word.setDictonaryId(dictonaryId);
 
             groups.setTitle(group);
             groups.setDictonaryId(dictonaryId);
 
-            groupsDBSource.createGroup(groups, dbConnection);
+            groupsDBSource.createGroup(groups);
 
-            words.setGroupId(groupsDBSource.getGroupId(groups, dbConnection));
+            word.setGroupId(groupsDBSource.getGroupId(groups));
 
-            boolean response = wordsDBSource.wordAdd(words, dbConnection);
+            boolean response = wordsDBSource.wordAdd(word);
 
             if (response)
                 return "Слово было успешно добавлено!";
@@ -128,19 +137,33 @@ public class DBHandler {
     }
 
     /**
+     * <p>Показать перевод слова без водной части для пользователя</p>
+     *
+     * @param wordValue - слово, переданное в параметрах
+     */
+    public String translateWordWithoutMessage(String wordValue) {
+        Word word = new Word();
+
+        word.setWordValue(wordValue);
+
+        String wordTranslate = wordsDBSource.translate(word);
+
+        if (wordTranslate != null)
+            return wordTranslate;
+
+        return null;
+    }
+
+    /**
      * <p>Показать перевод слова</p>
      *
      * @param wordValue - слово, переданное в параметрах
      */
     public String translateWord(String wordValue) {
-        Words words = new Words();
-
-        words.setWordValue(wordValue);
-
-        String wordTranslate = wordsDBSource.translate(words, dbConnection);
+        String wordTranslate = translateWordWithoutMessage(wordValue);
 
         if (wordTranslate != null)
-            return "Перевод слова " + wordValue + ": " + wordTranslate;
+            return "Перевод слова " + wordTranslate + ": " + wordTranslate;
         else
             return "Ошибка! В словаре нет этого слова!\n Полный список команд можете посмотреть с помощью /help";
     }
@@ -154,32 +177,32 @@ public class DBHandler {
      */
 
     public String edit(String wordValue, String wordParam, String paramValue){
-        Words words = new Words();
-        words.setWordValue(wordValue);
+        Word word = new Word();
+        word.setWordValue(wordValue);
         switch (wordParam){
             case("group"):
                 try {
-                    Groups groups = new Groups();
-                    groups.setTitle(paramValue);
+                    Group group = new Group();
+                    group.setTitle(paramValue);
                     // вытягиваю dictionary_id из слова
 
-                    int dictionaryID = wordsDBSource.getDictonaryId(words, dbConnection);
+                    int dictionaryID = wordsDBSource.getDictonaryId(word);
 
                     if (dictionaryID == -1)
                         return "Вашего словаря не существует! Чтобы его создать, вам нужно зарегистрироваться!\n" +
                                 "Для регистрации напишите /start";
 
-                    groups.setDictonaryId(dictionaryID);
+                    group.setDictonaryId(dictionaryID);
                     // поиск по d_id group_id с title из paramValue
 
-                    int groupID = groupsDBSource.getGroupId(groups, dbConnection);
+                    int groupID = groupsDBSource.getGroupId(group);
 
                     if (groupID == -1)
                         return "Такой группы не существует! Создайте группу, пожалуйста!";
 
-                    words.setGroupId(groupID);
+                    word.setGroupId(groupID);
 
-                    boolean response = wordsDBSource.editGroupId(words, dbConnection);
+                    boolean response = wordsDBSource.editGroupId(word);
 
                     if (response)
                         return "Вы успешно изменили group_id";
@@ -189,9 +212,9 @@ public class DBHandler {
                     throw new RuntimeException(e);
                 }
             case("translation"):
-                words.setWordTranslate(paramValue);
+                word.setWordTranslate(paramValue);
 
-                boolean response = wordsDBSource.editTranslation(words,dbConnection);
+                boolean response = wordsDBSource.editTranslation(word);
 
                 if (response)
                     return "Вы успешно изменили translation";
@@ -209,21 +232,21 @@ public class DBHandler {
      */
     public String getGroup(String wordValue) {
         try {
-            Words words = new Words();
+            Word word = new Word();
 
-            words.setWordValue(wordValue);
+            word.setWordValue(wordValue);
 
-            int groupId = wordsDBSource.getGroupId(words, dbConnection);
+            int groupId = wordsDBSource.getGroupId(word);
 
             if (groupId == -1)
                 return "Слова нет в вашем словаре. Введите существующее слово!";
 
-            words.setGroupId(groupId);
+            word.setGroupId(groupId);
 
-            Groups groups = new Groups();
-            groups.setId(words.getGroupId());
+            Group group = new Group();
+            group.setId(word.getGroupId());
 
-            String groupTitle = groupsDBSource.getGroupTitle(groups, dbConnection);
+            String groupTitle = groupsDBSource.getGroupTitle(group);
 
             if (groupTitle != null)
                 return "Группа у слова " + wordValue + ": " + groupTitle;
@@ -241,15 +264,100 @@ public class DBHandler {
      * @param wordValue - слово, переданное в параметрах
      */
     public String deleteWord(String wordValue) {
-        Words words = new Words();
+        Word word = new Word();
 
-        words.setWordValue(wordValue);
+        word.setWordValue(wordValue);
 
-        boolean response = wordsDBSource.deleteWord(words, dbConnection);
+        boolean response = wordsDBSource.deleteWord(word);
 
         if (response)
             return "Слово было удалено из базы данных!";
 
         return "Слова нет в базе данных!";
+    }
+
+    /**
+     * Проверяет существование группы по названию
+     * @param group - название группы
+     * @return - возвращает <i>true</i>, если группа существует, и <i>false</i>, если группа не существует
+     */
+    public boolean groupIsExist(String group) {
+        Group groups = new Group();
+
+        groups.setTitle(group);
+
+        return groupsDBSource.groupIsExist(groups);
+    }
+
+    /**
+     * Проверяет существование пользователя по тегу
+     * @param tag - тег пользователя
+     * @return - возвращает <i>true</i>, если пользователь существует, и <i>false</i>, если пользователя не существует
+     */
+    public boolean userIsExist(String tag) {
+        User user = new User();
+
+        user.setTag(tag);
+
+        return usersDBSource.userIsExist(user);
+    }
+
+    /**
+     * Возвращает случайное слово из базы данных у конкретного пользователя.\
+     * Может возвращать как по любым группам, так и по какой-то конкретной группе слов
+     * @param tag - тег пользователя, у которого должно лежать это слово
+     * @param group - название конкретной группы слов или если хотим по всем, то нужно указать значение <i>все</i>
+     * @return - возвращает случайно слово
+     */
+    public String getRandomWord(String tag, String group) {
+        try {
+            User user = new User();
+            user.setTag(tag);
+
+            int userId = usersDBSource.getUserIdByTag(user);
+
+            if (userId == -1)
+                return "Вы не зарегистрированы! Для регистрации напишите /start";
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(userId);
+
+            Group groups = new Group();
+            groups.setTitle(group);
+            groups.setDictonaryId(dictonaryId);
+
+            int groupId = groupsDBSource.getGroupId(groups);
+
+            Word word = new Word();
+            word.setGroupId(groupId);
+            word.setDictonaryId(dictonaryId);
+
+            group = group.toLowerCase();
+
+            if (group.equals("все"))
+                return wordsDBSource.getRandomWord(word);
+
+            return wordsDBSource.getRandomWordByGroup(word);
+        } catch (SQLException e) {
+            System.out.println("Не удалось получить слово!\n" + e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getCountsWordsOfUser(String tag) {
+        try {
+            User user = new User();
+            user.setTag(tag);
+
+            int userId = usersDBSource.getUserIdByTag(user);
+
+            int dictonaryId = dictonaryDBSource.getDictonaryId(userId);
+
+            Word word = new Word();
+            word.setDictonaryId(dictonaryId);
+
+            return wordsDBSource.getCountWords(word);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
